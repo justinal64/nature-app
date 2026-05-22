@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { useAuth } from '@/context/AuthContext';
 
 const STATS = [
   { value: '47', label: 'Species' },
@@ -26,8 +27,39 @@ const ENTRIES: { name: string; meta: string; kind: SpeciesKind }[] = [
   { name: 'Mourning Dove', meta: 'May 18', kind: 'bird' },
 ];
 
+function getInitial(user: { displayName?: string | null; email?: string | null }) {
+  const name = user.displayName?.trim();
+  if (name) return name.charAt(0).toUpperCase();
+  return user.email?.charAt(0).toUpperCase() ?? '?';
+}
+
+function getJoinedLabel(metadata?: { creationTime?: string }) {
+  const ts = metadata?.creationTime;
+  if (!ts) return 'New explorer';
+  const d = new Date(ts);
+  return `Joined ${d.toLocaleString('en-US', { month: 'short', year: 'numeric' })}`;
+}
+
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
+  const { user, signOut } = useAuth();
+
+  const displayName = user?.displayName || user?.email?.split('@')[0] || 'Naturalist';
+  const initial = user ? getInitial(user) : '?';
+  const joinedLabel = getJoinedLabel(user?.metadata);
+
+  const confirmSignOut = () => {
+    Alert.alert('Sign out', 'You can sign back in any time.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign out',
+        style: 'destructive',
+        onPress: () => {
+          signOut().catch((e) => Alert.alert('Error', String(e)));
+        },
+      },
+    ]);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -61,17 +93,16 @@ export default function ProfileScreen() {
               glow(COLORS.dusk, 10),
             ]}
           >
-            <Text style={{ color: COLORS.cream, fontSize: 32, fontWeight: '700' }}>I</Text>
+            <Text style={{ color: COLORS.cream, fontSize: 32, fontWeight: '700' }}>{initial}</Text>
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '700' }}>
-              Iris Calloway
+              {displayName}
             </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>
-              Tucson, Arizona · Joined Mar 2026
-            </Text>
+            <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>{joinedLabel}</Text>
           </View>
           <Pressable
+            onPress={confirmSignOut}
             style={{
               width: 38,
               height: 38,
@@ -83,7 +114,7 @@ export default function ProfileScreen() {
               borderColor: COLORS.sand,
             }}
           >
-            <Ionicons name="settings-outline" size={16} color={COLORS.ink} />
+            <Ionicons name="log-out-outline" size={18} color={COLORS.ink} />
           </Pressable>
         </View>
 

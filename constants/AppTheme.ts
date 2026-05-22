@@ -2,14 +2,12 @@ import { DefaultTheme, Theme } from '@react-navigation/native';
 import { Platform, TextStyle, ViewStyle } from 'react-native';
 
 export const COLORS = {
-  background: '#0F1A0B',
-  card: '#1A2E14',
-  primary: '#56AB2F',
-  secondary: '#A8E063',
-  text: '#F0F7EE',
-  textDim: '#92B896',
-  border: '#2A4225',
-  success: '#00C853',
+  ink: '#3D2519',
+  clay: '#B85C3A',
+  sand: '#E8D5B7',
+  sage: '#9CAB87',
+  dusk: '#6B4E6B',
+  cream: '#F4ECDA',
 };
 
 export const glow = (color: string, radius = 10): ViewStyle => ({
@@ -34,14 +32,14 @@ export const textGlow = (color: string, radius = 8): TextStyle => ({
 });
 
 export const NatureTheme: Theme = {
-  dark: true,
+  dark: false,
   colors: {
-    primary: COLORS.primary,
-    background: COLORS.background,
-    card: COLORS.card,
-    text: COLORS.text,
-    border: COLORS.border,
-    notification: COLORS.primary,
+    primary: COLORS.clay,
+    background: COLORS.cream,
+    card: COLORS.sand,
+    text: COLORS.ink,
+    border: COLORS.sage,
+    notification: COLORS.clay,
   },
   fonts: DefaultTheme.fonts,
 };

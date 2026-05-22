@@ -5,14 +5,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0F1A0B',
-        card: '#1A2E14',
-        primary: '#56AB2F',
-        secondary: '#A8E063',
-        text: '#F0F7EE',
-        textDim: '#92B896',
-        border: '#2A4225',
-        success: '#00C853',
+        ink: '#3D2519',
+        clay: '#B85C3A',
+        sand: '#E8D5B7',
+        sage: '#9CAB87',
+        dusk: '#6B4E6B',
+        cream: '#F4ECDA',
       },
     },
   },

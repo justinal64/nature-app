@@ -11,15 +11,20 @@ export default function RootLayout() {
     <ThemeProvider value={NatureTheme}>
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: NatureTheme.colors.card },
-          headerTintColor: NatureTheme.colors.text,
-          headerTitleStyle: { fontWeight: 'bold', color: NatureTheme.colors.primary },
+          headerShown: false,
           animation: 'fade',
+          contentStyle: { backgroundColor: NatureTheme.colors.background },
         }}
       >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="capture"
+          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen name="result" options={{ animation: 'fade' }} />
+        <Stack.Screen name="species/[id]" options={{ animation: 'slide_from_right' }} />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
     </ThemeProvider>
   );
 }

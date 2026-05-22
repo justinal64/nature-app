@@ -1,6 +1,36 @@
-import { COLORS } from '@/constants/AppTheme';
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
+import { Platform, Pressable, View } from 'react-native';
+
+import { COLORS, glow } from '@/constants/AppTheme';
+
+function CameraTabButton() {
+  const router = useRouter();
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Pressable
+        onPress={() => router.push('/capture')}
+        style={({ pressed }) => [
+          {
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: COLORS.clay,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: -22,
+            borderWidth: 4,
+            borderColor: COLORS.background,
+            transform: [{ scale: pressed ? 0.94 : 1 }],
+          },
+          glow(COLORS.clay, 12),
+        ]}
+      >
+        <Ionicons name="camera" size={26} color={COLORS.cream} />
+      </Pressable>
+    </View>
+  );
+}
 
 export default function TabLayout() {
   return (
@@ -9,47 +39,67 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: COLORS.background,
-          borderTopColor: COLORS.border,
+          borderTopColor: COLORS.sand,
           borderTopWidth: 1,
-          height: 90,
-          paddingBottom: 30,
-          paddingTop: 10,
+          height: Platform.OS === 'ios' ? 86 : 70,
+          paddingBottom: Platform.OS === 'ios' ? 28 : 10,
+          paddingTop: 8,
         },
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.textDim,
+        tabBarActiveTintColor: COLORS.clay,
+        tabBarInactiveTintColor: COLORS.bark,
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-          letterSpacing: 0.5,
+          fontSize: 11,
+          fontWeight: '600',
+          letterSpacing: 0.4,
+          marginTop: 2,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <Ionicons name="compass" size={28} color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="identify"
+        name="guide"
         options={{
-          title: 'Identify',
-          tabBarIcon: ({ color }) => <Ionicons name="camera" size={28} color={color} />,
+          title: 'Guide',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'book' : 'book-outline'} size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="collection"
+        name="capture-tab"
         options={{
-          title: 'My Finds',
-          tabBarIcon: ({ color }) => <Ionicons name="leaf" size={28} color={color} />,
+          title: '',
+          tabBarButton: () => <CameraTabButton />,
+        }}
+      />
+      <Tabs.Screen
+        name="journal"
+        options={{
+          title: 'Journal',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'bookmark' : 'bookmark-outline'} size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <Ionicons name="person-circle" size={28} color={color} />,
+          title: 'Me',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'person-circle' : 'person-circle-outline'}
+              size={24}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>

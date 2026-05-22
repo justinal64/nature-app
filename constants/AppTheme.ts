@@ -8,6 +8,17 @@ export const COLORS = {
   sage: '#9CAB87',
   dusk: '#6B4E6B',
   cream: '#F4ECDA',
+  bark: '#8B6F47',
+  gold: '#D4A437',
+  night: '#0A0A18',
+  // Semantic aliases
+  background: '#F4ECDA',
+  surface: '#FFFFFF',
+  text: '#3D2519',
+  textDim: '#8B6F47',
+  primary: '#B85C3A',
+  secondary: '#9CAB87',
+  border: '#E8D5B7',
 };
 
 export const glow = (color: string, radius = 10): ViewStyle => ({
@@ -31,14 +42,29 @@ export const textGlow = (color: string, radius = 8): TextStyle => ({
   textShadowRadius: radius,
 });
 
+export const softShadow = (opacity = 0.08, radius = 12, offsetY = 4): ViewStyle => ({
+  ...Platform.select({
+    ios: {
+      shadowColor: COLORS.ink,
+      shadowOffset: { width: 0, height: offsetY },
+      shadowOpacity: opacity,
+      shadowRadius: radius,
+    },
+    android: {
+      elevation: Math.min(radius, 12),
+    },
+    default: {},
+  }),
+});
+
 export const NatureTheme: Theme = {
   dark: false,
   colors: {
     primary: COLORS.clay,
     background: COLORS.cream,
-    card: COLORS.sand,
+    card: COLORS.surface,
     text: COLORS.ink,
-    border: COLORS.sage,
+    border: COLORS.sand,
     notification: COLORS.clay,
   },
   fonts: DefaultTheme.fonts,

@@ -7,6 +7,7 @@ import Svg, { Path } from 'react-native-svg';
 import { LandscapeHeader } from '@/components/LandscapeHeader';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
+import { useAuth } from '@/context/AuthContext';
 
 const RECENT = [
   { name: 'Saguaro', time: '2h ago', kind: 'cactus' as SpeciesKind },
@@ -25,6 +26,10 @@ const CATEGORIES = [
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuth();
+
+  const firstName = user?.displayName?.trim().split(' ')[0] || user?.email?.split('@')[0] || 'friend';
+  const initial = firstName.charAt(0).toUpperCase();
 
   return (
     <ScrollView
@@ -62,7 +67,7 @@ export default function HomeScreen() {
             Good afternoon,
           </Text>
           <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '700', lineHeight: 34 }}>
-            Iris.
+            {firstName}.
           </Text>
         </View>
         <View
@@ -80,7 +85,7 @@ export default function HomeScreen() {
             softShadow(0.12, 8, 3),
           ]}
         >
-          <Text style={{ color: COLORS.cream, fontSize: 22, fontWeight: '700' }}>I</Text>
+          <Text style={{ color: COLORS.cream, fontSize: 22, fontWeight: '700' }}>{initial}</Text>
         </View>
       </View>
 

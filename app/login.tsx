@@ -2,26 +2,47 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
+import { PasswordInput } from '@/components/PasswordInput';
+import { TextField } from '@/components/TextField';
 import { COLORS, glow } from '@/constants/AppTheme';
 import { auth } from '@/lib/firebase';
 import { getUserFriendlyError } from '@/utils/errors';
+import { validateEmail, validatePassword } from '@/utils/validation';
 
 export default function LoginScreen() {
   const { top } = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false);
 
+  function updateEmail(value: string) {
+    setEmail(value);
+    if (errors.email) setErrors((e) => ({ ...e, email: undefined }));
+  }
+
+  function updatePassword(value: string) {
+    setPassword(value);
+    if (errors.password) setErrors((e) => ({ ...e, password: undefined }));
+  }
+
   async function signInWithEmail() {
+    const nextErrors = {
+      email: validateEmail(email),
+      password: validatePassword(password),
+    };
+    setErrors(nextErrors);
+    if (nextErrors.email || nextErrors.password) return;
+
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (error: unknown) {
-      Alert.alert('Sign In Error', getUserFriendlyError(error));
+      Alert.alert('Sign in error', getUserFriendlyError(error));
     } finally {
       setLoading(false);
     }
@@ -59,71 +80,24 @@ export default function LoginScreen() {
           </Text>
         </View>
 
-        <View style={{ marginBottom: 14 }}>
-          <Text
-            style={{
-              color: COLORS.bark,
-              fontSize: 11,
-              fontWeight: '700',
-              letterSpacing: 0.6,
-              marginBottom: 8,
-            }}
-          >
-            EMAIL
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: COLORS.surface,
-              borderWidth: 1,
-              borderColor: COLORS.sand,
-              borderRadius: 14,
-              paddingHorizontal: 14,
-              paddingVertical: 14,
-              fontSize: 15,
-              color: COLORS.ink,
-            }}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="email@address.com"
-            placeholderTextColor={COLORS.bark}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            testID="email-input"
-          />
-        </View>
+        <TextField
+          label="EMAIL"
+          value={email}
+          onChangeText={updateEmail}
+          placeholder="email@address.com"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          error={errors.email}
+          testID="email-input"
+        />
 
-        <View style={{ marginBottom: 20 }}>
-          <Text
-            style={{
-              color: COLORS.bark,
-              fontSize: 11,
-              fontWeight: '700',
-              letterSpacing: 0.6,
-              marginBottom: 8,
-            }}
-          >
-            PASSWORD
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: COLORS.surface,
-              borderWidth: 1,
-              borderColor: COLORS.sand,
-              borderRadius: 14,
-              paddingHorizontal: 14,
-              paddingVertical: 14,
-              fontSize: 15,
-              color: COLORS.ink,
-            }}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-            placeholderTextColor={COLORS.bark}
-            secureTextEntry
-            autoCapitalize="none"
-            testID="password-input"
-          />
-        </View>
+        <PasswordInput
+          label="PASSWORD"
+          value={password}
+          onChangeText={updatePassword}
+          error={errors.password}
+          testID="password-input"
+        />
 
         <Pressable
           onPress={signInWithEmail}
@@ -131,6 +105,7 @@ export default function LoginScreen() {
           testID="sign-in-button"
           style={({ pressed }) => [
             {
+              marginTop: 6,
               backgroundColor: COLORS.clay,
               borderRadius: 24,
               paddingVertical: 16,

@@ -6,66 +6,23 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
+import { PasswordInput } from '@/components/PasswordInput';
+import { TextField } from '@/components/TextField';
 import { COLORS, glow } from '@/constants/AppTheme';
 import { auth } from '@/lib/firebase';
 import { getUserFriendlyError } from '@/utils/errors';
+import { validateEmail, validatePassword, validateRequired } from '@/utils/validation';
 
-function Field({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  secureTextEntry,
-  autoCapitalize = 'sentences',
-  keyboardType,
-}: {
-  label: string;
-  value: string;
-  onChangeText: (v: string) => void;
-  placeholder: string;
-  secureTextEntry?: boolean;
-  autoCapitalize?: 'sentences' | 'none' | 'words' | 'characters';
-  keyboardType?: 'default' | 'email-address';
-}) {
-  return (
-    <View style={{ marginBottom: 14 }}>
-      <Text
-        style={{
-          color: COLORS.bark,
-          fontSize: 11,
-          fontWeight: '700',
-          letterSpacing: 0.6,
-          marginBottom: 8,
-        }}
-      >
-        {label}
-      </Text>
-      <TextInput
-        style={{
-          backgroundColor: COLORS.surface,
-          borderWidth: 1,
-          borderColor: COLORS.sand,
-          borderRadius: 14,
-          paddingHorizontal: 14,
-          paddingVertical: 14,
-          fontSize: 15,
-          color: COLORS.ink,
-        }}
-        onChangeText={onChangeText}
-        value={value}
-        placeholder={placeholder}
-        placeholderTextColor={COLORS.bark}
-        secureTextEntry={secureTextEntry}
-        autoCapitalize={autoCapitalize}
-        keyboardType={keyboardType}
-      />
-    </View>
-  );
-}
+type Errors = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+};
 
 export default function RegisterScreen() {
   const { top } = useSafeAreaInsets();
@@ -73,23 +30,35 @@ export default function RegisterScreen() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<Errors>({});
   const [loading, setLoading] = useState(false);
 
+  function update<K extends keyof Errors>(field: K, setter: (v: string) => void) {
+    return (value: string) => {
+      setter(value);
+      if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }));
+    };
+  }
+
   async function signUp() {
-    if (!firstName || !lastName) {
-      Alert.alert('Missing Info', 'Please enter your first and last name.');
-      return;
-    }
+    const nextErrors: Errors = {
+      firstName: validateRequired(firstName, 'First name'),
+      lastName: validateRequired(lastName, 'Last name'),
+      email: validateEmail(email),
+      password: validatePassword(password),
+    };
+    setErrors(nextErrors);
+    if (Object.values(nextErrors).some(Boolean)) return;
 
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
       await updateProfile(userCredential.user, {
-        displayName: `${firstName} ${lastName}`,
+        displayName: `${firstName.trim()} ${lastName.trim()}`,
       });
       await sendEmailVerification(userCredential.user);
     } catch (error: unknown) {
-      Alert.alert('Registration Error', getUserFriendlyError(error));
+      Alert.alert('Registration error', getUserFriendlyError(error));
     } finally {
       setLoading(false);
     }
@@ -137,39 +106,40 @@ export default function RegisterScreen() {
 
         <View style={{ flexDirection: 'row', gap: 12 }}>
           <View style={{ flex: 1 }}>
-            <Field
+            <TextField
               label="FIRST NAME"
               value={firstName}
-              onChangeText={setFirstName}
+              onChangeText={update('firstName', setFirstName)}
               placeholder="Iris"
+              error={errors.firstName}
             />
           </View>
           <View style={{ flex: 1 }}>
-            <Field
+            <TextField
               label="LAST NAME"
               value={lastName}
-              onChangeText={setLastName}
+              onChangeText={update('lastName', setLastName)}
               placeholder="Calloway"
+              error={errors.lastName}
             />
           </View>
         </View>
 
-        <Field
+        <TextField
           label="EMAIL"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={update('email', setEmail)}
           placeholder="email@address.com"
           autoCapitalize="none"
           keyboardType="email-address"
+          error={errors.email}
         />
 
-        <Field
+        <PasswordInput
           label="PASSWORD"
           value={password}
-          onChangeText={setPassword}
-          placeholder="Password"
-          autoCapitalize="none"
-          secureTextEntry
+          onChangeText={update('password', setPassword)}
+          error={errors.password}
         />
 
         <Pressable

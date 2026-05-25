@@ -3,14 +3,49 @@
 Expo Router app for identifying plants and animals in the wild. Mobile-first
 (iOS + Android), with web supported only for browser testing.
 
+## Architecture: offline-first
+
+This is the most important thing to internalize before suggesting any data
+work — **the app must function fully offline**. Most use happens in the
+backcountry where users have no cell signal. That drives a different shape
+than a typical Expo + Firebase app:
+
+- **Species catalog (Trees, Birds, Insects, Snakes — taxonomy, photos,
+  identifying features, range notes) ships inside the app bundle**, not
+  Firestore. Updating the catalog means shipping an app update.
+- **ML models for #3 / #18 also ship in-app** (or are downloaded once and
+  cached), not called via a network API.
+- **User-generated content** (sightings, photos, journal entries, favorites)
+  is **local-first**. Use on-device storage (`expo-file-system` for photos,
+  AsyncStorage / SQLite / MMKV for metadata) as the source of truth. If we
+  ever want cross-device sync, layer Firestore on top as a background sync
+  target — but reads always come from local first.
+- **Firebase's role is intentionally narrow:** auth (requires internet on
+  first sign-in, then session token is cached), and maybe optional cloud
+  backup of sightings later. Don't reach for Firestore as the default
+  persistence layer the way skateboard does.
+- **Network calls in the hot path are a bug.** If something needs to render
+  while the user is identifying a plant in the desert, it can't depend on
+  reaching the internet.
+
+Implications for existing issues: #8 (Firestore schema) is much narrower than
+it reads — auth profile only, not catalog. #10 (replace hardcoded data) is
+actually about moving the hardcoded arrays into a bundled catalog file, not
+about Firestore queries. #17/#19/#20 (data sourcing) are about what to bundle
+at build time, not what to fetch at runtime.
+
 ## Sibling project
 
 `/Users/justin.leggett/Projects/react-native/skateboard/` is the canonical
-reference architecture. When the user says "use the same strategy as
-skateboard," port the pattern from there — Firebase auth, AuthContext,
-Zustand store, jest setup, EAS config, `firestore.rules` all originated there.
-Match its file layout when adding equivalents here so cross-project ports
-stay easy.
+reference for **auth, theming, Zustand store, jest setup, EAS config, and
+file layout**. When the user says "use the same strategy as skateboard,"
+port those patterns from there.
+
+**Do not port skateboard's Firestore-heavy data model** — skateboard is an
+online-first app where collections are the source of truth. WildLens is
+offline-first (see above). The places where the two apps diverge most are
+data persistence and the role of Firebase. Match skateboard's file layout
+when adding equivalents, but don't assume its Firestore patterns apply.
 
 ## Stack
 
@@ -133,13 +168,23 @@ restarts when env vars change (`npx expo start -c`).
   passing — proactively suggest filing one rather than silently fixing
   off-task things.
 
-## What's hardcoded (and shouldn't be assumed real)
+## Data layer status
 
-The entire app's data layer is static arrays right now: Recent finds, Browse
-the guide counts, Field Guide species list, Profile stats/badges/entries,
-Journal entries, Result page Saguaro data. Issues #8–#11 cover wiring
-Firestore. New work that depends on data shape should consult #8's schema
-proposal first.
+Two kinds of "fake" data live in the screens right now:
+
+1. **Catalog data** (species names, regions, photos, descriptions) — currently
+   inline arrays per screen. The *bundle-with-the-app* end state is similar
+   in shape; the work is to extract these into a single source of truth
+   (e.g. `constants/catalog.ts` or `assets/catalog.json`) keyed by id, then
+   import it from each screen. **Not** a Firestore migration.
+2. **User-specific data** (counters like "47 species · 14d streak", recent
+   finds, journal entries, favorites, sightings) — also hardcoded today.
+   This needs an actual local persistence layer (AsyncStorage or SQLite),
+   keyed by the signed-in user's uid. Sync to Firestore is optional and out
+   of scope for the offline-first MVP.
+
+Always treat the visible numbers in the Profile / Home screens as fiction
+until #10 lands.
 
 ## Out of scope (don't add without asking)
 
@@ -147,6 +192,10 @@ proposal first.
 - Social auth (Google / Apple) — the email + verify pattern is intentional
 - `@react-native-firebase/*` native modules — we use the JS SDK on purpose
 - `firebase-admin` or server SDKs — this is a pure client app
+- **Network-dependent code paths in the identification or guide flow** —
+  app must work offline (see Architecture above). Auth is the one exception.
+- Streaming photos / catalog data from Firestore Storage on demand —
+  bundle it in the app instead
 - Comments that explain WHAT the code does — keep them for non-obvious WHY
 - New marketing / docs `.md` files — write to the PR description or an issue
   instead unless asked

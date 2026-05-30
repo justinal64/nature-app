@@ -1,40 +1,118 @@
 import { Ionicons } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { G, Line, Path, Rect } from 'react-native-svg';
+import Svg, { G, Line } from 'react-native-svg';
 
-import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow } from '@/constants/AppTheme';
 
 export default function CaptureScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const router = useRouter();
+  const cameraRef = useRef<CameraView>(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [facing, setFacing] = useState<'front' | 'back'>('back');
+  const [flash, setFlash] = useState<'on' | 'off'>('off');
+  const [capturing, setCapturing] = useState(false);
+
+  async function takePicture() {
+    if (!cameraRef.current || capturing) return;
+    setCapturing(true);
+    try {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.85 });
+      if (photo) {
+        router.replace({ pathname: '/result', params: { photoUri: photo.uri } });
+      }
+    } finally {
+      setCapturing(false);
+    }
+  }
+
+  async function pickFromGallery() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: 'images',
+      quality: 0.85,
+    });
+    if (!result.canceled) {
+      router.replace({ pathname: '/result', params: { photoUri: result.assets[0].uri } });
+    }
+  }
+
+  if (!permission) {
+    return <View style={{ flex: 1, backgroundColor: COLORS.ink }} />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.ink,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: 36,
+        }}
+      >
+        <Ionicons name="camera-outline" size={52} color={COLORS.cream} />
+        <Text
+          style={{
+            color: COLORS.cream,
+            fontSize: 20,
+            fontWeight: '700',
+            marginTop: 20,
+            textAlign: 'center',
+          }}
+        >
+          Camera access needed
+        </Text>
+        <Text
+          style={{
+            color: COLORS.bark,
+            fontSize: 15,
+            marginTop: 10,
+            textAlign: 'center',
+            lineHeight: 22,
+          }}
+        >
+          WildLens uses your camera to identify plants and animals.
+        </Text>
+        {permission.canAskAgain ? (
+          <Pressable
+            onPress={requestPermission}
+            style={{
+              marginTop: 28,
+              backgroundColor: COLORS.clay,
+              borderRadius: 24,
+              paddingVertical: 14,
+              paddingHorizontal: 32,
+            }}
+          >
+            <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+              Allow Camera
+            </Text>
+          </Pressable>
+        ) : (
+          <Text
+            style={{ color: COLORS.bark, fontSize: 13, marginTop: 20, textAlign: 'center' }}
+          >
+            Go to Settings → WildLens → Camera to enable access.
+          </Text>
+        )}
+        <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
+          <Text style={{ color: COLORS.bark, fontSize: 15 }}>Go back</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.gold }}>
-      <View style={{ position: 'absolute', inset: 0 }}>
-        <Svg width="100%" height="100%" viewBox="0 0 393 752" preserveAspectRatio="xMidYMid slice">
-          <Rect x={0} y={0} width={393} height={752} fill={COLORS.gold} />
-          <Path
-            d="M0 520 L 80 480 L 140 510 L 220 470 L 290 500 L 393 475 L 393 752 L 0 752 Z"
-            fill={COLORS.dusk}
-            opacity={0.4}
-          />
-          <Path
-            d="M0 560 L 100 530 L 180 555 L 260 525 L 350 550 L 393 535 L 393 752 L 0 752 Z"
-            fill={COLORS.bark}
-            opacity={0.5}
-          />
-          <Rect x={0} y={600} width={393} height={152} fill={COLORS.clay} opacity={0.7} />
-          <G fill={COLORS.ink} opacity={0.85}>
-            <Rect x={170} y={300} width={32} height={300} rx={12} />
-            <Path d="M170 460 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
-            <Path d="M202 420 q 34 0 34 -34 v -36 q 0 -12 -12 -12 v 44 q 0 8 -8 8 h -14 z" />
-          </G>
-        </Svg>
-      </View>
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+      <CameraView ref={cameraRef} style={{ flex: 1 }} facing={facing} flash={flash} />
 
+      {/* Reticle corners */}
       <View style={{ position: 'absolute', inset: 0 }}>
         <Svg width="100%" height="100%" viewBox="0 0 393 752">
           <G stroke={COLORS.cream} strokeWidth={2.5} fill="none" opacity={0.9}>
@@ -50,6 +128,7 @@ export default function CaptureScreen() {
         </Svg>
       </View>
 
+      {/* Top bar */}
       <View
         style={{
           position: 'absolute',
@@ -78,18 +157,25 @@ export default function CaptureScreen() {
 
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Pressable
+            onPress={() => setFlash(f => (f === 'off' ? 'on' : 'off'))}
             style={{
               width: 42,
               height: 42,
               borderRadius: 21,
-              backgroundColor: 'rgba(10, 10, 24, 0.45)',
+              backgroundColor:
+                flash === 'on' ? COLORS.gold : 'rgba(10, 10, 24, 0.45)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="flash-outline" size={20} color={COLORS.cream} />
+            <Ionicons
+              name={flash === 'on' ? 'flash' : 'flash-outline'}
+              size={20}
+              color={COLORS.cream}
+            />
           </Pressable>
           <Pressable
+            onPress={() => setFacing(f => (f === 'back' ? 'front' : 'back'))}
             style={{
               width: 42,
               height: 42,
@@ -104,6 +190,7 @@ export default function CaptureScreen() {
         </View>
       </View>
 
+      {/* Hint pill */}
       <View
         style={{
           position: 'absolute',
@@ -134,51 +221,7 @@ export default function CaptureScreen() {
         </View>
       </View>
 
-      <View
-        style={{
-          position: 'absolute',
-          left: 20,
-          right: 20,
-          bottom: bottom + 130,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 12,
-          backgroundColor: 'rgba(10, 10, 24, 0.7)',
-          borderRadius: 18,
-          padding: 14,
-          borderWidth: 1,
-          borderColor: 'rgba(244, 236, 218, 0.18)',
-        }}
-      >
-        <View
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
-            backgroundColor: COLORS.gold,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Ionicons name="sparkles" size={18} color={COLORS.ink} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              color: COLORS.cream,
-              fontWeight: '700',
-              fontSize: 15,
-              marginBottom: 2,
-            }}
-          >
-            Looks like a Saguaro
-          </Text>
-          <Text style={{ color: 'rgba(244, 236, 218, 0.7)', fontSize: 12, lineHeight: 16 }}>
-            Tap the shutter to confirm — or move closer for a sharper ID.
-          </Text>
-        </View>
-      </View>
-
+      {/* Bottom controls */}
       <View
         style={{
           position: 'absolute',
@@ -192,6 +235,7 @@ export default function CaptureScreen() {
         }}
       >
         <Pressable
+          onPress={pickFromGallery}
           style={{
             width: 50,
             height: 50,
@@ -199,14 +243,14 @@ export default function CaptureScreen() {
             backgroundColor: 'rgba(10, 10, 24, 0.45)',
             alignItems: 'center',
             justifyContent: 'center',
-            overflow: 'hidden',
           }}
         >
-          <SpeciesIcon kind="bird" size={28} color={COLORS.cream} />
+          <Ionicons name="images-outline" size={24} color={COLORS.cream} />
         </Pressable>
 
         <Pressable
-          onPress={() => router.replace('/result')}
+          onPress={takePicture}
+          disabled={capturing}
           style={({ pressed }) => [
             {
               width: 78,
@@ -218,32 +262,27 @@ export default function CaptureScreen() {
               alignItems: 'center',
               justifyContent: 'center',
               transform: [{ scale: pressed ? 0.94 : 1 }],
+              opacity: capturing ? 0.6 : 1,
             },
             glow(COLORS.cream, 12),
           ]}
         >
-          <View
-            style={{
-              width: 58,
-              height: 58,
-              borderRadius: 29,
-              backgroundColor: COLORS.cream,
-            }}
-          />
+          {capturing ? (
+            <ActivityIndicator color={COLORS.cream} />
+          ) : (
+            <View
+              style={{
+                width: 58,
+                height: 58,
+                borderRadius: 29,
+                backgroundColor: COLORS.cream,
+              }}
+            />
+          )}
         </Pressable>
 
-        <Pressable
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 14,
-            backgroundColor: 'rgba(10, 10, 24, 0.45)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Ionicons name="arrow-up" size={22} color={COLORS.cream} />
-        </Pressable>
+        {/* Spacer keeps the shutter centred */}
+        <View style={{ width: 50 }} />
       </View>
     </View>
   );

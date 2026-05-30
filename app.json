@@ -4,7 +4,6 @@
     "slug": "wildlens",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "wildlens",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
@@ -17,16 +16,11 @@
     },
     "android": {
       "package": "com.justinleggett.wildlens",
-      "adaptiveIcon": {
-        "backgroundColor": "#0F1A0B",
-        "foregroundImage": "./assets/images/android-icon-foreground.png"
-      },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
       "expo-router",
@@ -38,11 +32,23 @@
       ],
       "expo-font",
       "expo-web-browser",
-      "expo-image"
+      "expo-image",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "WildLens uses your camera to identify plants and animals.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "WildLens reads photos from your library so you can identify species from existing images."
+        }
+      ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     },
     "extra": {
       "router": {}

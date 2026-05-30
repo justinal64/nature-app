@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Rect } from 'react-native-svg';
@@ -16,6 +17,7 @@ const OTHER = [
 export default function ResultScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -24,25 +26,33 @@ export default function ResultScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ height: 320, backgroundColor: COLORS.gold, overflow: 'hidden' }}>
-          <Svg width="100%" height="100%" viewBox="0 0 393 320" preserveAspectRatio="none">
-            <Rect x={0} y={0} width={393} height={320} fill={COLORS.gold} />
-            <Path
-              d="M0 220 L 80 180 L 140 210 L 220 170 L 290 200 L 393 175 L 393 320 L 0 320 Z"
-              fill={COLORS.dusk}
-              opacity={0.4}
+          {photoUri ? (
+            <Image
+              source={{ uri: photoUri }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
             />
-            <Path
-              d="M0 250 L 100 220 L 180 245 L 260 215 L 350 240 L 393 225 L 393 320 L 0 320 Z"
-              fill={COLORS.bark}
-              opacity={0.5}
-            />
-            <Rect x={0} y={280} width={393} height={40} fill={COLORS.clay} opacity={0.7} />
-            <G fill={COLORS.ink} opacity={0.85}>
-              <Rect x={170} y={110} width={32} height={210} rx={12} />
-              <Path d="M170 210 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
-              <Path d="M202 190 q 34 0 34 -34 v -36 q 0 -12 -12 -12 v 44 q 0 8 -8 8 h -14 z" />
-            </G>
-          </Svg>
+          ) : (
+            <Svg width="100%" height="100%" viewBox="0 0 393 320" preserveAspectRatio="none">
+              <Rect x={0} y={0} width={393} height={320} fill={COLORS.gold} />
+              <Path
+                d="M0 220 L 80 180 L 140 210 L 220 170 L 290 200 L 393 175 L 393 320 L 0 320 Z"
+                fill={COLORS.dusk}
+                opacity={0.4}
+              />
+              <Path
+                d="M0 250 L 100 220 L 180 245 L 260 215 L 350 240 L 393 225 L 393 320 L 0 320 Z"
+                fill={COLORS.bark}
+                opacity={0.5}
+              />
+              <Rect x={0} y={280} width={393} height={40} fill={COLORS.clay} opacity={0.7} />
+              <G fill={COLORS.ink} opacity={0.85}>
+                <Rect x={170} y={110} width={32} height={210} rx={12} />
+                <Path d="M170 210 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
+                <Path d="M202 190 q 34 0 34 -34 v -36 q 0 -12 -12 -12 v 44 q 0 8 -8 8 h -14 z" />
+              </G>
+            </Svg>
+          )}
 
           <View
             style={{

@@ -9,7 +9,9 @@ function CameraTabButton() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Pressable
-        onPress={() => router.push('/capture')}
+        accessibilityLabel="Capture photo"
+        accessibilityRole="button"
+        onPress={() => router.navigate('/capture')}
         style={({ pressed }) => [
           {
             width: 60,

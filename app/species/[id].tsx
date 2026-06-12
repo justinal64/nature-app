@@ -1,14 +1,27 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 const TABS = ['Overview', 'ID Tips', 'Your sightings'] as const;
 type TabName = (typeof TABS)[number];
+
+// One entry per carousel image. Extend when real photos are bundled.
+const IMAGES = ['primary'] as const;
+
+const ID_TIPS = [
+  'Ribbed, column-shaped trunk that expands after monsoon rain to store water',
+  'Arms typically develop after 50–75 years of growth',
+  'White, waxy flowers bloom at arm tips in May–June',
+  'Grows only in the Sonoran Desert — Arizona, California, and Sonora, Mexico',
+  'Distinctive pleated texture visible on the trunk of mature specimens',
+];
 
 const STATS: { label: string; value: string }[] = [
   { label: 'Habitat', value: 'Sonoran' },
@@ -23,6 +36,7 @@ export default function SpeciesDetailScreen() {
   const router = useRouter();
   const [tab, setTab] = useState<TabName>('Overview');
   const [liked, setLiked] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -30,26 +44,50 @@ export default function SpeciesDetailScreen() {
         contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ height: 360, backgroundColor: COLORS.gold, overflow: 'hidden' }}>
-          <Svg width="100%" height="100%" viewBox="0 0 393 360" preserveAspectRatio="none">
-            <Rect x={0} y={0} width={393} height={360} fill={COLORS.gold} />
-            <Path
-              d="M0 250 L 80 210 L 140 240 L 220 200 L 290 230 L 393 205 L 393 360 L 0 360 Z"
-              fill={COLORS.dusk}
-              opacity={0.4}
-            />
-            <Path
-              d="M0 280 L 100 250 L 180 275 L 260 245 L 350 270 L 393 255 L 393 360 L 0 360 Z"
-              fill={COLORS.bark}
-              opacity={0.5}
-            />
-            <Rect x={0} y={310} width={393} height={50} fill={COLORS.clay} opacity={0.7} />
-            <G fill={COLORS.ink} opacity={0.85}>
-              <Rect x={170} y={130} width={32} height={220} rx={12} />
-              <Path d="M170 230 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
-              <Path d="M202 210 q 34 0 34 -34 v -36 q 0 -12 -12 -12 v 44 q 0 8 -8 8 h -14 z" />
-            </G>
-          </Svg>
+        <View style={{ height: 360, overflow: 'hidden' }}>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={(e) =>
+              setImageIndex(Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH))
+            }
+            style={{ height: 360 }}
+          >
+            {IMAGES.map((key, i) => (
+              <View
+                key={key}
+                style={{
+                  width: SCREEN_WIDTH,
+                  height: 360,
+                  backgroundColor: COLORS.gold,
+                  overflow: 'hidden',
+                }}
+              >
+                {i === 0 && (
+                  <Svg width="100%" height="100%" viewBox="0 0 393 360" preserveAspectRatio="none">
+                    <Rect x={0} y={0} width={393} height={360} fill={COLORS.gold} />
+                    <Path
+                      d="M0 250 L 80 210 L 140 240 L 220 200 L 290 230 L 393 205 L 393 360 L 0 360 Z"
+                      fill={COLORS.dusk}
+                      opacity={0.4}
+                    />
+                    <Path
+                      d="M0 280 L 100 250 L 180 275 L 260 245 L 350 270 L 393 255 L 393 360 L 0 360 Z"
+                      fill={COLORS.bark}
+                      opacity={0.5}
+                    />
+                    <Rect x={0} y={310} width={393} height={50} fill={COLORS.clay} opacity={0.7} />
+                    <G fill={COLORS.ink} opacity={0.85}>
+                      <Rect x={170} y={130} width={32} height={220} rx={12} />
+                      <Path d="M170 230 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
+                      <Path d="M202 210 q 34 0 34 -34 v -36 q 0 -12 -12 -12 v 44 q 0 8 -8 8 h -14 z" />
+                    </G>
+                  </Svg>
+                )}
+              </View>
+            ))}
+          </ScrollView>
 
           <View
             style={{
@@ -119,7 +157,9 @@ export default function SpeciesDetailScreen() {
               borderRadius: 12,
             }}
           >
-            <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '600' }}>1 / 6</Text>
+            <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '600' }}>
+              {imageIndex + 1} / {IMAGES.length}
+            </Text>
           </View>
         </View>
 
@@ -234,59 +274,91 @@ export default function SpeciesDetailScreen() {
           ))}
         </View>
 
-        <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
-          <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23 }}>
-            The towering icon of the Sonoran Desert. Saguaros can take 70 years to grow their first
-            arm and live for two centuries — pleated trunks swell to hold rainwater after monsoon
-            storms.
-          </Text>
-        </View>
+        {tab === 'Overview' && (
+          <>
+            <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
+              <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23 }}>
+                The towering icon of the Sonoran Desert. Saguaros can take 70 years to grow their
+                first arm and live for two centuries — pleated trunks swell to hold rainwater after
+                monsoon storms.
+              </Text>
+            </View>
 
-        <View
-          style={[
-            {
-              marginHorizontal: 16,
-              marginTop: 22,
-              backgroundColor: COLORS.dusk,
-              borderRadius: 18,
-              padding: 18,
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              gap: 12,
-            },
-            glow(COLORS.dusk, 12),
-          ]}
-        >
-          <View
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 16,
-              backgroundColor: COLORS.gold,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>i</Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                color: COLORS.gold,
-                fontSize: 11,
-                fontWeight: '700',
-                letterSpacing: 0.6,
-                textTransform: 'uppercase',
-                marginBottom: 4,
-              }}
+            <View
+              style={[
+                {
+                  marginHorizontal: 16,
+                  marginTop: 22,
+                  backgroundColor: COLORS.dusk,
+                  borderRadius: 18,
+                  padding: 18,
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  gap: 12,
+                },
+                glow(COLORS.dusk, 12),
+              ]}
             >
-              Did you know
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                  backgroundColor: COLORS.gold,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>i</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    color: COLORS.gold,
+                    fontSize: 11,
+                    fontWeight: '700',
+                    letterSpacing: 0.6,
+                    textTransform: 'uppercase',
+                    marginBottom: 4,
+                  }}
+                >
+                  Did you know
+                </Text>
+                <Text style={{ color: COLORS.cream, fontSize: 14, lineHeight: 20 }}>
+                  A flowering Saguaro can hold up to 80 lbs of water in a single arm.
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
+
+        {tab === 'ID Tips' && (
+          <View style={{ paddingHorizontal: 24, marginTop: 22, gap: 14 }}>
+            {ID_TIPS.map((tip) => (
+              <View key={tip} style={{ flexDirection: 'row', gap: 10 }}>
+                <Text style={{ color: COLORS.clay, fontSize: 16, fontWeight: '700', lineHeight: 23 }}>
+                  •
+                </Text>
+                <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23, flex: 1 }}>
+                  {tip}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {tab === 'Your sightings' && (
+          <View
+            style={{ paddingHorizontal: 24, marginTop: 48, alignItems: 'center', gap: 8 }}
+          >
+            <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
+              No sightings yet
             </Text>
-            <Text style={{ color: COLORS.cream, fontSize: 14, lineHeight: 20 }}>
-              A flowering Saguaro can hold up to 80 lbs of water in a single arm.
+            <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
+              Spot a Saguaro? Use the camera to log your first sighting.
             </Text>
           </View>
-        </View>
+        )}
 
       </ScrollView>
     </View>

@@ -2,12 +2,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
+import Animated, {
+  Extrapolation,
+  FadeIn,
+  FadeInDown,
+  ZoomIn,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 
+import { PressableScale } from '@/components/PressableScale';
+import { Reveal } from '@/components/Reveal';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const HERO_HEIGHT = 360;
 
 const TABS = ['Overview', 'ID Tips', 'Your sightings'] as const;
 type TabName = (typeof TABS)[number];
@@ -38,13 +53,51 @@ export default function SpeciesDetailScreen() {
   const [liked, setLiked] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
+  const scrollY = useSharedValue(0);
+  const heartScale = useSharedValue(1);
+
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
+  // Stretch on pull-down, recede at half speed on scroll-up
+  const heroStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: interpolate(
+          scrollY.value,
+          [-HERO_HEIGHT, 0, HERO_HEIGHT],
+          [-HERO_HEIGHT / 2, 0, HERO_HEIGHT / 2],
+          Extrapolation.CLAMP,
+        ),
+      },
+      {
+        scale: interpolate(scrollY.value, [-HERO_HEIGHT, 0], [1.8, 1], {
+          extrapolateRight: Extrapolation.CLAMP,
+        }),
+      },
+    ],
+  }));
+
+  const heartStyle = useAnimatedStyle(() => ({ transform: [{ scale: heartScale.value }] }));
+
+  const toggleLike = () => {
+    setLiked((v) => !v);
+    heartScale.value = withSequence(
+      withSpring(1.45, { damping: 9, stiffness: 420 }),
+      withSpring(1, { damping: 14, stiffness: 260 }),
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ height: 360, overflow: 'hidden' }}>
+        <Animated.View style={[{ height: HERO_HEIGHT, overflow: 'hidden' }, heroStyle]}>
           <ScrollView
             horizontal
             pagingEnabled
@@ -52,14 +105,14 @@ export default function SpeciesDetailScreen() {
             onMomentumScrollEnd={(e) =>
               setImageIndex(Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH))
             }
-            style={{ height: 360 }}
+            style={{ height: HERO_HEIGHT }}
           >
             {IMAGES.map((key, i) => (
               <View
                 key={key}
                 style={{
                   width: SCREEN_WIDTH,
-                  height: 360,
+                  height: HERO_HEIGHT,
                   backgroundColor: COLORS.gold,
                   overflow: 'hidden',
                 }}
@@ -92,63 +145,6 @@ export default function SpeciesDetailScreen() {
           <View
             style={{
               position: 'absolute',
-              top: top + 12,
-              left: 16,
-              right: 16,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Pressable
-              onPress={() => router.back()}
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: 21,
-                backgroundColor: 'rgba(10, 10, 24, 0.4)',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
-            </Pressable>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
-              <Pressable
-                onPress={() => setLiked((v) => !v)}
-                style={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: 21,
-                  backgroundColor: 'rgba(10, 10, 24, 0.4)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Ionicons
-                  name={liked ? 'heart' : 'heart-outline'}
-                  size={20}
-                  color={liked ? COLORS.clay : COLORS.cream}
-                />
-              </Pressable>
-              <Pressable
-                style={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: 21,
-                  backgroundColor: 'rgba(10, 10, 24, 0.4)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Ionicons name="share-outline" size={20} color={COLORS.cream} />
-              </Pressable>
-            </View>
-          </View>
-
-          <View
-            style={{
-              position: 'absolute',
               bottom: 16,
               right: 16,
               backgroundColor: 'rgba(10, 10, 24, 0.5)',
@@ -161,77 +157,79 @@ export default function SpeciesDetailScreen() {
               {imageIndex + 1} / {IMAGES.length}
             </Text>
           </View>
-        </View>
+        </Animated.View>
 
-        <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
-          <Text
+        <Reveal>
+          <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
+            <Text
+              style={{
+                color: COLORS.clay,
+                fontSize: 12,
+                fontWeight: '700',
+                letterSpacing: 0.6,
+                textTransform: 'uppercase',
+              }}
+            >
+              Cacti · Cactaceae
+            </Text>
+            <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}>
+              Saguaro
+            </Text>
+            <Text
+              style={{
+                color: COLORS.bark,
+                fontStyle: 'italic',
+                fontSize: 15,
+                marginTop: 2,
+              }}
+            >
+              Carnegiea gigantea
+            </Text>
+          </View>
+        </Reveal>
+
+        <Reveal delay={70}>
+          <View
             style={{
-              color: COLORS.clay,
-              fontSize: 12,
-              fontWeight: '700',
-              letterSpacing: 0.6,
-              textTransform: 'uppercase',
+              flexDirection: 'row',
+              marginHorizontal: 24,
+              marginTop: 22,
+              backgroundColor: COLORS.cream,
+              borderRadius: 14,
+              padding: 4,
             }}
           >
-            Cacti · Cactaceae
-          </Text>
-          <Text
-            style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}
-          >
-            Saguaro
-          </Text>
-          <Text
-            style={{
-              color: COLORS.bark,
-              fontStyle: 'italic',
-              fontSize: 15,
-              marginTop: 2,
-            }}
-          >
-            Carnegiea gigantea
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 24,
-            marginTop: 22,
-            backgroundColor: COLORS.cream,
-            borderRadius: 14,
-            padding: 4,
-          }}
-        >
-          {TABS.map((t) => {
-            const active = tab === t;
-            return (
-              <Pressable
-                key={t}
-                onPress={() => setTab(t)}
-                style={[
-                  {
-                    flex: 1,
-                    paddingVertical: 10,
-                    borderRadius: 11,
-                    alignItems: 'center',
-                    backgroundColor: active ? COLORS.surface : 'transparent',
-                  },
-                  active ? softShadow(0.05, 4, 1) : {},
-                ]}
-              >
-                <Text
-                  style={{
-                    color: active ? COLORS.ink : COLORS.bark,
-                    fontWeight: active ? '700' : '600',
-                    fontSize: 13,
-                  }}
+            {TABS.map((t) => {
+              const active = tab === t;
+              return (
+                <Pressable
+                  key={t}
+                  onPress={() => setTab(t)}
+                  style={[
+                    {
+                      flex: 1,
+                      paddingVertical: 10,
+                      borderRadius: 11,
+                      alignItems: 'center',
+                      backgroundColor: active ? COLORS.surface : 'transparent',
+                    },
+                    active ? softShadow(0.05, 4, 1) : {},
+                  ]}
                 >
-                  {t}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+                  <Text
+                    style={{
+                      color: active ? COLORS.ink : COLORS.bark,
+                      fontWeight: active ? '700' : '600',
+                      fontSize: 13,
+                    }}
+                  >
+                    {t}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </Reveal>
 
         <View
           style={{
@@ -242,9 +240,10 @@ export default function SpeciesDetailScreen() {
             gap: 10,
           }}
         >
-          {STATS.map((s) => (
-            <View
+          {STATS.map((s, i) => (
+            <Animated.View
               key={s.label}
+              entering={ZoomIn.delay(140 + i * 70).springify().damping(13).stiffness(180)}
               style={[
                 {
                   width: '47.5%',
@@ -257,9 +256,7 @@ export default function SpeciesDetailScreen() {
                 softShadow(0.04, 6, 2),
               ]}
             >
-              <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
-                {s.label}
-              </Text>
+              <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>{s.label}</Text>
               <Text
                 style={{
                   color: COLORS.ink,
@@ -270,12 +267,12 @@ export default function SpeciesDetailScreen() {
               >
                 {s.value}
               </Text>
-            </View>
+            </Animated.View>
           ))}
         </View>
 
         {tab === 'Overview' && (
-          <>
+          <Animated.View key="overview" entering={FadeInDown.duration(280)}>
             <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
               <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23 }}>
                 The towering icon of the Sonoran Desert. Saguaros can take 70 years to grow their
@@ -329,26 +326,34 @@ export default function SpeciesDetailScreen() {
                 </Text>
               </View>
             </View>
-          </>
+          </Animated.View>
         )}
 
         {tab === 'ID Tips' && (
           <View style={{ paddingHorizontal: 24, marginTop: 22, gap: 14 }}>
-            {ID_TIPS.map((tip) => (
-              <View key={tip} style={{ flexDirection: 'row', gap: 10 }}>
-                <Text style={{ color: COLORS.clay, fontSize: 16, fontWeight: '700', lineHeight: 23 }}>
+            {ID_TIPS.map((tip, i) => (
+              <Animated.View
+                key={tip}
+                entering={FadeInDown.delay(i * 60).duration(280)}
+                style={{ flexDirection: 'row', gap: 10 }}
+              >
+                <Text
+                  style={{ color: COLORS.clay, fontSize: 16, fontWeight: '700', lineHeight: 23 }}
+                >
                   •
                 </Text>
                 <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23, flex: 1 }}>
                   {tip}
                 </Text>
-              </View>
+              </Animated.View>
             ))}
           </View>
         )}
 
         {tab === 'Your sightings' && (
-          <View
+          <Animated.View
+            key="sightings"
+            entering={FadeInDown.duration(280)}
             style={{ paddingHorizontal: 24, marginTop: 48, alignItems: 'center', gap: 8 }}
           >
             <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
@@ -357,10 +362,78 @@ export default function SpeciesDetailScreen() {
             <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
               Spot a Saguaro? Use the camera to log your first sighting.
             </Text>
-          </View>
+          </Animated.View>
         )}
+      </Animated.ScrollView>
 
-      </ScrollView>
+      <Animated.View
+        entering={FadeIn.delay(150).duration(350)}
+        style={{
+          position: 'absolute',
+          top: top + 12,
+          left: 16,
+          right: 16,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <PressableScale
+          onPress={() => router.back()}
+          scaleTo={0.88}
+          accessibilityLabel="Go back"
+          accessibilityRole="button"
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 21,
+            backgroundColor: 'rgba(10, 10, 24, 0.4)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
+        </PressableScale>
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          <PressableScale
+            onPress={toggleLike}
+            scaleTo={0.88}
+            accessibilityLabel="Toggle favorite"
+            accessibilityRole="button"
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 21,
+              backgroundColor: 'rgba(10, 10, 24, 0.4)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Animated.View style={heartStyle}>
+              <Ionicons
+                name={liked ? 'heart' : 'heart-outline'}
+                size={20}
+                color={liked ? COLORS.clay : COLORS.cream}
+              />
+            </Animated.View>
+          </PressableScale>
+          <PressableScale
+            scaleTo={0.88}
+            accessibilityLabel="Share"
+            accessibilityRole="button"
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 21,
+              backgroundColor: 'rgba(10, 10, 24, 0.4)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="share-outline" size={20} color={COLORS.cream} />
+          </PressableScale>
+        </View>
+      </Animated.View>
     </View>
   );
 }

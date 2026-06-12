@@ -1,10 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
+import { Floating } from '@/components/Floating';
 import { LandscapeHeader } from '@/components/LandscapeHeader';
+import { PressableScale } from '@/components/PressableScale';
+import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
@@ -22,6 +27,20 @@ const CATEGORIES = [
   { name: 'Insects', count: 217, kind: 'insect' as SpeciesKind },
   { name: 'Snakes', count: 31, kind: 'snake' as SpeciesKind },
 ];
+
+function todayLabel() {
+  const now = new Date();
+  const weekday = now.toLocaleDateString('en-US', { weekday: 'long' });
+  const date = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  return `${weekday} · ${date}`;
+}
+
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning,';
+  if (hour < 18) return 'Good afternoon,';
+  return 'Good evening,';
+}
 
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
@@ -41,198 +60,211 @@ export default function HomeScreen() {
 
       <View style={{ height: top + 8 }} />
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          paddingHorizontal: 24,
-          paddingTop: 18,
-          paddingBottom: 22,
-        }}
-      >
-        <View>
-          <Text
-            style={{
-              color: COLORS.bark,
-              fontSize: 13,
-              fontWeight: '600',
-              letterSpacing: 0.5,
-              marginBottom: 8,
-            }}
-          >
-            Tuesday · May 21
-          </Text>
-          <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '400', lineHeight: 34 }}>
-            Good afternoon,
-          </Text>
-          <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '700', lineHeight: 34 }}>
-            {firstName}.
-          </Text>
-        </View>
+      <Reveal>
         <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            paddingHorizontal: 24,
+            paddingTop: 18,
+            paddingBottom: 22,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                color: COLORS.bark,
+                fontSize: 13,
+                fontWeight: '600',
+                letterSpacing: 0.5,
+                marginBottom: 8,
+              }}
+            >
+              {todayLabel()}
+            </Text>
+            <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '400', lineHeight: 34 }}>
+              {greeting()}
+            </Text>
+            <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '700', lineHeight: 34 }}>
+              {firstName}.
+            </Text>
+          </View>
+          <Animated.View entering={ZoomIn.delay(200).springify().damping(12)}>
+            <View
+              style={[
+                {
+                  width: 52,
+                  height: 52,
+                  borderRadius: 26,
+                  backgroundColor: COLORS.dusk,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 2,
+                  borderColor: COLORS.cream,
+                },
+                softShadow(0.12, 8, 3),
+              ]}
+            >
+              <Text style={{ color: COLORS.cream, fontSize: 22, fontWeight: '700' }}>{initial}</Text>
+            </View>
+          </Animated.View>
+        </View>
+      </Reveal>
+
+      <Reveal delay={90}>
+        <PressableScale
+          onPress={() => router.push('/capture')}
+          scaleTo={0.98}
           style={[
             {
-              width: 52,
-              height: 52,
-              borderRadius: 26,
-              backgroundColor: COLORS.dusk,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 2,
-              borderColor: COLORS.cream,
+              marginHorizontal: 20,
+              height: 168,
+              borderRadius: 24,
+              overflow: 'hidden',
             },
-            softShadow(0.12, 8, 3),
+            softShadow(0.18, 18, 8),
           ]}
         >
-          <Text style={{ color: COLORS.cream, fontSize: 22, fontWeight: '700' }}>{initial}</Text>
-        </View>
-      </View>
-
-      <Pressable
-        onPress={() => router.push('/capture')}
-        style={({ pressed }) => [
-          {
-            marginHorizontal: 20,
-            height: 168,
-            borderRadius: 24,
-            overflow: 'hidden',
-            backgroundColor: COLORS.gold,
-            transform: [{ scale: pressed ? 0.99 : 1 }],
-          },
-          softShadow(0.15, 16, 6),
-        ]}
-      >
-        <Svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 360 168"
-          preserveAspectRatio="none"
-          style={{ position: 'absolute' }}
-        >
-          <Path
-            d="M -20 100 Q 80 60, 180 90 T 380 70 L 380 168 L -20 168 Z"
-            fill={COLORS.gold}
+          <LinearGradient
+            colors={[COLORS.gold, COLORS.clay]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1.3 }}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
           />
-          <Path
-            d="M -20 130 Q 100 100, 220 130 T 380 110 L 380 168 L -20 168 Z"
-            fill={COLORS.ink}
-            opacity={0.55}
-          />
-        </Svg>
+          <Svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 360 168"
+            preserveAspectRatio="none"
+            style={{ position: 'absolute' }}
+          >
+            <Path
+              d="M -20 100 Q 80 60, 180 90 T 380 70 L 380 168 L -20 168 Z"
+              fill={COLORS.gold}
+              opacity={0.7}
+            />
+            <Path
+              d="M -20 130 Q 100 100, 220 130 T 380 110 L 380 168 L -20 168 Z"
+              fill={COLORS.ink}
+              opacity={0.55}
+            />
+          </Svg>
 
-        <View
-          style={{
-            position: 'absolute',
-            right: 18,
-            top: 8,
-            opacity: 0.85,
-          }}
-        >
-          <SpeciesIcon kind="cactus" size={140} color={COLORS.ink} />
-        </View>
+          <Floating amplitude={4} duration={3600} style={{ position: 'absolute', right: 18, top: 8, opacity: 0.85 }}>
+            <SpeciesIcon kind="cactus" size={140} color={COLORS.ink} />
+          </Floating>
 
-        <View style={{ position: 'absolute', left: 22, top: 22 }}>
-          <Text
+          <View style={{ position: 'absolute', left: 22, top: 22 }}>
+            <Text
+              style={{
+                color: COLORS.ink,
+                fontSize: 22,
+                fontWeight: '700',
+                letterSpacing: 0.2,
+              }}
+            >
+              AI Identify
+            </Text>
+            <Text
+              style={{
+                color: COLORS.ink,
+                opacity: 0.7,
+                fontSize: 14,
+                marginTop: 4,
+                fontWeight: '500',
+              }}
+            >
+              See something in the wild?
+            </Text>
+          </View>
+
+          <View
             style={{
-              color: COLORS.ink,
-              fontSize: 22,
-              fontWeight: '700',
-              letterSpacing: 0.2,
+              position: 'absolute',
+              right: 16,
+              bottom: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: COLORS.cream,
+              paddingHorizontal: 14,
+              paddingVertical: 10,
+              borderRadius: 22,
+              gap: 8,
             }}
           >
-            AI Identify
-          </Text>
-          <Text
-            style={{
-              color: COLORS.ink,
-              opacity: 0.7,
-              fontSize: 14,
-              marginTop: 4,
-              fontWeight: '500',
-            }}
-          >
-            See something in the wild?
-          </Text>
-        </View>
+            <Ionicons name="camera" size={14} color={COLORS.ink} />
+            <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 13 }}>Take a photo</Text>
+          </View>
+        </PressableScale>
+      </Reveal>
 
+      <Reveal delay={170}>
         <View
           style={{
-            position: 'absolute',
-            right: 16,
-            bottom: 16,
             flexDirection: 'row',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: COLORS.cream,
-            paddingHorizontal: 14,
-            paddingVertical: 10,
-            borderRadius: 22,
-            gap: 8,
+            paddingHorizontal: 24,
+            marginTop: 28,
+            marginBottom: 14,
           }}
         >
-          <Ionicons name="camera" size={14} color={COLORS.ink} />
-          <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 13 }}>Take a photo</Text>
+          <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Recent finds</Text>
+          <Pressable>
+            <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
+          </Pressable>
         </View>
-      </Pressable>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: 24,
-          marginTop: 28,
-          marginBottom: 14,
-        }}
-      >
-        <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Recent finds</Text>
-        <Pressable>
-          <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
-        </Pressable>
-      </View>
+      </Reveal>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
       >
-        {RECENT.map((item) => (
-          <Pressable
+        {RECENT.map((item, i) => (
+          <Animated.View
             key={item.name}
-            style={[
-              {
-                width: 130,
-                borderRadius: 18,
-                backgroundColor: COLORS.surface,
-                padding: 14,
-                borderWidth: 1,
-                borderColor: COLORS.sand,
-              },
-              softShadow(0.05, 8, 2),
-            ]}
+            entering={FadeInDown.delay(220 + i * 70).springify().damping(15).stiffness(150)}
           >
-            <View
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 14,
-                backgroundColor: COLORS.sage,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 10,
-              }}
+            <PressableScale
+              style={[
+                {
+                  width: 130,
+                  borderRadius: 18,
+                  backgroundColor: COLORS.surface,
+                  padding: 14,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                },
+                softShadow(0.05, 8, 2),
+              ]}
             >
-              <SpeciesIcon kind={item.kind} size={44} color={COLORS.cream} />
-            </View>
-            <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{item.name}</Text>
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>{item.time}</Text>
-          </Pressable>
+              <View
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 14,
+                  backgroundColor: COLORS.sage,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 10,
+                }}
+              >
+                <SpeciesIcon kind={item.kind} size={44} color={COLORS.cream} />
+              </View>
+              <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{item.name}</Text>
+              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>{item.time}</Text>
+            </PressableScale>
+          </Animated.View>
         ))}
       </ScrollView>
 
-      <View style={{ paddingHorizontal: 24, marginTop: 28, marginBottom: 14 }}>
-        <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Browse the guide</Text>
-      </View>
+      <Reveal delay={280}>
+        <View style={{ paddingHorizontal: 24, marginTop: 28, marginBottom: 14 }}>
+          <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Browse the guide</Text>
+        </View>
+      </Reveal>
 
       <View
         style={{
@@ -242,42 +274,46 @@ export default function HomeScreen() {
           gap: 12,
         }}
       >
-        {CATEGORIES.map((cat) => (
-          <Pressable
+        {CATEGORIES.map((cat, i) => (
+          <Animated.View
             key={cat.name}
-            onPress={() => router.push('/(tabs)/guide')}
-            style={({ pressed }) => [
-              {
-                width: '47.5%',
-                borderRadius: 18,
-                backgroundColor: COLORS.surface,
-                padding: 16,
-                borderWidth: 1,
-                borderColor: COLORS.sand,
-                alignItems: 'center',
-                transform: [{ scale: pressed ? 0.98 : 1 }],
-              },
-              softShadow(0.05, 8, 2),
-            ]}
+            entering={FadeInDown.delay(320 + i * 70).springify().damping(15).stiffness(150)}
+            style={{ width: '47.5%' }}
           >
-            <View
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 16,
-                backgroundColor: COLORS.cream,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 10,
-              }}
+            <PressableScale
+              onPress={() => router.push('/(tabs)/guide')}
+              scaleTo={0.97}
+              style={[
+                {
+                  borderRadius: 18,
+                  backgroundColor: COLORS.surface,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                  alignItems: 'center',
+                },
+                softShadow(0.05, 8, 2),
+              ]}
             >
-              <SpeciesIcon kind={cat.kind} size={56} color={COLORS.ink} />
-            </View>
-            <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>{cat.name}</Text>
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
-              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{cat.count}</Text> species
-            </Text>
-          </Pressable>
+              <View
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 16,
+                  backgroundColor: COLORS.cream,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 10,
+                }}
+              >
+                <SpeciesIcon kind={cat.kind} size={56} color={COLORS.ink} />
+              </View>
+              <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>{cat.name}</Text>
+              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{cat.count}</Text> species
+              </Text>
+            </PressableScale>
+          </Animated.View>
         ))}
       </View>
     </ScrollView>

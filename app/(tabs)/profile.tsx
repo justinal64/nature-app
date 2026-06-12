@@ -11,18 +11,22 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CountUp } from '@/components/CountUp';
 import { LandscapeHeader } from '@/components/LandscapeHeader';
+import { PressableScale } from '@/components/PressableScale';
+import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 
 const STATS = [
-  { value: '47', label: 'Species' },
-  { value: '128', label: 'Photos' },
-  { value: '14d', label: 'Streak' },
-  { value: '6', label: 'Badges' },
+  { value: 47, suffix: '', label: 'Species' },
+  { value: 128, suffix: '', label: 'Photos' },
+  { value: 14, suffix: 'd', label: 'Streak' },
+  { value: 6, suffix: '', label: 'Badges' },
 ];
 
 const BADGES: { name: string; kind: SpeciesKind }[] = [
@@ -108,31 +112,38 @@ export default function ProfileScreen() {
             gap: 16,
           }}
         >
-          <View
-            style={[
-              {
-                width: 76,
-                height: 76,
-                borderRadius: 38,
-                backgroundColor: COLORS.dusk,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 3,
-                borderColor: COLORS.cream,
-              },
-              glow(COLORS.dusk, 10),
-            ]}
-          >
-            <Text style={{ color: COLORS.cream, fontSize: 32, fontWeight: '700' }}>{initial}</Text>
-          </View>
-          <View style={{ flex: 1 }}>
+          <Animated.View entering={ZoomIn.springify().damping(12)}>
+            <View
+              style={[
+                {
+                  width: 76,
+                  height: 76,
+                  borderRadius: 38,
+                  backgroundColor: COLORS.dusk,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 3,
+                  borderColor: COLORS.cream,
+                },
+                glow(COLORS.dusk, 10),
+              ]}
+            >
+              <Text style={{ color: COLORS.cream, fontSize: 32, fontWeight: '700' }}>
+                {initial}
+              </Text>
+            </View>
+          </Animated.View>
+          <Reveal delay={80} style={{ flex: 1 }}>
             <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '700' }}>
               {displayName}
             </Text>
             <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>{joinedLabel}</Text>
-          </View>
-          <Pressable
+          </Reveal>
+          <PressableScale
             onPress={confirmSignOut}
+            scaleTo={0.9}
+            accessibilityLabel="Sign out"
+            accessibilityRole="button"
             style={{
               width: 38,
               height: 38,
@@ -145,80 +156,87 @@ export default function ProfileScreen() {
             }}
           >
             <Ionicons name="log-out-outline" size={18} color={COLORS.ink} />
-          </Pressable>
+          </PressableScale>
         </View>
 
-        <View
-          style={[
-            {
-              marginHorizontal: 20,
-              marginTop: 22,
-              backgroundColor: COLORS.surface,
-              borderRadius: 18,
-              padding: 16,
-              flexDirection: 'row',
-              borderWidth: 1,
-              borderColor: COLORS.sand,
-            },
-            softShadow(0.05, 8, 2),
-          ]}
-        >
-          {STATS.map((stat, i) => (
-            <View
-              key={stat.label}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                borderLeftWidth: i === 0 ? 0 : 1,
-                borderLeftColor: COLORS.sand,
-              }}
-            >
-              <Text style={{ color: COLORS.ink, fontSize: 20, fontWeight: '700' }}>
-                {stat.value}
-              </Text>
-              <Text
+        <Reveal delay={120}>
+          <View
+            style={[
+              {
+                marginHorizontal: 20,
+                marginTop: 22,
+                backgroundColor: COLORS.surface,
+                borderRadius: 18,
+                padding: 16,
+                flexDirection: 'row',
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+              },
+              softShadow(0.05, 8, 2),
+            ]}
+          >
+            {STATS.map((stat, i) => (
+              <View
+                key={stat.label}
                 style={{
-                  color: COLORS.bark,
-                  fontSize: 11,
-                  fontWeight: '600',
-                  letterSpacing: 0.4,
-                  marginTop: 2,
+                  flex: 1,
+                  alignItems: 'center',
+                  borderLeftWidth: i === 0 ? 0 : 1,
+                  borderLeftColor: COLORS.sand,
                 }}
               >
-                {stat.label}
-              </Text>
-            </View>
-          ))}
-        </View>
+                <CountUp
+                  value={stat.value}
+                  suffix={stat.suffix}
+                  delay={250 + i * 120}
+                  style={{ color: COLORS.ink, fontSize: 20, fontWeight: '700' }}
+                />
+                <Text
+                  style={{
+                    color: COLORS.bark,
+                    fontSize: 11,
+                    fontWeight: '600',
+                    letterSpacing: 0.4,
+                    marginTop: 2,
+                  }}
+                >
+                  {stat.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </Reveal>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 24,
-            marginTop: 28,
-            marginBottom: 12,
-          }}
-        >
-          <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>Recent badges</Text>
-          <Pressable>
-            <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>All ›</Text>
-          </Pressable>
-        </View>
+        <Reveal delay={200}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: 24,
+              marginTop: 28,
+              marginBottom: 12,
+            }}
+          >
+            <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
+              Recent badges
+            </Text>
+            <Pressable>
+              <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>All ›</Text>
+            </Pressable>
+          </View>
+        </Reveal>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
         >
-          {BADGES.map((badge) => (
-            <View
+          {BADGES.map((badge, i) => (
+            <Animated.View
               key={badge.name}
-              style={{
-                width: 100,
-                alignItems: 'center',
-              }}
+              entering={ZoomIn.delay(260 + i * 90).springify().damping(11).stiffness(180)}
+              style={{ width: 100, alignItems: 'center' }}
             >
               <View
                 style={[
@@ -248,85 +266,93 @@ export default function ProfileScreen() {
               >
                 {badge.name}
               </Text>
-            </View>
+            </Animated.View>
           ))}
         </ScrollView>
 
-        <View style={{ paddingHorizontal: 24, marginTop: 28, marginBottom: 12 }}>
-          <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>Recent entries</Text>
-        </View>
+        <Reveal delay={320}>
+          <View style={{ paddingHorizontal: 24, marginTop: 28, marginBottom: 12 }}>
+            <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
+              Recent entries
+            </Text>
+          </View>
+        </Reveal>
 
-        <View
-          style={[
-            {
-              marginHorizontal: 20,
-              backgroundColor: COLORS.surface,
-              borderRadius: 18,
-              borderWidth: 1,
-              borderColor: COLORS.sand,
-              overflow: 'hidden',
-            },
-            softShadow(0.04, 6, 2),
-          ]}
-        >
-          {ENTRIES.map((entry, i) => (
-            <Pressable
-              key={entry.name}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: 14,
-                gap: 12,
-                borderTopWidth: i === 0 ? 0 : 1,
-                borderTopColor: COLORS.sand,
-              }}
-            >
-              <View
+        <Reveal delay={380}>
+          <View
+            style={[
+              {
+                marginHorizontal: 20,
+                backgroundColor: COLORS.surface,
+                borderRadius: 18,
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+                overflow: 'hidden',
+              },
+              softShadow(0.04, 6, 2),
+            ]}
+          >
+            {ENTRIES.map((entry, i) => (
+              <Pressable
+                key={entry.name}
                 style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 12,
-                  backgroundColor: COLORS.sage,
+                  flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  padding: 14,
+                  gap: 12,
+                  borderTopWidth: i === 0 ? 0 : 1,
+                  borderTopColor: COLORS.sand,
                 }}
               >
-                <SpeciesIcon kind={entry.kind} size={28} color={COLORS.cream} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
-                  {entry.name}
-                </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
-                  {entry.meta}
-                </Text>
-              </View>
-              <Text style={{ color: COLORS.bark, fontSize: 18 }}>›</Text>
-            </Pressable>
-          ))}
-        </View>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 12,
+                    backgroundColor: COLORS.sage,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <SpeciesIcon kind={entry.kind} size={28} color={COLORS.cream} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
+                    {entry.name}
+                  </Text>
+                  <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                    {entry.meta}
+                  </Text>
+                </View>
+                <Text style={{ color: COLORS.bark, fontSize: 18 }}>›</Text>
+              </Pressable>
+            ))}
+          </View>
+        </Reveal>
 
-        <Pressable
-          onPress={() => {
-            Alert.alert(
-              'Delete account',
-              'This is permanent. Your sightings, journal entries, and badges will be removed.',
-              [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                  text: 'Continue',
-                  style: 'destructive',
-                  onPress: () => setShowDeleteModal(true),
-                },
-              ],
-            );
-          }}
-          style={{ marginTop: 24, marginBottom: 8, alignItems: 'center', paddingVertical: 12 }}
-        >
-          <Text style={{ color: COLORS.clay, fontSize: 14, fontWeight: '600' }}>
-            Delete account
-          </Text>
-        </Pressable>
+        <Animated.View entering={FadeInDown.delay(460).duration(400)}>
+          <Pressable
+            onPress={() => {
+              Alert.alert(
+                'Delete account',
+                'This is permanent. Your sightings, journal entries, and badges will be removed.',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Continue',
+                    style: 'destructive',
+                    onPress: () => setShowDeleteModal(true),
+                  },
+                ],
+              );
+            }}
+            style={{ marginTop: 24, marginBottom: 8, alignItems: 'center', paddingVertical: 12 }}
+          >
+            <Text style={{ color: COLORS.clay, fontSize: 14, fontWeight: '600' }}>
+              Delete account
+            </Text>
+          </Pressable>
+        </Animated.View>
       </ScrollView>
 
       <Modal

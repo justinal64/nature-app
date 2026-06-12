@@ -32,6 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await auth.signOut();
+    setUser(null);
+    setEmailVerified(false);
   };
 
   const refreshUser = async (): Promise<boolean> => {

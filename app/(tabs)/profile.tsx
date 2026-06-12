@@ -1,5 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { useState } from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
@@ -42,11 +53,30 @@ function getJoinedLabel(metadata?: { creationTime?: string }) {
 
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
-  const { user, signOut } = useAuth();
+  const { user, signOut, deleteAccount } = useAuth();
 
   const displayName = user?.displayName || user?.email?.split('@')[0] || 'Naturalist';
   const initial = user ? getInitial(user) : '?';
   const joinedLabel = getJoinedLabel(user?.metadata);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    if (!deletePassword) {
+      setDeleteError('Password is required');
+      return;
+    }
+    setDeleting(true);
+    try {
+      await deleteAccount(deletePassword);
+    } catch {
+      setDeleteError('Incorrect password. Please try again.');
+      setDeleting(false);
+    }
+  };
 
   const confirmSignOut = () => {
     Alert.alert('Sign out', 'You can sign back in any time.', [
@@ -275,7 +305,133 @@ export default function ProfileScreen() {
             </Pressable>
           ))}
         </View>
+
+        <Pressable
+          onPress={() => {
+            Alert.alert(
+              'Delete account',
+              'This is permanent. Your sightings, journal entries, and badges will be removed.',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Continue',
+                  style: 'destructive',
+                  onPress: () => setShowDeleteModal(true),
+                },
+              ],
+            );
+          }}
+          style={{ marginTop: 24, marginBottom: 8, alignItems: 'center', paddingVertical: 12 }}
+        >
+          <Text style={{ color: COLORS.clay, fontSize: 14, fontWeight: '600' }}>
+            Delete account
+          </Text>
+        </Pressable>
       </ScrollView>
+
+      <Modal
+        visible={showDeleteModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => {
+          setShowDeleteModal(false);
+          setDeletePassword('');
+          setDeleteError('');
+        }}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              justifyContent: 'center',
+              paddingHorizontal: 24,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: COLORS.background,
+                borderRadius: 20,
+                padding: 24,
+              }}
+            >
+              <Text style={{ color: COLORS.ink, fontSize: 20, fontWeight: '700', marginBottom: 6 }}>
+                Confirm deletion
+              </Text>
+              <Text style={{ color: COLORS.bark, fontSize: 14, lineHeight: 20, marginBottom: 20 }}>
+                Enter your password to permanently delete your account.
+              </Text>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: deleteError ? COLORS.clay : COLORS.sand,
+                  borderRadius: 12,
+                  paddingHorizontal: 14,
+                  paddingVertical: 12,
+                  backgroundColor: COLORS.surface,
+                  marginBottom: deleteError ? 8 : 20,
+                }}
+              >
+                <TextInput
+                  value={deletePassword}
+                  onChangeText={(t) => {
+                    setDeletePassword(t);
+                    setDeleteError('');
+                  }}
+                  placeholder="Password"
+                  placeholderTextColor={COLORS.bark}
+                  secureTextEntry
+                  autoFocus
+                  style={{ color: COLORS.ink, fontSize: 15 }}
+                />
+              </View>
+              {deleteError ? (
+                <Text style={{ color: COLORS.clay, fontSize: 12, marginBottom: 16 }}>
+                  {deleteError}
+                </Text>
+              ) : null}
+              <View style={{ flexDirection: 'row', gap: 12 }}>
+                <Pressable
+                  onPress={() => {
+                    setShowDeleteModal(false);
+                    setDeletePassword('');
+                    setDeleteError('');
+                  }}
+                  style={{
+                    flex: 1,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: COLORS.sand,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ color: COLORS.ink, fontWeight: '600' }}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleDeleteAccount}
+                  disabled={deleting}
+                  style={{
+                    flex: 1,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    backgroundColor: COLORS.clay,
+                    alignItems: 'center',
+                    opacity: deleting ? 0.6 : 1,
+                  }}
+                >
+                  <Text style={{ color: COLORS.cream, fontWeight: '700' }}>
+                    {deleting ? 'Deleting…' : 'Delete'}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }

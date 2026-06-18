@@ -232,7 +232,7 @@ export default function GuideScreen() {
                     width: 56,
                     height: 56,
                     borderRadius: 14,
-                    backgroundColor: sp.seen > 0 ? COLORS.sage : COLORS.sand,
+                    backgroundColor: sightings.some((s) => s.speciesId === sp.id) ? COLORS.sage : COLORS.sand,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -277,27 +277,30 @@ export default function GuideScreen() {
                   </View>
                 </View>
 
-                {sp.seen > 0 ? (
-                  <View style={{ alignItems: 'flex-end' }}>
-                    <Text style={{ color: COLORS.clay, fontSize: 18, fontWeight: '700' }}>
-                      {sp.seen}
-                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '500' }}>
-                        {' '}
-                        seen
+                {(() => {
+                  const spCount = sightings.filter((s) => s.speciesId === sp.id).length;
+                  return spCount > 0 ? (
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text style={{ color: COLORS.clay, fontSize: 18, fontWeight: '700' }}>
+                        {spCount}
+                        <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '500' }}>
+                          {' '}
+                          seen
+                        </Text>
                       </Text>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={16}
+                        color={COLORS.sage}
+                        style={{ marginTop: 4 }}
+                      />
+                    </View>
+                  ) : (
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontStyle: 'italic' }}>
+                      not seen
                     </Text>
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={16}
-                      color={COLORS.sage}
-                      style={{ marginTop: 4 }}
-                    />
-                  </View>
-                ) : (
-                  <Text style={{ color: COLORS.bark, fontSize: 11, fontStyle: 'italic' }}>
-                    not seen
-                  </Text>
-                )}
+                  );
+                })()}
               </PressableScale>
             </Animated.View>
           ))}

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
@@ -47,6 +48,7 @@ function getJoinedLabel(metadata?: { creationTime?: string }) {
 
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
   const { user, signOut, deleteAccount } = useAuth();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
@@ -224,7 +226,7 @@ export default function ProfileScreen() {
             <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
               Recent badges
             </Text>
-            <Pressable>
+            <Pressable onPress={() => Alert.alert('Badges', 'Full badge history coming soon.')}>
               <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>All ›</Text>
             </Pressable>
           </View>
@@ -303,6 +305,7 @@ export default function ProfileScreen() {
               recentEntries.map((entry, i) => (
                 <Pressable
                   key={entry.id}
+                  onPress={() => router.push(`/species/${entry.speciesId}` as never)}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',

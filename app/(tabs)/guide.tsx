@@ -237,7 +237,7 @@ export default function GuideScreen() {
                     justifyContent: 'center',
                   }}
                 >
-                  <SpeciesIcon kind="cactus" size={36} color={COLORS.cream} />
+                  <SpeciesIcon kind={sp.kind} size={36} color={COLORS.cream} />
                 </View>
 
                 <View style={{ flex: 1 }}>

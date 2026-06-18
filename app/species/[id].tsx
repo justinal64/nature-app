@@ -19,9 +19,12 @@ import Svg, { G, Path, Rect } from 'react-native-svg';
 
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
+import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
+import { useSightings } from '@/hooks/useSightings';
+import { formatRelativeDate } from '@/utils/date';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const HERO_HEIGHT = 360;
@@ -52,6 +55,8 @@ export default function SpeciesDetailScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
+  const { sightings } = useSightings(user?.uid);
+  const speciesSightings = sightings.filter((s) => s.speciesId === speciesId);
   const [tab, setTab] = useState<TabName>('Overview');
   const [liked, setLiked] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
@@ -361,17 +366,61 @@ export default function SpeciesDetailScreen() {
         )}
 
         {tab === 'Your sightings' && (
-          <Animated.View
-            key="sightings"
-            entering={FadeInDown.duration(280)}
-            style={{ paddingHorizontal: 24, marginTop: 48, alignItems: 'center', gap: 8 }}
-          >
-            <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
-              No sightings yet
-            </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
-              Spot a Saguaro? Use the camera to log your first sighting.
-            </Text>
+          <Animated.View key="sightings" entering={FadeInDown.duration(280)}>
+            {speciesSightings.length === 0 ? (
+              <View style={{ paddingHorizontal: 24, marginTop: 48, alignItems: 'center', gap: 8 }}>
+                <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
+                  No sightings yet
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
+                  Spot a Saguaro? Use the camera to log your first sighting.
+                </Text>
+              </View>
+            ) : (
+              <View style={{ paddingHorizontal: 20, marginTop: 20, gap: 10 }}>
+                {speciesSightings.map((s) => (
+                  <View
+                    key={s.id}
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: COLORS.surface,
+                        borderRadius: 16,
+                        padding: 14,
+                        borderWidth: 1,
+                        borderColor: COLORS.sand,
+                        gap: 14,
+                      },
+                      softShadow(0.04, 6, 2),
+                    ]}
+                  >
+                    <View
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 12,
+                        backgroundColor: COLORS.sage,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SpeciesIcon kind={s.kind as SpeciesKind} size={30} color={COLORS.cream} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
+                        {formatRelativeDate(s.capturedAt)}
+                      </Text>
+                      {s.notes ? (
+                        <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>
+                          {s.notes}
+                        </Text>
+                      ) : null}
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
           </Animated.View>
         )}
       </Animated.ScrollView>

@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -72,6 +73,15 @@ const SPECIES = [
 export default function GuideScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const [search, setSearch] = useState('');
+
+  const filtered = search.trim()
+    ? SPECIES.filter(
+        (sp) =>
+          sp.name.toLowerCase().includes(search.toLowerCase()) ||
+          sp.latin.toLowerCase().includes(search.toLowerCase()),
+      )
+    : SPECIES;
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -115,7 +125,14 @@ export default function GuideScreen() {
             }}
           >
             <Ionicons name="search" size={16} color={COLORS.bark} />
-            <Text style={{ color: COLORS.bark, fontSize: 14 }}>Search species…</Text>
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search species…"
+              placeholderTextColor={COLORS.bark}
+              returnKeyType="search"
+              style={{ flex: 1, color: COLORS.ink, fontSize: 14 }}
+            />
           </View>
         </Reveal>
 
@@ -208,7 +225,12 @@ export default function GuideScreen() {
         </Reveal>
 
         <View style={{ paddingHorizontal: 20, gap: 10 }}>
-          {SPECIES.map((sp, i) => (
+          {filtered.length === 0 && (
+            <View style={{ paddingVertical: 32, alignItems: 'center' }}>
+              <Text style={{ color: COLORS.bark, fontSize: 14 }}>No species match &ldquo;{search}&rdquo;</Text>
+            </View>
+          )}
+          {filtered.map((sp, i) => (
             <Animated.View
               key={sp.id}
               entering={FadeInDown.delay(200 + i * 55).springify().damping(15).stiffness(150)}

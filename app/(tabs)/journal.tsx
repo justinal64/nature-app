@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,6 +14,7 @@ import { formatRelativeDate } from '@/utils/date';
 
 export default function JournalScreen() {
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
   const { user } = useAuth();
   const { sightings, loading } = useSightings(user?.uid);
 
@@ -103,6 +105,7 @@ export default function JournalScreen() {
                   />
                   <PressableScale
                     scaleTo={0.98}
+                    onPress={() => router.push(`/species/${entry.speciesId}` as never)}
                     style={[
                       {
                         flex: 1,

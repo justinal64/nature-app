@@ -5,6 +5,23 @@ import { initializeApp } from 'firebase/app';
 import { getReactNativePersistence, initializeAuth } from '@firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+const REQUIRED_VARS = [
+  'EXPO_PUBLIC_FIREBASE_API_KEY',
+  'EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN',
+  'EXPO_PUBLIC_FIREBASE_PROJECT_ID',
+  'EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET',
+  'EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
+  'EXPO_PUBLIC_FIREBASE_APP_ID',
+] as const;
+
+const missing = REQUIRED_VARS.filter((k) => !process.env[k]);
+if (missing.length > 0) {
+  throw new Error(
+    `Missing Firebase environment variables: ${missing.join(', ')}. ` +
+      'Add them to .env for local dev or via EAS secrets for production builds.',
+  );
+}
+
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,

@@ -208,7 +208,7 @@ export default function HomeScreen() {
           }}
         >
           <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Recent finds</Text>
-          <Pressable>
+          <Pressable onPress={() => router.push('/(tabs)/journal')}>
             <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
           </Pressable>
         </View>

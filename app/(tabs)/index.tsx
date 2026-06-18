@@ -291,7 +291,7 @@ export default function HomeScreen() {
             style={{ width: '47.5%' }}
           >
             <PressableScale
-              onPress={() => router.push('/(tabs)/guide')}
+              onPress={() => router.push(`/(tabs)/guide?category=${cat.name}` as never)}
               scaleTo={0.97}
               style={[
                 {

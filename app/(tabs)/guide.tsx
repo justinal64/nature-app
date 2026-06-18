@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
@@ -33,10 +33,12 @@ const SPECIES = [
 export default function GuideScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { category } = useLocalSearchParams<{ category?: string }>();
   const { user } = useAuth();
   const { sightings } = useSightings(user?.uid);
   const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Trees');
+  const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Trees';
+  const [activeCategory, setActiveCategory] = useState(validCategory);
   const [activeRegion, setActiveRegion] = useState('ALL');
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';

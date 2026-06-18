@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -480,6 +480,11 @@ export default function SpeciesDetailScreen() {
             scaleTo={0.88}
             accessibilityLabel="Share"
             accessibilityRole="button"
+            onPress={() =>
+              Share.share({
+                message: 'Check out the Saguaro (Carnegiea gigantea) on WildLens!',
+              })
+            }
             style={{
               width: 42,
               height: 42,

@@ -12,76 +12,38 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
 
 const CATS = [
-  { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind, active: true },
+  { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind },
   { name: 'Birds', count: 142, kind: 'bird' as SpeciesKind },
   { name: 'Insects', count: 217, kind: 'insect' as SpeciesKind },
   { name: 'Snakes', count: 31, kind: 'snake' as SpeciesKind },
 ];
 
 const SPECIES = [
-  {
-    id: 'saguaro',
-    name: 'Saguaro',
-    latin: 'Carnegiea gigantea',
-    region: 'SONORAN',
-    seen: 4,
-  },
-  {
-    id: 'joshua-tree',
-    name: 'Joshua Tree',
-    latin: 'Yucca brevifolia',
-    region: 'MOJAVE',
-    seen: 2,
-  },
-  {
-    id: 'palo-verde',
-    name: 'Palo Verde',
-    latin: 'Parkinsonia florida',
-    region: 'SONORAN',
-    seen: 1,
-  },
-  {
-    id: 'mesquite',
-    name: 'Mesquite',
-    latin: 'Prosopis velutina',
-    region: 'SONORAN',
-    seen: 6,
-  },
-  {
-    id: 'desert-willow',
-    name: 'Desert Willow',
-    latin: 'Chilopsis linearis',
-    region: 'CHIHUAHUAN',
-    seen: 0,
-  },
-  {
-    id: 'ocotillo',
-    name: 'Ocotillo',
-    latin: 'Fouquieria splendens',
-    region: 'SONORAN',
-    seen: 1,
-  },
-  {
-    id: 'ironwood',
-    name: 'Ironwood',
-    latin: 'Olneya tesota',
-    region: 'SONORAN',
-    seen: 0,
-  },
+  { id: 'saguaro', name: 'Saguaro', latin: 'Carnegiea gigantea', region: 'SONORAN', seen: 4, kind: 'cactus' as SpeciesKind },
+  { id: 'joshua-tree', name: 'Joshua Tree', latin: 'Yucca brevifolia', region: 'MOJAVE', seen: 2, kind: 'cactus' as SpeciesKind },
+  { id: 'palo-verde', name: 'Palo Verde', latin: 'Parkinsonia florida', region: 'SONORAN', seen: 1, kind: 'cactus' as SpeciesKind },
+  { id: 'mesquite', name: 'Mesquite', latin: 'Prosopis velutina', region: 'SONORAN', seen: 6, kind: 'cactus' as SpeciesKind },
+  { id: 'desert-willow', name: 'Desert Willow', latin: 'Chilopsis linearis', region: 'CHIHUAHUAN', seen: 0, kind: 'cactus' as SpeciesKind },
+  { id: 'ocotillo', name: 'Ocotillo', latin: 'Fouquieria splendens', region: 'SONORAN', seen: 1, kind: 'cactus' as SpeciesKind },
+  { id: 'ironwood', name: 'Ironwood', latin: 'Olneya tesota', region: 'SONORAN', seen: 0, kind: 'cactus' as SpeciesKind },
 ];
 
 export default function GuideScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [activeCategory, setActiveCategory] = useState('Trees');
 
-  const filtered = search.trim()
-    ? SPECIES.filter(
-        (sp) =>
-          sp.name.toLowerCase().includes(search.toLowerCase()) ||
-          sp.latin.toLowerCase().includes(search.toLowerCase()),
-      )
-    : SPECIES;
+  const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
+
+  const filtered = SPECIES.filter((sp) => {
+    const matchesSearch =
+      !search.trim() ||
+      sp.name.toLowerCase().includes(search.toLowerCase()) ||
+      sp.latin.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = sp.kind === activeKind;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -141,51 +103,39 @@ export default function GuideScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 10 }}
         >
-          {CATS.map((cat, i) => (
-            <Animated.View key={cat.name} entering={FadeInRight.delay(120 + i * 60).springify().damping(15)}>
-              <PressableScale
-                scaleTo={0.93}
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingHorizontal: 14,
-                    paddingVertical: 10,
-                    borderRadius: 22,
-                    backgroundColor: cat.active ? COLORS.clay : COLORS.surface,
-                    borderWidth: 1,
-                    borderColor: cat.active ? COLORS.clay : COLORS.sand,
-                    gap: 8,
-                  },
-                  cat.active ? softShadow(0.1, 8, 3) : {},
-                ]}
-              >
-                <SpeciesIcon
-                  kind={cat.kind}
-                  size={18}
-                  color={cat.active ? COLORS.cream : COLORS.ink}
-                />
-                <Text
-                  style={{
-                    color: cat.active ? COLORS.cream : COLORS.ink,
-                    fontWeight: '700',
-                    fontSize: 13,
-                  }}
+          {CATS.map((cat, i) => {
+            const active = cat.name === activeCategory;
+            return (
+              <Animated.View key={cat.name} entering={FadeInRight.delay(120 + i * 60).springify().damping(15)}>
+                <PressableScale
+                  scaleTo={0.93}
+                  onPress={() => setActiveCategory(cat.name)}
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingHorizontal: 14,
+                      paddingVertical: 10,
+                      borderRadius: 22,
+                      backgroundColor: active ? COLORS.clay : COLORS.surface,
+                      borderWidth: 1,
+                      borderColor: active ? COLORS.clay : COLORS.sand,
+                      gap: 8,
+                    },
+                    active ? softShadow(0.1, 8, 3) : {},
+                  ]}
                 >
-                  {cat.name}
-                </Text>
-                <Text
-                  style={{
-                    color: cat.active ? 'rgba(244, 236, 218, 0.7)' : COLORS.bark,
-                    fontWeight: '600',
-                    fontSize: 12,
-                  }}
-                >
-                  {cat.count}
-                </Text>
-              </PressableScale>
-            </Animated.View>
-          ))}
+                  <SpeciesIcon kind={cat.kind} size={18} color={active ? COLORS.cream : COLORS.ink} />
+                  <Text style={{ color: active ? COLORS.cream : COLORS.ink, fontWeight: '700', fontSize: 13 }}>
+                    {cat.name}
+                  </Text>
+                  <Text style={{ color: active ? 'rgba(244, 236, 218, 0.7)' : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                    {cat.count}
+                  </Text>
+                </PressableScale>
+              </Animated.View>
+            );
+          })}
         </ScrollView>
 
         <Reveal delay={160}>

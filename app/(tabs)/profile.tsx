@@ -22,6 +22,7 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { getUserFriendlyError } from '@/utils/errors';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
 import { formatRelativeDate } from '@/utils/date';
@@ -94,7 +95,7 @@ export default function ProfileScreen() {
         text: 'Sign out',
         style: 'destructive',
         onPress: () => {
-          signOut().catch((e) => Alert.alert('Error', String(e)));
+          signOut().catch((e) => Alert.alert('Error', getUserFriendlyError(e)));
         },
       },
     ]);

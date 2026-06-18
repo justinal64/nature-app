@@ -21,25 +21,15 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
-
-const STATS = [
-  { value: 47, suffix: '', label: 'Species' },
-  { value: 128, suffix: '', label: 'Photos' },
-  { value: 14, suffix: 'd', label: 'Streak' },
-  { value: 6, suffix: '', label: 'Badges' },
-];
+import { useSightings } from '@/hooks/useSightings';
+import { useStreak } from '@/hooks/useStreak';
+import { formatRelativeDate } from '@/utils/date';
 
 const BADGES: { name: string; kind: SpeciesKind }[] = [
   { name: 'First Find', kind: 'cactus' },
   { name: '10-day Streak', kind: 'bird' },
   { name: 'Cactus Crew', kind: 'cactus' },
   { name: 'Birder', kind: 'bird' },
-];
-
-const ENTRIES: { name: string; meta: string; kind: SpeciesKind }[] = [
-  { name: 'Saguaro', meta: 'Today · 2:14 pm', kind: 'cactus' },
-  { name: 'Tarantula Hawk', meta: 'May 19', kind: 'insect' },
-  { name: 'Mourning Dove', meta: 'May 18', kind: 'bird' },
 ];
 
 function getInitial(user: { displayName?: string | null; email?: string | null }) {
@@ -58,10 +48,23 @@ function getJoinedLabel(metadata?: { creationTime?: string }) {
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
   const { user, signOut, deleteAccount } = useAuth();
+  const { sightings } = useSightings(user?.uid);
+  const streak = useStreak(user?.uid);
 
   const displayName = user?.displayName || user?.email?.split('@')[0] || 'Naturalist';
   const initial = user ? getInitial(user) : '?';
   const joinedLabel = getJoinedLabel(user?.metadata);
+
+  const speciesCount = new Set(sightings.map((s) => s.speciesId)).size;
+  const photoCount = sightings.filter((s) => s.photoUri).length;
+  const recentEntries = sightings.slice(0, 3);
+
+  const STATS = [
+    { value: speciesCount, suffix: '', label: 'Species' },
+    { value: photoCount, suffix: '', label: 'Photos' },
+    { value: streak, suffix: 'd', label: 'Streak' },
+    { value: 0, suffix: '', label: 'Badges' },
+  ];
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
@@ -292,41 +295,47 @@ export default function ProfileScreen() {
               softShadow(0.04, 6, 2),
             ]}
           >
-            {ENTRIES.map((entry, i) => (
-              <Pressable
-                key={entry.name}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: 14,
-                  gap: 12,
-                  borderTopWidth: i === 0 ? 0 : 1,
-                  borderTopColor: COLORS.sand,
-                }}
-              >
-                <View
+            {recentEntries.length === 0 ? (
+              <View style={{ padding: 20, alignItems: 'center' }}>
+                <Text style={{ color: COLORS.bark, fontSize: 14 }}>No entries yet</Text>
+              </View>
+            ) : (
+              recentEntries.map((entry, i) => (
+                <Pressable
+                  key={entry.id}
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    backgroundColor: COLORS.sage,
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    padding: 14,
+                    gap: 12,
+                    borderTopWidth: i === 0 ? 0 : 1,
+                    borderTopColor: COLORS.sand,
                   }}
                 >
-                  <SpeciesIcon kind={entry.kind} size={28} color={COLORS.cream} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
-                    {entry.name}
-                  </Text>
-                  <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
-                    {entry.meta}
-                  </Text>
-                </View>
-                <Text style={{ color: COLORS.bark, fontSize: 18 }}>›</Text>
-              </Pressable>
-            ))}
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      backgroundColor: COLORS.sage,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <SpeciesIcon kind={entry.kind as SpeciesKind} size={28} color={COLORS.cream} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
+                      {entry.commonName}
+                    </Text>
+                    <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                      {formatRelativeDate(entry.capturedAt)}
+                    </Text>
+                  </View>
+                  <Text style={{ color: COLORS.bark, fontSize: 18 }}>›</Text>
+                </Pressable>
+              ))
+            )}
           </View>
         </Reveal>
 

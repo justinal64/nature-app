@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -20,6 +20,8 @@ import Svg, { G, Path, Rect } from 'react-native-svg';
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { useAuth } from '@/context/AuthContext';
+import { isFavorited, toggleFavorite } from '@/lib/favorites';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const HERO_HEIGHT = 360;
@@ -46,12 +48,18 @@ const STATS: { label: string; value: string }[] = [
 ];
 
 export default function SpeciesDetailScreen() {
-  useLocalSearchParams<{ id: string }>();
+  const { id: speciesId } = useLocalSearchParams<{ id: string }>();
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuth();
   const [tab, setTab] = useState<TabName>('Overview');
   const [liked, setLiked] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (!user || !speciesId) return;
+    isFavorited(user.uid, speciesId).then(setLiked);
+  }, [user, speciesId]);
 
   const scrollY = useSharedValue(0);
   const heartScale = useSharedValue(1);
@@ -81,8 +89,10 @@ export default function SpeciesDetailScreen() {
 
   const heartStyle = useAnimatedStyle(() => ({ transform: [{ scale: heartScale.value }] }));
 
-  const toggleLike = () => {
-    setLiked((v) => !v);
+  const toggleLike = async () => {
+    if (!user || !speciesId) return;
+    const next = await toggleFavorite(user.uid, speciesId);
+    setLiked(next);
     heartScale.value = withSequence(
       withSpring(1.45, { damping: 9, stiffness: 420 }),
       withSpring(1, { damping: 14, stiffness: 260 }),

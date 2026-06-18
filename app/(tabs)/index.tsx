@@ -13,13 +13,8 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
-
-const RECENT = [
-  { name: 'Saguaro', time: '2h ago', kind: 'cactus' as SpeciesKind },
-  { name: 'Mourning Dove', time: 'Yesterday', kind: 'bird' as SpeciesKind },
-  { name: 'Tarantula Hawk', time: '3d ago', kind: 'insect' as SpeciesKind },
-  { name: 'Sidewinder', time: '5d ago', kind: 'snake' as SpeciesKind },
-];
+import { useSightings } from '@/hooks/useSightings';
+import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
   { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind },
@@ -46,9 +41,11 @@ export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
+  const { sightings } = useSightings(user?.uid);
 
   const firstName = user?.displayName?.trim().split(' ')[0] || user?.email?.split('@')[0] || 'friend';
   const initial = firstName.charAt(0).toUpperCase();
+  const recentFinds = sightings.slice(0, 4);
 
   return (
     <ScrollView
@@ -222,42 +219,55 @@ export default function HomeScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
       >
-        {RECENT.map((item, i) => (
-          <Animated.View
-            key={item.name}
-            entering={FadeInDown.delay(220 + i * 70).springify().damping(15).stiffness(150)}
-          >
-            <PressableScale
-              style={[
-                {
-                  width: 130,
-                  borderRadius: 18,
-                  backgroundColor: COLORS.surface,
-                  padding: 14,
-                  borderWidth: 1,
-                  borderColor: COLORS.sand,
-                },
-                softShadow(0.05, 8, 2),
-              ]}
+        {recentFinds.length === 0 ? (
+          <View style={{ paddingVertical: 8, paddingHorizontal: 4 }}>
+            <Text style={{ color: COLORS.bark, fontSize: 14 }}>
+              Your finds will appear here after your first capture.
+            </Text>
+          </View>
+        ) : (
+          recentFinds.map((item, i) => (
+            <Animated.View
+              key={item.id}
+              entering={FadeInDown.delay(220 + i * 70).springify().damping(15).stiffness(150)}
             >
-              <View
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 14,
-                  backgroundColor: COLORS.sage,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 10,
-                }}
+              <PressableScale
+                onPress={() => router.push(`/species/${item.speciesId}` as never)}
+                style={[
+                  {
+                    width: 130,
+                    borderRadius: 18,
+                    backgroundColor: COLORS.surface,
+                    padding: 14,
+                    borderWidth: 1,
+                    borderColor: COLORS.sand,
+                  },
+                  softShadow(0.05, 8, 2),
+                ]}
               >
-                <SpeciesIcon kind={item.kind} size={44} color={COLORS.cream} />
-              </View>
-              <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{item.name}</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>{item.time}</Text>
-            </PressableScale>
-          </Animated.View>
-        ))}
+                <View
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 14,
+                    backgroundColor: COLORS.sage,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 10,
+                  }}
+                >
+                  <SpeciesIcon kind={item.kind as SpeciesKind} size={44} color={COLORS.cream} />
+                </View>
+                <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>
+                  {item.commonName}
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+                  {formatRelativeDate(item.capturedAt)}
+                </Text>
+              </PressableScale>
+            </Animated.View>
+          ))
+        )}
       </ScrollView>
 
       <Reveal delay={280}>

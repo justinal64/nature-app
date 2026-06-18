@@ -8,11 +8,18 @@ import '../global.css';
 
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { updateStreak } from '@/lib/streak';
 
 function RootLayoutNav() {
   const { user, loading, emailVerified } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+
+  useEffect(() => {
+    if (user?.emailVerified) {
+      updateStreak(user.uid).catch(() => {});
+    }
+  }, [user?.uid, user?.emailVerified]);
 
   useEffect(() => {
     if (loading) return;
@@ -21,7 +28,8 @@ function RootLayoutNav() {
     const isLoginPage = root === 'login';
     const isRegisterPage = root === 'register';
     const isVerifyPage = root === 'verify-email';
-    const isPublicPage = isLoginPage || isRegisterPage;
+    const isForgotPasswordPage = root === 'forgot-password';
+    const isPublicPage = isLoginPage || isRegisterPage || isForgotPasswordPage;
 
     if (!user && !isPublicPage) {
       router.replace('/login');
@@ -45,6 +53,7 @@ function RootLayoutNav() {
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
         <Stack.Screen name="verify-email" />
+        <Stack.Screen name="forgot-password" />
         <Stack.Screen
           name="capture"
           options={{ presentation: 'modal', animation: 'slide_from_bottom' }}

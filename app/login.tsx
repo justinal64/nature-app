@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
@@ -15,6 +15,7 @@ import { validateEmail, validatePassword } from '@/utils/validation';
 
 export default function LoginScreen() {
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -98,6 +99,15 @@ export default function LoginScreen() {
           error={errors.password}
           testID="password-input"
         />
+
+        <Pressable
+          onPress={() => router.push('/forgot-password')}
+          style={{ alignSelf: 'flex-end', marginTop: 8, marginBottom: 6 }}
+        >
+          <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>
+            Forgot password?
+          </Text>
+        </Pressable>
 
         <Pressable
           onPress={signInWithEmail}

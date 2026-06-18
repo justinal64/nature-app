@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -20,6 +20,8 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { useAuth } from '@/context/AuthContext';
+import { addSighting } from '@/lib/sightings';
 
 const OTHER = [
   { name: 'Cardón', pct: 11 },
@@ -65,6 +67,8 @@ function MatchBar({ pct, delay }: { pct: number; delay: number }) {
 export default function ResultScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuth();
+  const [saving, setSaving] = useState(false);
   const { photoUri, confidence: confidenceParam, noMatch } = useLocalSearchParams<{
     photoUri?: string;
     confidence?: string;
@@ -380,7 +384,27 @@ export default function ResultScreen() {
             ) : (
               <>
                 <PressableScale
-                  onPress={() => router.replace('/(tabs)')}
+                  onPress={async () => {
+                    if (!user) { router.replace('/(tabs)'); return; }
+                    setSaving(true);
+                    try {
+                      await addSighting({
+                        userId: user.uid,
+                        speciesId: 'saguaro',
+                        commonName: 'Saguaro',
+                        latinName: 'Carnegiea gigantea',
+                        kind: 'cactus',
+                        photoUri: typeof photoUri === 'string' ? photoUri : undefined,
+                        capturedAt: new Date().toISOString(),
+                      });
+                      router.replace('/(tabs)');
+                    } catch {
+                      Alert.alert('Error', 'Could not save sighting. Please try again.');
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  disabled={saving}
                   scaleTo={0.97}
                   style={[
                     {
@@ -389,12 +413,13 @@ export default function ResultScreen() {
                       borderRadius: 24,
                       paddingVertical: 16,
                       alignItems: 'center',
+                      opacity: saving ? 0.6 : 1,
                     },
                     glow(COLORS.clay, 10),
                   ]}
                 >
                   <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
-                    Save to Journal
+                    {saving ? 'Saving…' : 'Save to Journal'}
                   </Text>
                 </PressableScale>
                 <PressableScale

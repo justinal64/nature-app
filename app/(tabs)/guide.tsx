@@ -10,6 +10,8 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
+import { useAuth } from '@/context/AuthContext';
+import { useSightings } from '@/hooks/useSightings';
 
 const CATS = [
   { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind },
@@ -31,6 +33,8 @@ const SPECIES = [
 export default function GuideScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuth();
+  const { sightings } = useSightings(user?.uid);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('Trees');
   const [activeRegion, setActiveRegion] = useState('ALL');
@@ -46,6 +50,10 @@ export default function GuideScreen() {
     const matchesRegion = activeRegion === 'ALL' || sp.region === activeRegion;
     return matchesSearch && matchesCategory && matchesRegion;
   });
+
+  const seenCount = filtered.filter((sp) =>
+    sightings.some((s) => s.speciesId === sp.id),
+  ).length;
 
   const regionLabel =
     activeRegion === 'ALL'
@@ -166,8 +174,8 @@ export default function GuideScreen() {
             }}
           >
             <Text style={{ color: COLORS.ink, fontSize: 14, fontWeight: '600' }}>
-              <Text style={{ fontWeight: '700' }}>64</Text> species ·{' '}
-              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>14 seen</Text>
+              <Text style={{ fontWeight: '700' }}>{filtered.length}</Text> species ·{' '}
+              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{seenCount} seen</Text>
             </Text>
             <Pressable
               onPress={pickRegion}

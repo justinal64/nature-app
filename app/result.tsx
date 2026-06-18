@@ -65,7 +65,15 @@ function MatchBar({ pct, delay }: { pct: number; delay: number }) {
 export default function ResultScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
-  const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
+  const { photoUri, confidence: confidenceParam, noMatch } = useLocalSearchParams<{
+    photoUri?: string;
+    confidence?: string;
+    noMatch?: string;
+  }>();
+
+  const matchPct = confidenceParam !== undefined ? parseInt(confidenceParam, 10) : 96;
+  const isLowConfidence = noMatch === 'true' || matchPct < 50;
+  const noMatchMode = noMatch === 'true';
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -132,25 +140,48 @@ export default function ResultScreen() {
               </PressableScale>
             </Animated.View>
             <Animated.View entering={ZoomIn.delay(350).springify().damping(11).stiffness(220)}>
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 6,
-                    backgroundColor: COLORS.sage,
-                    paddingHorizontal: 14,
-                    paddingVertical: 8,
-                    borderRadius: 18,
-                  },
-                  glow(COLORS.sage, 10),
-                ]}
-              >
-                <Ionicons name="checkmark-circle" size={16} color={COLORS.ink} />
-                <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 13 }}>
-                  96% match
-                </Text>
-              </View>
+              {isLowConfidence ? (
+                <View
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                      backgroundColor: COLORS.clay,
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 18,
+                      opacity: 0.92,
+                    },
+                    glow(COLORS.clay, 8),
+                  ]}
+                >
+                  <Ionicons name="help-circle" size={16} color={COLORS.cream} />
+                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>
+                    Not sure
+                  </Text>
+                </View>
+              ) : (
+                <View
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                      backgroundColor: COLORS.sage,
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 18,
+                    },
+                    glow(COLORS.sage, 10),
+                  ]}
+                >
+                  <Ionicons name="checkmark-circle" size={16} color={COLORS.ink} />
+                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 13 }}>
+                    {matchPct}% match
+                  </Text>
+                </View>
+              )}
             </Animated.View>
           </View>
         </View>
@@ -170,54 +201,71 @@ export default function ResultScreen() {
               softShadow(0.08, 16, 4),
             ]}
           >
-            <Text
-              style={{
-                color: COLORS.clay,
-                fontSize: 12,
-                fontWeight: '700',
-                letterSpacing: 0.6,
-                textTransform: 'uppercase',
-              }}
-            >
-              Cacti · Cactaceae
-            </Text>
-            <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700', marginTop: 6 }}>
-              Saguaro
-            </Text>
-            <Text
-              style={{
-                color: COLORS.bark,
-                fontStyle: 'italic',
-                fontSize: 15,
-                marginTop: 2,
-              }}
-            >
-              Carnegiea gigantea
-            </Text>
-
-            <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>
-              {FACTS.map((fact, i) => (
-                <Animated.View
-                  key={fact.label}
-                  entering={FadeInDown.delay(300 + i * 80).springify().damping(15).stiffness(160)}
+            {isLowConfidence ? (
+              <>
+                <Text style={{ color: COLORS.ink, fontSize: 26, fontWeight: '700' }}>
+                  {noMatchMode ? "Couldn't identify this" : "We're not confident"}
+                </Text>
+                <Text
+                  style={{ color: COLORS.bark, fontSize: 15, lineHeight: 22, marginTop: 10 }}
+                >
+                  {noMatchMode
+                    ? "Try repositioning the subject or taking a clearer, closer shot."
+                    : "The photo doesn't give us enough to be certain. Try getting closer or finding better lighting."}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text
                   style={{
-                    flex: 1,
-                    backgroundColor: COLORS.cream,
-                    borderRadius: 14,
-                    padding: 12,
+                    color: COLORS.clay,
+                    fontSize: 12,
+                    fontWeight: '700',
+                    letterSpacing: 0.6,
+                    textTransform: 'uppercase',
                   }}
                 >
-                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
-                    {fact.label}
-                  </Text>
-                  <Text
-                    style={{ color: COLORS.ink, fontSize: 15, fontWeight: '700', marginTop: 4 }}
-                  >
-                    {fact.value}
-                  </Text>
-                </Animated.View>
-              ))}
-            </View>
+                  Cacti · Cactaceae
+                </Text>
+                <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700', marginTop: 6 }}>
+                  Saguaro
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.bark,
+                    fontStyle: 'italic',
+                    fontSize: 15,
+                    marginTop: 2,
+                  }}
+                >
+                  Carnegiea gigantea
+                </Text>
+
+                <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>
+                  {FACTS.map((fact, i) => (
+                    <Animated.View
+                      key={fact.label}
+                      entering={FadeInDown.delay(300 + i * 80).springify().damping(15).stiffness(160)}
+                      style={{
+                        flex: 1,
+                        backgroundColor: COLORS.cream,
+                        borderRadius: 14,
+                        padding: 12,
+                      }}
+                    >
+                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                        {fact.label}
+                      </Text>
+                      <Text
+                        style={{ color: COLORS.ink, fontSize: 15, fontWeight: '700', marginTop: 4 }}
+                      >
+                        {fact.value}
+                      </Text>
+                    </Animated.View>
+                  ))}
+                </View>
+              </>
+            )}
           </View>
         </Reveal>
 
@@ -233,7 +281,7 @@ export default function ResultScreen() {
                 marginBottom: 10,
               }}
             >
-              Other possibilities
+              {isLowConfidence ? 'Top suggestions' : 'Other possibilities'}
             </Text>
             <View
               style={[
@@ -291,39 +339,83 @@ export default function ResultScreen() {
 
         <Reveal delay={380}>
           <View style={{ flexDirection: 'row', marginHorizontal: 16, marginTop: 24, gap: 12 }}>
-            <PressableScale
-              onPress={() => router.replace('/(tabs)')}
-              scaleTo={0.97}
-              style={[
-                {
-                  flex: 2,
-                  backgroundColor: COLORS.clay,
-                  borderRadius: 24,
-                  paddingVertical: 16,
-                  alignItems: 'center',
-                },
-                glow(COLORS.clay, 10),
-              ]}
-            >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
-                Save to Journal
-              </Text>
-            </PressableScale>
-            <PressableScale
-              onPress={() => router.replace('/capture')}
-              scaleTo={0.97}
-              style={{
-                flex: 1,
-                backgroundColor: 'transparent',
-                borderRadius: 24,
-                paddingVertical: 16,
-                alignItems: 'center',
-                borderWidth: 1.5,
-                borderColor: COLORS.bark,
-              }}
-            >
-              <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>Retake</Text>
-            </PressableScale>
+            {isLowConfidence ? (
+              <>
+                <PressableScale
+                  onPress={() => router.replace('/capture')}
+                  scaleTo={0.97}
+                  style={[
+                    {
+                      flex: 2,
+                      backgroundColor: COLORS.clay,
+                      borderRadius: 24,
+                      paddingVertical: 16,
+                      alignItems: 'center',
+                    },
+                    glow(COLORS.clay, 10),
+                  ]}
+                >
+                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                    Retake photo
+                  </Text>
+                </PressableScale>
+                <PressableScale
+                  onPress={() => router.replace('/(tabs)/guide')}
+                  scaleTo={0.97}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    borderRadius: 24,
+                    paddingVertical: 16,
+                    alignItems: 'center',
+                    borderWidth: 1.5,
+                    borderColor: COLORS.bark,
+                  }}
+                >
+                  <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                    Browse guide
+                  </Text>
+                </PressableScale>
+              </>
+            ) : (
+              <>
+                <PressableScale
+                  onPress={() => router.replace('/(tabs)')}
+                  scaleTo={0.97}
+                  style={[
+                    {
+                      flex: 2,
+                      backgroundColor: COLORS.clay,
+                      borderRadius: 24,
+                      paddingVertical: 16,
+                      alignItems: 'center',
+                    },
+                    glow(COLORS.clay, 10),
+                  ]}
+                >
+                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                    Save to Journal
+                  </Text>
+                </PressableScale>
+                <PressableScale
+                  onPress={() => router.replace('/capture')}
+                  scaleTo={0.97}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    borderRadius: 24,
+                    paddingVertical: 16,
+                    alignItems: 'center',
+                    borderWidth: 1.5,
+                    borderColor: COLORS.bark,
+                  }}
+                >
+                  <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                    Retake
+                  </Text>
+                </PressableScale>
+              </>
+            )}
           </View>
         </Reveal>
       </ScrollView>

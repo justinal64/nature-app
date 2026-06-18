@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -33,6 +33,7 @@ export default function GuideScreen() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('Trees');
+  const [activeRegion, setActiveRegion] = useState('ALL');
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
 
@@ -42,8 +43,23 @@ export default function GuideScreen() {
       sp.name.toLowerCase().includes(search.toLowerCase()) ||
       sp.latin.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = sp.kind === activeKind;
-    return matchesSearch && matchesCategory;
+    const matchesRegion = activeRegion === 'ALL' || sp.region === activeRegion;
+    return matchesSearch && matchesCategory && matchesRegion;
   });
+
+  const regionLabel =
+    activeRegion === 'ALL'
+      ? 'All regions'
+      : activeRegion.charAt(0) + activeRegion.slice(1).toLowerCase();
+
+  const pickRegion = () =>
+    Alert.alert('Filter by region', undefined, [
+      { text: 'All regions', onPress: () => setActiveRegion('ALL') },
+      { text: 'Sonoran', onPress: () => setActiveRegion('SONORAN') },
+      { text: 'Mojave', onPress: () => setActiveRegion('MOJAVE') },
+      { text: 'Chihuahuan', onPress: () => setActiveRegion('CHIHUAHUAN') },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -154,22 +170,23 @@ export default function GuideScreen() {
               <Text style={{ color: COLORS.clay, fontWeight: '700' }}>14 seen</Text>
             </Text>
             <Pressable
+              onPress={pickRegion}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 4,
-                backgroundColor: COLORS.surface,
+                backgroundColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.surface,
                 paddingHorizontal: 10,
                 paddingVertical: 6,
                 borderRadius: 14,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.sand,
               }}
             >
-              <Text style={{ color: COLORS.bark, fontWeight: '600', fontSize: 12 }}>
-                Region: Sonoran
+              <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                {regionLabel}
               </Text>
-              <Text style={{ color: COLORS.bark, fontSize: 10 }}>▾</Text>
+              <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
             </Pressable>
           </View>
         </Reveal>

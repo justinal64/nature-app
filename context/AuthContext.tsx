@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EmailAuthProvider, reauthenticateWithCredential, User } from 'firebase/auth';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
@@ -52,8 +53,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const credential = EmailAuthProvider.credential(currentUser.email, password);
     await reauthenticateWithCredential(currentUser, credential);
 
-    await deleteDoc(doc(db, 'user_profiles', currentUser.uid)).catch(() => {});
+    const uid = currentUser.uid;
+    await deleteDoc(doc(db, 'user_profiles', uid)).catch(() => {});
     await currentUser.delete();
+    await Promise.all([
+      AsyncStorage.removeItem(`sightings:${uid}`),
+      AsyncStorage.removeItem(`favorites:${uid}`),
+      AsyncStorage.removeItem(`streak:${uid}`),
+    ]).catch(() => {});
   };
 
   return (

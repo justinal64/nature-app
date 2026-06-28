@@ -16,6 +16,7 @@ import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
+import { exportSightingsCsv } from '@/lib/export';
 import type { Sighting } from '@/lib/sightings';
 import { formatRelativeDate } from '@/utils/date';
 
@@ -81,24 +82,52 @@ export default function JournalScreen() {
               </Text>
               <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700' }}>Journal</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => router.push('/sightings-map' as never)}
-              accessibilityLabel="View sightings on map"
-              accessibilityRole="button"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: COLORS.surface,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 1,
-                borderColor: COLORS.sand,
-                marginBottom: 4,
-              }}
-            >
-              <Ionicons name="map-outline" size={20} color={COLORS.clay} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 8, marginBottom: 4 }}>
+              <TouchableOpacity
+                onPress={() => router.push('/sightings-map' as never)}
+                accessibilityLabel="View sightings on map"
+                accessibilityRole="button"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: COLORS.surface,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                }}
+              >
+                <Ionicons name="map-outline" size={20} color={COLORS.clay} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  if (sightings.length === 0) {
+                    Alert.alert('Nothing to export', 'Log some sightings first.');
+                    return;
+                  }
+                  try {
+                    await exportSightingsCsv(sightings);
+                  } catch {
+                    Alert.alert('Export failed', 'Could not export your sightings. Please try again.');
+                  }
+                }}
+                accessibilityLabel="Export sightings as CSV"
+                accessibilityRole="button"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: COLORS.surface,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                }}
+              >
+                <Ionicons name="download-outline" size={20} color={COLORS.clay} />
+              </TouchableOpacity>
+            </View>
           </View>
         </Reveal>
 

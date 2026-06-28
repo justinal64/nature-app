@@ -1234,6 +1234,10 @@ export function isActiveNow(speciesId: string): boolean {
   return (ACTIVE_MONTHS[speciesId] ?? ALL).includes(month);
 }
 
+export function getActiveMonths(speciesId: string): number[] {
+  return ACTIVE_MONTHS[speciesId] ?? ALL;
+}
+
 export function getSpeciesById(id: string): Species | undefined {
   return CATALOG.find((s) => s.id === id);
 }
@@ -1254,6 +1258,19 @@ const REGION_BOXES: { region: Region; box: BBox }[] = [
   { region: 'GREAT_BASIN', box: { minLat: 36, maxLat: 45, minLng: -120, maxLng: -113 } },
   { region: 'SONORAN',     box: { minLat: 25, maxLat: 35, minLng: -116, maxLng: -107 } },
 ];
+
+export function getRelatedSpecies(species: Species, limit = 4): Species[] {
+  return CATALOG.filter(
+    (s) => s.id !== species.id && (s.kind === species.kind || s.region === species.region),
+  )
+    .sort((a, b) => {
+      // Same kind AND same region ranks highest
+      const aScore = (a.kind === species.kind ? 2 : 0) + (a.region === species.region ? 1 : 0);
+      const bScore = (b.kind === species.kind ? 2 : 0) + (b.region === species.region ? 1 : 0);
+      return bScore - aScore;
+    })
+    .slice(0, limit);
+}
 
 export function getRegionForCoords(lat: number, lng: number): Region | null {
   const match = REGION_BOXES.find(

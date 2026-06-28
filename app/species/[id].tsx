@@ -21,7 +21,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { getSpeciesById } from '@/constants/catalog';
+import { getActiveMonths, getRelatedSpecies, getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
@@ -352,6 +352,60 @@ export default function SpeciesDetailScreen() {
             ))}
           </View>
         )}
+
+        {/* Seasonal activity bar — shown on Overview and ID Tips tabs */}
+        {tab !== 'Your sightings' && speciesId && (
+          <Animated.View entering={FadeInDown.delay(180).duration(300)} style={{ paddingHorizontal: 24, marginTop: 28 }}>
+            <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 12 }}>
+              Activity by month
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 4 }}>
+              {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => {
+                const activeMonths = getActiveMonths(speciesId);
+                const active = activeMonths.includes(i + 1);
+                return (
+                  <View key={`${m}-${i}`} style={{ flex: 1, alignItems: 'center', gap: 4 }}>
+                    <View style={{ width: '100%', height: 32, borderRadius: 6, backgroundColor: active ? COLORS.sage : COLORS.sand, opacity: active ? 1 : 0.4 }} />
+                    <Text style={{ color: COLORS.bark, fontSize: 9, fontWeight: '600' }}>{m}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          </Animated.View>
+        )}
+
+        {/* Related species — shown on Overview tab */}
+        {tab === 'Overview' && species && (() => {
+          const related = getRelatedSpecies(species);
+          if (related.length === 0) return null;
+          return (
+            <Animated.View entering={FadeInDown.delay(240).duration(300)} style={{ marginTop: 28, paddingBottom: 32 }}>
+              <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 12, paddingHorizontal: 24 }}>
+                You might also see
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}>
+                {related.map((rel) => (
+                  <PressableScale
+                    key={rel.id}
+                    onPress={() => router.push(`/species/${rel.id}` as never)}
+                    scaleTo={0.96}
+                    accessibilityLabel={`View ${rel.commonName}`}
+                    accessibilityRole="button"
+                    style={[{ width: 110, borderRadius: 18, backgroundColor: COLORS.surface, padding: 12, borderWidth: 1, borderColor: COLORS.sand, alignItems: 'center', gap: 8 }, softShadow(0.04, 6, 2)]}
+                  >
+                    <View style={{ width: 60, height: 60, borderRadius: 14, backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center' }}>
+                      <SpeciesIcon kind={rel.kind as SpeciesKind} size={38} color={COLORS.ink} />
+                    </View>
+                    <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12, textAlign: 'center', lineHeight: 16 }}>
+                      {rel.commonName}
+                    </Text>
+                    <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
+                  </PressableScale>
+                ))}
+              </ScrollView>
+            </Animated.View>
+          );
+        })()}
 
         {tab === 'Your sightings' && (
           <Animated.View key="sightings" entering={FadeInDown.duration(280)}>

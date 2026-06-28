@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Share, Text, View } from 'react-native';
@@ -86,6 +87,7 @@ export default function SpeciesDetailScreen() {
     if (!user || !speciesId) return;
     const next = await toggleFavorite(user.uid, speciesId);
     setLiked(next);
+    Haptics.impactAsync(next ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light);
     heartScale.value = withSequence(
       withSpring(1.45, { damping: 9, stiffness: 420 }),
       withSpring(1, { damping: 14, stiffness: 260 }),

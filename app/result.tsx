@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import * as Haptics from 'expo-haptics';
 import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -124,6 +125,7 @@ export default function ResultScreen() {
         capturedAt: new Date().toISOString(),
         location: locationRef.current ?? undefined,
       });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       router.replace('/(tabs)');
     } catch {
       Alert.alert('Error', 'Could not save sighting. Please try again.');

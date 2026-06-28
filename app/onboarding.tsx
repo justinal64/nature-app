@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
@@ -125,6 +126,7 @@ export default function OnboardingScreen() {
   const slide = SLIDES[index];
 
   function goNext() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (index < SLIDES.length - 1) {
       const next = index + 1;
       scrollRef.current?.scrollTo({ x: next * SCREEN_WIDTH, animated: true });

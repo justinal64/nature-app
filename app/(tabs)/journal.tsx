@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
@@ -71,6 +72,7 @@ export default function JournalScreen() {
   }
 
   function handleLongPress(entry: Sighting) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(entry.commonName, undefined, [
       {
         text: 'Edit notes',
@@ -103,6 +105,7 @@ export default function JournalScreen() {
   async function saveEdit() {
     if (!editingSighting || !user) return;
     await updateSighting(user.uid, editingSighting.id, { notes: editNotes.trim() || undefined });
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     await refresh();
     setEditingSighting(null);
   }

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -70,6 +70,7 @@ export default function ResultScreen() {
   const [saving, setSaving] = useState(false);
   const [identifying, setIdentifying] = useState(true);
   const [results, setResults] = useState<IdentifyResult[]>([]);
+  const [note, setNote] = useState('');
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
 
@@ -104,6 +105,7 @@ export default function ResultScreen() {
         latinName: topResult.latin,
         kind: topResult.kind,
         photoUri: typeof photoUri === 'string' ? photoUri : undefined,
+        notes: note.trim() || undefined,
         capturedAt: new Date().toISOString(),
       });
       router.replace('/(tabs)');
@@ -462,6 +464,40 @@ export default function ResultScreen() {
                   </Pressable>
                 ))}
               </View>
+            </View>
+          </Reveal>
+        )}
+
+        {!identifying && !isLowConfidence && (
+          <Reveal delay={320}>
+            <View
+              style={[
+                {
+                  marginHorizontal: 16,
+                  marginTop: 16,
+                  borderRadius: 16,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                  backgroundColor: COLORS.surface,
+                  paddingHorizontal: 14,
+                  paddingVertical: 10,
+                },
+              ]}
+            >
+              <TextInput
+                value={note}
+                onChangeText={setNote}
+                placeholder="Add a note… (optional)"
+                placeholderTextColor={COLORS.bark}
+                multiline
+                maxLength={300}
+                style={{
+                  color: COLORS.ink,
+                  fontSize: 14,
+                  lineHeight: 20,
+                  minHeight: 44,
+                }}
+              />
             </View>
           </Reveal>
         )}

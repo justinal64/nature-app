@@ -159,6 +159,14 @@ export default function JournalScreen() {
                       <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 4 }}>
                         {formatRelativeDate(entry.capturedAt)}
                       </Text>
+                      {entry.notes ? (
+                        <Text
+                          numberOfLines={1}
+                          style={{ color: COLORS.bark, fontSize: 12, marginTop: 3, fontStyle: 'italic' }}
+                        >
+                          {entry.notes}
+                        </Text>
+                      ) : null}
                     </View>
                     <Text style={{ color: COLORS.bark, fontSize: 20 }}>›</Text>
                   </PressableScale>

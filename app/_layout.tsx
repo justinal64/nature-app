@@ -1,13 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'react-native-reanimated';
 import 'react-native-url-polyfill/auto';
 import '../global.css';
 
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { ONBOARDING_KEY } from './onboarding';
 import { scheduleStreakReminder } from '@/lib/notifications';
 import { updateStreak } from '@/lib/streak';
 
@@ -15,6 +17,7 @@ function RootLayoutNav() {
   const { user, loading, emailVerified } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const onboardingChecked = useRef(false);
 
   useEffect(() => {
     if (user?.emailVerified) {
@@ -32,6 +35,7 @@ function RootLayoutNav() {
     const isVerifyPage = root === 'verify-email';
     const isForgotPasswordPage = root === 'forgot-password';
     const isPrivacyPolicyPage = root === 'privacy-policy';
+    const isOnboardingPage = root === 'onboarding';
     const isPublicPage = isLoginPage || isRegisterPage || isForgotPasswordPage || isPrivacyPolicyPage;
 
     if (!user && !isPublicPage) {
@@ -39,7 +43,19 @@ function RootLayoutNav() {
     } else if (user && !emailVerified && !isVerifyPage) {
       router.replace('/verify-email');
     } else if (user && emailVerified && (isPublicPage || isVerifyPage)) {
-      router.replace('/');
+      // Show onboarding once, then go home
+      if (!onboardingChecked.current && !isOnboardingPage) {
+        onboardingChecked.current = true;
+        AsyncStorage.getItem(ONBOARDING_KEY).then((done) => {
+          if (!done) {
+            router.replace('/onboarding');
+          } else {
+            router.replace('/');
+          }
+        });
+      } else if (!isOnboardingPage) {
+        router.replace('/');
+      }
     }
   }, [user, loading, emailVerified, segments, router]);
 
@@ -68,6 +84,7 @@ function RootLayoutNav() {
         <Stack.Screen name="sound-id" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
         <Stack.Screen name="field-cam" options={{ animation: 'fade', presentation: 'fullScreenModal' }} />
         <Stack.Screen name="ask" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="onboarding" options={{ animation: 'fade', gestureEnabled: false }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

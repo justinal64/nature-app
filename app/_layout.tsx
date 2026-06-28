@@ -102,6 +102,7 @@ function RootLayoutNav() {
         <Stack.Screen name="field-cam" options={{ animation: 'fade', presentation: 'fullScreenModal' }} />
         <Stack.Screen name="ask" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="onboarding" options={{ animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="search" options={{ animation: 'fade', presentation: 'modal' }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

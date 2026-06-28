@@ -88,7 +88,28 @@ export default function HomeScreen() {
               {firstName}.
             </Text>
           </View>
-          <Animated.View entering={ZoomIn.delay(200).springify().damping(12)}>
+          <Animated.View entering={ZoomIn.delay(200).springify().damping(12)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <PressableScale
+              onPress={() => router.push('/search' as never)}
+              scaleTo={0.9}
+              accessibilityLabel="Search species"
+              accessibilityRole="button"
+              style={[
+                {
+                  width: 42,
+                  height: 42,
+                  borderRadius: 21,
+                  backgroundColor: COLORS.surface,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                },
+                softShadow(0.06, 6, 2),
+              ]}
+            >
+              <Ionicons name="search-outline" size={20} color={COLORS.ink} />
+            </PressableScale>
             <View
               style={[
                 {

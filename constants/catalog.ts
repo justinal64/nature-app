@@ -889,6 +889,276 @@ export const CATALOG: Species[] = [
       { label: 'Status', value: 'Stable' },
     ],
   },
+
+  // ─── Mojave Desert ────────────────────────────────────────────────────────────
+  {
+    id: 'creosote-bush',
+    commonName: 'Creosote Bush',
+    latin: 'Larrea tridentata',
+    family: 'Caltrop Family · Zygophyllaceae',
+    kind: 'cactus',
+    region: 'MOJAVE',
+    description:
+      'The most widely distributed shrub in the Mojave and Sonoran Deserts, identifiable by its distinctive resinous smell after rain. Some creosote clones in the Mojave are estimated to be over 11,000 years old — among the oldest living plants on Earth.',
+    didYouKnow: 'After rain, creosote releases a distinctive earthy scent from its resinous leaves — often described as the "smell of the desert."',
+    idTips: [
+      'Small, dark green resinous leaves in pairs; strong turpentine odor when rubbed',
+      'Yellow five-petaled flowers in spring; fuzzy white seed balls in summer',
+      'Open, airy branch structure; rarely taller than 1.5 m',
+      'Widespread on open desert flats and alluvial fans',
+      'Often surrounded by bare ground — releases chemicals that inhibit competing plants',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Desert flats' },
+      { label: 'Height', value: '0.5–1.5 m' },
+      { label: 'Flowers', value: 'Mar–May' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+  {
+    id: 'mojave-yucca',
+    commonName: 'Mojave Yucca',
+    latin: 'Yucca schidigera',
+    family: 'Asparagus Family · Asparagaceae',
+    kind: 'cactus',
+    region: 'MOJAVE',
+    description:
+      'A stout, trunkless or short-trunked yucca with long, fibrous, dagger-like leaves. Its large clusters of creamy white flowers bloom in spring and were an important food source for Indigenous peoples. Like Joshua Trees, it depends on yucca moths for pollination.',
+    didYouKnow: 'Yucca root extracts (saponins) were used as soap and shampoo by Native peoples — and are still used in commercial shampoos today.',
+    idTips: [
+      'Long, stiff, fibrous leaves with sharp terminal spines and peeling margins',
+      'Stout, short trunk or multi-stemmed from near ground level',
+      'Large panicle of creamy white bell-shaped flowers in spring',
+      'Found on dry slopes and mesas from 300 to 1200 m',
+      'Similar to Joshua Tree but lacks distinct trunk; leaves longer and straighter',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Rocky slopes' },
+      { label: 'Height', value: '1–5 m' },
+      { label: 'Flowers', value: 'Apr–May' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+  {
+    id: 'desert-tortoise',
+    commonName: 'Desert Tortoise',
+    latin: 'Gopherus agassizii',
+    family: 'Tortoises · Testudinidae',
+    kind: 'snake',
+    region: 'MOJAVE',
+    description:
+      'The official state reptile of California and Nevada. Desert tortoises spend up to 95% of their lives underground in burrows to escape extreme heat and cold. They can live over 80 years and store enough water in their bladder to survive a full year of drought.',
+    didYouKnow: 'A desert tortoise can store up to a quart of water in its bladder — which can be re-absorbed as needed during drought. Never pick one up outdoors — they may release this precious water reserve in fear.',
+    idTips: [
+      'High-domed shell, typically brown to tan; elephant-like columnar legs',
+      'Front legs heavily scaled and flattened for digging',
+      'Slow-moving; active in morning and late afternoon',
+      'Burrow entrances in desert flats and rocky hillsides',
+      'Shell length 20–38 cm; males have longer tail and gular horn',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Desert flats' },
+      { label: 'Shell length', value: '20–38 cm' },
+      { label: 'Lifespan', value: '80+ yr' },
+      { label: 'Status', value: 'Threatened' },
+    ],
+  },
+  {
+    id: 'black-throated-sparrow',
+    commonName: 'Black-throated Sparrow',
+    latin: 'Amphispiza bilineata',
+    family: 'New World Sparrows · Passerellidae',
+    kind: 'bird',
+    region: 'MOJAVE',
+    description:
+      'One of the most distinctive and commonly seen desert songbirds, easily identified by the bold black bib on its white face. It is remarkably water-independent — deriving most moisture from the seeds and insects it eats, rarely needing to drink free water.',
+    didYouKnow: 'Black-throated Sparrows can survive without drinking water indefinitely, obtaining all the moisture they need from their food.',
+    idTips: [
+      'Bold black triangular bib contrasting with white face and white supercilium',
+      'Gray-brown back and wings; white belly; long dark tail with white outer tail feathers',
+      'Distinctive two-note song: a sweet metallic "tink-tink-tseeee"',
+      'Often seen foraging on the ground near creosote and desert scrub',
+      'Year-round resident in lower deserts; common and confiding',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Desert scrub' },
+      { label: 'Length', value: '12–14 cm' },
+      { label: 'Wingspan', value: '19–22 cm' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+
+  // ─── Chihuahuan Desert ────────────────────────────────────────────────────────
+  {
+    id: 'lechuguilla',
+    commonName: 'Lechuguilla',
+    latin: 'Agave lechuguilla',
+    family: 'Asparagus Family · Asparagaceae',
+    kind: 'cactus',
+    region: 'CHIHUAHUAN',
+    description:
+      'The most diagnostic plant of the Chihuahuan Desert — if you see lechuguilla, you are in the Chihuahuan. Its fiercely spine-tipped leaves have been called "the most dangerous plant in Mexico." A monocarpic agave, it blooms once after 10–20 years, then dies.',
+    didYouKnow: 'Lechuguilla fibers (istle) were used for thousands of years by Indigenous peoples to make rope, mats, sandals, and brushes — and are still harvested commercially today.',
+    idTips: [
+      'Dense rosette of stiff, narrow, yellowish-green leaves with a rigid terminal spine',
+      'Leaves recurved at the tips, forming a compact, low rosette (30–50 cm tall)',
+      'Found only on rocky limestone slopes — a strong indicator of Chihuahuan Desert',
+      'Flowers on a tall stalk (1.5–4 m) with reddish buds, blooms once then dies',
+      'Much smaller and narrower-leaved than other desert agaves',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Rocky limestone' },
+      { label: 'Height', value: '30–50 cm' },
+      { label: 'Bloom cycle', value: '10–20 yr' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+  {
+    id: 'scaled-quail',
+    commonName: 'Scaled Quail',
+    latin: 'Callipepla squamata',
+    family: 'New World Quail · Odontophoridae',
+    kind: 'bird',
+    region: 'CHIHUAHUAN',
+    description:
+      'Called "Cotton Top" for the distinctive white-tipped crest on its head, the Scaled Quail is the characteristic quail of the Chihuahuan Desert grasslands and desert scrub. Its body feathers have a scaly appearance from black-edged tips, giving it its name.',
+    didYouKnow: 'Scaled Quail can run remarkably fast and often prefer to run rather than fly to escape predators — they can sprint at over 20 km/h.',
+    idTips: [
+      'Distinctive white-tipped crest (the "cotton top") visible at a distance',
+      'Blue-gray body with black-edged feathers giving a "scaly" pattern on breast',
+      'Reddish-buff streaking on flanks',
+      'Found in desert grasslands, thorny scrub, and arroyos',
+      'Often seen in coveys running along the ground',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Desert grassland' },
+      { label: 'Length', value: '25–30 cm' },
+      { label: 'Wingspan', value: '35–40 cm' },
+      { label: 'Status', value: 'Declining' },
+    ],
+  },
+  {
+    id: 'checkered-whipsnake',
+    commonName: 'Checkered Whipsnake',
+    latin: 'Masticophis flagellum testaceus',
+    family: 'Colubrids · Colubridae',
+    kind: 'snake',
+    region: 'CHIHUAHUAN',
+    description:
+      'A long, slender, fast-moving snake with a striking checkered pattern. Like other whipsnakes, it is diurnal, alert, and capable of remarkable bursts of speed. It is a key predator of lizards, small rodents, and other snakes across the Chihuahuan Desert.',
+    didYouKnow: 'Checkered Whipsnakes can outpace a running human for short distances — reaching speeds of over 6 km/h. They climb well and often bask in shrubs above the ground.',
+    idTips: [
+      'Long and slender; distinct checkered pattern of dark squares on pale tan background',
+      'Whip-like thin tail; head not wider than the neck',
+      'Fast-moving and diurnal; often seen gliding rapidly across open ground',
+      'When cornered, vibrates tail and may strike repeatedly; non-venomous',
+      'Found in desert scrub, grasslands, and rocky outcrops below 1800 m',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Desert scrub' },
+      { label: 'Length', value: '1–1.6 m' },
+      { label: 'Lifespan', value: '12 yr' },
+      { label: 'Status', value: 'Stable' },
+    ],
+  },
+
+  // ─── Great Basin Desert ───────────────────────────────────────────────────────
+  {
+    id: 'big-sagebrush',
+    commonName: 'Big Sagebrush',
+    latin: 'Artemisia tridentata',
+    family: 'Daisy Family · Asteraceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description:
+      'The defining plant of the Great Basin Desert and the American West. Sagebrush covers more area in North America than any other native shrub. Its aromatic silver-gray leaves release a powerful scent when wet — the iconic smell of the high desert after rain.',
+    didYouKnow: 'Sagebrush has been part of the North American landscape for at least 40,000 years. Indigenous peoples used it for medicine, ceremonial purposes, and as a building material.',
+    idTips: [
+      'Silver-gray aromatic leaves with three shallow lobes at the tip',
+      'Woody, multi-branched shrub 0.5–3 m tall',
+      'Strong, distinctive sage scent, especially when wet or crushed',
+      'Small yellow flowers in late summer; tiny dry fruits',
+      'Dominant shrub in open, dry landscapes at 1000–3000 m elevation',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'High desert' },
+      { label: 'Height', value: '0.5–3 m' },
+      { label: 'Flowers', value: 'Aug–Oct' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+  {
+    id: 'rabbitbrush',
+    commonName: 'Rubber Rabbitbrush',
+    latin: 'Ericameria nauseosa',
+    family: 'Daisy Family · Asteraceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description:
+      'One of the most conspicuous shrubs of the Great Basin, exploding into golden-yellow bloom in late summer and fall when little else flowers. It is a critical late-season nectar source for migrating monarch butterflies and a wide variety of native bees.',
+    didYouKnow: 'During WWII, rubber rabbitbrush was investigated as a potential commercial rubber source due to latex in its stems — hence "rubber" in its name.',
+    idTips: [
+      'Narrow, gray-green or white-felted leaves; stems also white and felted',
+      'Dense, showy clusters of bright yellow flowers from August through October',
+      'Upright, rounded shrub 0.5–2 m tall; green-gray year-round',
+      'Found in disturbed soils, roadsides, and open shrubland',
+      'Flowers later in the season than most other Great Basin shrubs',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Open shrubland' },
+      { label: 'Height', value: '0.5–2 m' },
+      { label: 'Flowers', value: 'Aug–Oct' },
+      { label: 'Status', value: 'Common' },
+    ],
+  },
+  {
+    id: 'sage-thrasher',
+    commonName: 'Sage Thrasher',
+    latin: 'Oreoscoptes montanus',
+    family: 'Mockingbirds · Mimidae',
+    kind: 'bird',
+    region: 'GREAT_BASIN',
+    description:
+      'The smallest of the North American thrashers, and the only one that breeds in sagebrush habitat. A talented mimic and accomplished singer, it produces a long, rambling, melodious song from exposed perches — a defining sound of Great Basin mornings in spring.',
+    didYouKnow: 'Sage Thrashers are closely tied to sagebrush — they nest almost exclusively in sagebrush plants and are considered indicators of intact sagebrush ecosystems.',
+    idTips: [
+      'Gray-brown above; heavily streaked black-and-white below',
+      'Yellow eyes; short, slightly curved bill',
+      'White wing bars and white tips on outer tail feathers in flight',
+      'Found almost exclusively in sagebrush habitat',
+      'Song is a long, varied, melodious series of phrases from a high perch',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Sagebrush' },
+      { label: 'Length', value: '20–23 cm' },
+      { label: 'Wingspan', value: '30–35 cm' },
+      { label: 'Status', value: 'Declining' },
+    ],
+  },
+  {
+    id: 'great-basin-rattlesnake',
+    commonName: 'Great Basin Rattlesnake',
+    latin: 'Crotalus oreganus lutosus',
+    family: 'Pit Vipers · Viperidae',
+    kind: 'snake',
+    region: 'GREAT_BASIN',
+    description:
+      'The most widespread rattlesnake of the Great Basin, found from the sagebrush flats to rocky mountain ridges at 3000 m. It is heavier-bodied and more cold-tolerant than the Mojave or Western Diamondback rattlesnakes, active at surprisingly low temperatures in early spring.',
+    didYouKnow: 'Great Basin Rattlesnakes sometimes gather in communal dens (hibernacula) of dozens of individuals, emerging each spring in what is called a "snake emergence."',
+    idTips: [
+      'Heavy-bodied with a pattern of brown blotches on gray-brown background',
+      'Triangular head, clearly wider than the neck',
+      'Rattle at the tail tip; heat-sensing pit organs between eye and nostril',
+      'Found in rocky outcrops, sagebrush flats, and scrub habitat up to 3000 m',
+      'More olive-brown and paler than the Western Diamondback; blotches rounder',
+    ],
+    stats: [
+      { label: 'Habitat', value: 'Shrub-steppe' },
+      { label: 'Length', value: '0.8–1.3 m' },
+      { label: 'Lifespan', value: '20 yr' },
+      { label: 'Status', value: 'Stable' },
+    ],
+  },
 ];
 
 // Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
@@ -940,6 +1210,23 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'coachwhip':              [4, 5, 6, 7, 8, 9, 10],
   'kingsnake':              [4, 5, 6, 7, 8, 9, 10],
   'desert-nightsnake':      [4, 5, 6, 7, 8, 9, 10],
+
+  // Mojave
+  'creosote-bush':          ALL,
+  'mojave-yucca':           ALL,
+  'desert-tortoise':        [3, 4, 5, 6, 7, 8, 9, 10], // brumation Oct–Feb
+  'black-throated-sparrow': ALL,
+
+  // Chihuahuan
+  'lechuguilla':            ALL,
+  'scaled-quail':           ALL,
+  'checkered-whipsnake':    [4, 5, 6, 7, 8, 9, 10],
+
+  // Great Basin
+  'big-sagebrush':          ALL,
+  'rabbitbrush':            ALL, // yellow flowers Aug–Oct but plant visible year-round
+  'sage-thrasher':          [3, 4, 5, 6, 7, 8, 9], // breeds spring–summer, winters south
+  'great-basin-rattlesnake': [4, 5, 6, 7, 8, 9, 10], // cold-tolerant but still ectotherm
 };
 
 export function isActiveNow(speciesId: string): boolean {

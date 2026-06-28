@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -121,18 +122,26 @@ export default function JournalScreen() {
                       softShadow(0.04, 6, 2),
                     ]}
                   >
-                    <View
-                      style={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: 14,
-                        backgroundColor: COLORS.sage,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <SpeciesIcon kind={entry.kind} size={34} color={COLORS.cream} />
-                    </View>
+                    {entry.photoUri ? (
+                      <Image
+                        source={{ uri: entry.photoUri }}
+                        style={{ width: 56, height: 56, borderRadius: 14 }}
+                        contentFit="cover"
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 14,
+                          backgroundColor: COLORS.sage,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <SpeciesIcon kind={entry.kind} size={34} color={COLORS.cream} />
+                      </View>
+                    )}
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
                         {entry.commonName}

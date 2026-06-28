@@ -522,6 +522,22 @@ export default function SpeciesDetailScreen() {
           </PressableScale>
           <PressableScale
             scaleTo={0.88}
+            accessibilityLabel="Compare with another species"
+            accessibilityRole="button"
+            onPress={() => router.push(`/compare?a=${speciesId}` as never)}
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 21,
+              backgroundColor: 'rgba(10, 10, 24, 0.4)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="git-compare-outline" size={20} color={COLORS.cream} />
+          </PressableScale>
+          <PressableScale
+            scaleTo={0.88}
             accessibilityLabel="Ask AI about this species"
             accessibilityRole="button"
             onPress={() => router.push(`/ask?speciesId=${speciesId}` as never)}

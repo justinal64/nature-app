@@ -10,7 +10,7 @@ import '../global.css';
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ONBOARDING_KEY } from './onboarding';
-import { scheduleStreakReminder } from '@/lib/notifications';
+import { scheduleSpeciesOfTheDay, scheduleStreakReminder } from '@/lib/notifications';
 import { updateStreak } from '@/lib/streak';
 
 function RootLayoutNav() {
@@ -23,6 +23,7 @@ function RootLayoutNav() {
     if (user?.emailVerified) {
       updateStreak(user.uid).catch(() => {});
       scheduleStreakReminder().catch(() => {});
+      scheduleSpeciesOfTheDay().catch(() => {});
     }
   }, [user?.uid, user?.emailVerified]);
 

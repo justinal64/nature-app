@@ -12,15 +12,16 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
+import { getCategoryCount } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
-  { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind },
-  { name: 'Birds', count: 142, kind: 'bird' as SpeciesKind },
-  { name: 'Insects', count: 217, kind: 'insect' as SpeciesKind },
-  { name: 'Snakes', count: 31, kind: 'snake' as SpeciesKind },
+  { name: 'Trees', kind: 'cactus' as SpeciesKind },
+  { name: 'Birds', kind: 'bird' as SpeciesKind },
+  { name: 'Insects', kind: 'insect' as SpeciesKind },
+  { name: 'Snakes', kind: 'snake' as SpeciesKind },
 ];
 
 function todayLabel() {
@@ -320,7 +321,7 @@ export default function HomeScreen() {
               </View>
               <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>{cat.name}</Text>
               <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
-                <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{cat.count}</Text> species
+                <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{getCategoryCount(cat.kind)}</Text> species
               </Text>
             </PressableScale>
           </Animated.View>

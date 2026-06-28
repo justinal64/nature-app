@@ -10,24 +10,15 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
+import { CATALOG, getCategoryCount } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 
 const CATS = [
-  { name: 'Trees', count: 64, kind: 'cactus' as SpeciesKind },
-  { name: 'Birds', count: 142, kind: 'bird' as SpeciesKind },
-  { name: 'Insects', count: 217, kind: 'insect' as SpeciesKind },
-  { name: 'Snakes', count: 31, kind: 'snake' as SpeciesKind },
-];
-
-const SPECIES = [
-  { id: 'saguaro', name: 'Saguaro', latin: 'Carnegiea gigantea', region: 'SONORAN', seen: 4, kind: 'cactus' as SpeciesKind },
-  { id: 'joshua-tree', name: 'Joshua Tree', latin: 'Yucca brevifolia', region: 'MOJAVE', seen: 2, kind: 'cactus' as SpeciesKind },
-  { id: 'palo-verde', name: 'Palo Verde', latin: 'Parkinsonia florida', region: 'SONORAN', seen: 1, kind: 'cactus' as SpeciesKind },
-  { id: 'mesquite', name: 'Mesquite', latin: 'Prosopis velutina', region: 'SONORAN', seen: 6, kind: 'cactus' as SpeciesKind },
-  { id: 'desert-willow', name: 'Desert Willow', latin: 'Chilopsis linearis', region: 'CHIHUAHUAN', seen: 0, kind: 'cactus' as SpeciesKind },
-  { id: 'ocotillo', name: 'Ocotillo', latin: 'Fouquieria splendens', region: 'SONORAN', seen: 1, kind: 'cactus' as SpeciesKind },
-  { id: 'ironwood', name: 'Ironwood', latin: 'Olneya tesota', region: 'SONORAN', seen: 0, kind: 'cactus' as SpeciesKind },
+  { name: 'Trees', kind: 'cactus' as SpeciesKind },
+  { name: 'Birds', kind: 'bird' as SpeciesKind },
+  { name: 'Insects', kind: 'insect' as SpeciesKind },
+  { name: 'Snakes', kind: 'snake' as SpeciesKind },
 ];
 
 export default function GuideScreen() {
@@ -43,10 +34,10 @@ export default function GuideScreen() {
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
 
-  const filtered = SPECIES.filter((sp) => {
+  const filtered = CATALOG.filter((sp) => {
     const matchesSearch =
       !search.trim() ||
-      sp.name.toLowerCase().includes(search.toLowerCase()) ||
+      sp.commonName.toLowerCase().includes(search.toLowerCase()) ||
       sp.latin.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = sp.kind === activeKind;
     const matchesRegion = activeRegion === 'ALL' || sp.region === activeRegion;
@@ -156,7 +147,7 @@ export default function GuideScreen() {
                     {cat.name}
                   </Text>
                   <Text style={{ color: active ? 'rgba(244, 236, 218, 0.7)' : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
-                    {cat.count}
+                    {getCategoryCount(cat.kind)}
                   </Text>
                 </PressableScale>
               </Animated.View>
@@ -244,7 +235,7 @@ export default function GuideScreen() {
 
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
-                    {sp.name}
+                    {sp.commonName}
                   </Text>
                   <Text
                     style={{

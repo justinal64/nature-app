@@ -21,6 +21,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
@@ -35,21 +36,6 @@ type TabName = (typeof TABS)[number];
 // One entry per carousel image. Extend when real photos are bundled.
 const IMAGES = ['primary'] as const;
 
-const ID_TIPS = [
-  'Ribbed, column-shaped trunk that expands after monsoon rain to store water',
-  'Arms typically develop after 50–75 years of growth',
-  'White, waxy flowers bloom at arm tips in May–June',
-  'Grows only in the Sonoran Desert — Arizona, California, and Sonora, Mexico',
-  'Distinctive pleated texture visible on the trunk of mature specimens',
-];
-
-const STATS: { label: string; value: string }[] = [
-  { label: 'Habitat', value: 'Sonoran' },
-  { label: 'Height', value: '12–18 m' },
-  { label: 'Lifespan', value: '150 yr+' },
-  { label: 'Status', value: 'Stable' },
-];
-
 export default function SpeciesDetailScreen() {
   const { id: speciesId } = useLocalSearchParams<{ id: string }>();
   const { top } = useSafeAreaInsets();
@@ -60,6 +46,8 @@ export default function SpeciesDetailScreen() {
   const [tab, setTab] = useState<TabName>('Overview');
   const [liked, setLiked] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
+
+  const species = speciesId ? getSpeciesById(speciesId) : undefined;
 
   useEffect(() => {
     if (!user || !speciesId) return;
@@ -185,10 +173,10 @@ export default function SpeciesDetailScreen() {
                 textTransform: 'uppercase',
               }}
             >
-              Cacti · Cactaceae
+              {species?.family ?? '—'}
             </Text>
             <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}>
-              Saguaro
+              {species?.commonName ?? 'Unknown species'}
             </Text>
             <Text
               style={{
@@ -198,7 +186,7 @@ export default function SpeciesDetailScreen() {
                 marginTop: 2,
               }}
             >
-              Carnegiea gigantea
+              {species?.latin ?? ''}
             </Text>
           </View>
         </Reveal>
@@ -255,7 +243,7 @@ export default function SpeciesDetailScreen() {
             gap: 10,
           }}
         >
-          {STATS.map((s, i) => (
+          {(species?.stats ?? []).map((s, i) => (
             <Animated.View
               key={s.label}
               entering={ZoomIn.delay(140 + i * 70).springify().damping(13).stiffness(180)}
@@ -290,63 +278,63 @@ export default function SpeciesDetailScreen() {
           <Animated.View key="overview" entering={FadeInDown.duration(280)}>
             <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
               <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 23 }}>
-                The towering icon of the Sonoran Desert. Saguaros can take 70 years to grow their
-                first arm and live for two centuries — pleated trunks swell to hold rainwater after
-                monsoon storms.
+                {species?.description ?? ''}
               </Text>
             </View>
 
-            <View
-              style={[
-                {
-                  marginHorizontal: 16,
-                  marginTop: 22,
-                  backgroundColor: COLORS.dusk,
-                  borderRadius: 18,
-                  padding: 18,
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  gap: 12,
-                },
-                glow(COLORS.dusk, 12),
-              ]}
-            >
+            {species?.didYouKnow ? (
               <View
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 16,
-                  backgroundColor: COLORS.gold,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                style={[
+                  {
+                    marginHorizontal: 16,
+                    marginTop: 22,
+                    backgroundColor: COLORS.dusk,
+                    borderRadius: 18,
+                    padding: 18,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    gap: 12,
+                  },
+                  glow(COLORS.dusk, 12),
+                ]}
               >
-                <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>i</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text
+                <View
                   style={{
-                    color: COLORS.gold,
-                    fontSize: 11,
-                    fontWeight: '700',
-                    letterSpacing: 0.6,
-                    textTransform: 'uppercase',
-                    marginBottom: 4,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 16,
+                    backgroundColor: COLORS.gold,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  Did you know
-                </Text>
-                <Text style={{ color: COLORS.cream, fontSize: 14, lineHeight: 20 }}>
-                  A flowering Saguaro can hold up to 80 lbs of water in a single arm.
-                </Text>
+                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>i</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      color: COLORS.gold,
+                      fontSize: 11,
+                      fontWeight: '700',
+                      letterSpacing: 0.6,
+                      textTransform: 'uppercase',
+                      marginBottom: 4,
+                    }}
+                  >
+                    Did you know
+                  </Text>
+                  <Text style={{ color: COLORS.cream, fontSize: 14, lineHeight: 20 }}>
+                    {species.didYouKnow}
+                  </Text>
+                </View>
               </View>
-            </View>
+            ) : null}
           </Animated.View>
         )}
 
         {tab === 'ID Tips' && (
           <View style={{ paddingHorizontal: 24, marginTop: 22, gap: 14 }}>
-            {ID_TIPS.map((tip, i) => (
+            {(species?.idTips ?? []).map((tip, i) => (
               <Animated.View
                 key={tip}
                 entering={FadeInDown.delay(i * 60).duration(280)}
@@ -373,7 +361,7 @@ export default function SpeciesDetailScreen() {
                   No sightings yet
                 </Text>
                 <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
-                  Spot a Saguaro? Use the camera to log your first sighting.
+                  {`Spot a ${species?.commonName ?? 'one'}? Use the camera to log your first sighting.`}
                 </Text>
               </View>
             ) : (
@@ -482,7 +470,7 @@ export default function SpeciesDetailScreen() {
             accessibilityRole="button"
             onPress={() =>
               Share.share({
-                message: 'Check out the Saguaro (Carnegiea gigantea) on WildLens!',
+                message: `Check out the ${species?.commonName ?? 'species'} (${species?.latin ?? ''}) on WildLens!`,
               })
             }
             style={{

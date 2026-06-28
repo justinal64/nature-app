@@ -103,6 +103,7 @@ function RootLayoutNav() {
         <Stack.Screen name="ask" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="onboarding" options={{ animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen name="search" options={{ animation: 'fade', presentation: 'modal' }} />
+        <Stack.Screen name="favorites" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

@@ -281,8 +281,21 @@ export default function CaptureScreen() {
           )}
         </Pressable>
 
-        {/* Spacer keeps the shutter centred */}
-        <View style={{ width: 50 }} />
+        <Pressable
+          onPress={() => router.push('/sound-id' as never)}
+          accessibilityLabel="Identify a bird by sound"
+          accessibilityRole="button"
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 14,
+            backgroundColor: 'rgba(10, 10, 24, 0.45)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="mic-outline" size={24} color={COLORS.cream} />
+        </Pressable>
       </View>
     </View>
   );

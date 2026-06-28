@@ -79,6 +79,12 @@
         {
           "locationWhenInUsePermission": "WildLens uses your location to record where you spotted a species."
         }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "WildLens uses your microphone to record bird calls for identification."
+        }
       ]
     ],
     "experiments": {

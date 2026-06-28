@@ -11,6 +11,7 @@ import '../global.css';
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { OfflineBar } from '@/components/OfflineBar';
 import { ONBOARDING_KEY } from './onboarding';
 import { scheduleSpeciesOfTheDay, scheduleStreakReminder } from '@/lib/notifications';
 import { updateStreak } from '@/lib/streak';
@@ -106,7 +107,9 @@ function RootLayoutNav() {
         <Stack.Screen name="favorites" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="compare" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="journal-stats" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="sighting/[id]" options={{ animation: 'slide_from_right' }} />
       </Stack>
+      <OfflineBar />
       <StatusBar style="dark" />
     </ThemeProvider>
   );

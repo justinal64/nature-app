@@ -327,7 +327,7 @@ export default function JournalScreen() {
                   />
                   <PressableScale
                     scaleTo={0.98}
-                    onPress={() => router.push(`/species/${entry.speciesId}` as never)}
+                    onPress={() => router.push(`/sighting/${entry.id}` as never)}
                     onLongPress={() => handleLongPress(entry)}
                     accessibilityLabel={`${entry.commonName} — ${formatRelativeDate(entry.capturedAt)}. Long press to edit or delete.`}
                     accessibilityRole="button"

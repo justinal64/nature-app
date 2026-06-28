@@ -22,6 +22,11 @@ export async function getSightings(userId: string): Promise<Sighting[]> {
   return raw ? (JSON.parse(raw) as Sighting[]) : [];
 }
 
+export async function getSightingById(userId: string, sightingId: string): Promise<Sighting | undefined> {
+  const all = await getSightings(userId);
+  return all.find((s) => s.id === sightingId);
+}
+
 export async function addSighting(sighting: Omit<Sighting, 'id'>): Promise<Sighting> {
   const all = await getSightings(sighting.userId);
   const record: Sighting = { ...sighting, id: `${Date.now()}-${Math.random().toString(36).slice(2)}` };

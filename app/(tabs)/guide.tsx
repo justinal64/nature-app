@@ -35,8 +35,10 @@ export default function GuideScreen() {
   const [visibleNow, setVisibleNow] = useState(false);
   const [nearMe, setNearMe] = useState(false);
   const [locLoading, setLocLoading] = useState(false);
+  const [unseenOnly, setUnseenOnly] = useState(false);
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
+  const seenIds = new Set(sightings.map((s) => s.speciesId));
 
   const filtered = CATALOG.filter((sp) => {
     const matchesSearch =
@@ -46,12 +48,11 @@ export default function GuideScreen() {
     const matchesCategory = sp.kind === activeKind;
     const matchesRegion = activeRegion === 'ALL' || sp.region === activeRegion;
     const matchesSeason = !visibleNow || isActiveNow(sp.id);
-    return matchesSearch && matchesCategory && matchesRegion && matchesSeason;
+    const matchesUnseen = !unseenOnly || !seenIds.has(sp.id);
+    return matchesSearch && matchesCategory && matchesRegion && matchesSeason && matchesUnseen;
   });
 
-  const seenCount = filtered.filter((sp) =>
-    sightings.some((s) => s.speciesId === sp.id),
-  ).length;
+  const seenCount = filtered.filter((sp) => seenIds.has(sp.id)).length;
 
   const regionLabel =
     activeRegion === 'ALL'
@@ -216,7 +217,30 @@ export default function GuideScreen() {
             </Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <Pressable
+                onPress={() => setUnseenOnly((v) => !v)}
+                accessibilityLabel={unseenOnly ? 'Show all species' : 'Show unseen species only'}
+                accessibilityRole="button"
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: unseenOnly ? COLORS.gold : COLORS.surface,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: unseenOnly ? COLORS.gold : COLORS.sand,
+                }}
+              >
+                <Ionicons name="eye-off-outline" size={12} color={unseenOnly ? COLORS.ink : COLORS.bark} />
+                <Text style={{ color: unseenOnly ? COLORS.ink : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                  Unseen
+                </Text>
+              </Pressable>
+              <Pressable
                 onPress={() => setVisibleNow((v) => !v)}
+                accessibilityLabel={visibleNow ? 'Show all seasons' : 'Show species active now'}
+                accessibilityRole="button"
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',

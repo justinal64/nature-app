@@ -28,6 +28,7 @@ import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
 import { addSighting } from '@/lib/sightings';
+import { maybeRequestReview } from '@/lib/review';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
   cactus: 'Plant',
@@ -126,6 +127,7 @@ export default function ResultScreen() {
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      maybeRequestReview(user.uid).catch(() => {});
       router.replace('/(tabs)');
     } catch {
       Alert.alert('Error', 'Could not save sighting. Please try again.');

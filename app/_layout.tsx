@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef } from 'react';
@@ -26,6 +27,20 @@ function RootLayoutNav() {
       scheduleSpeciesOfTheDay().catch(() => {});
     }
   }, [user?.uid, user?.emailVerified]);
+
+  // Navigate to species detail when user taps a Species of the Day notification
+  useEffect(() => {
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      const id = response.notification.request.identifier;
+      if (id === 'species-of-the-day') {
+        const speciesId = response.notification.request.content.data?.speciesId as string | undefined;
+        if (speciesId) {
+          router.push(`/species/${speciesId}` as never);
+        }
+      }
+    });
+    return () => sub.remove();
+  }, [router]);
 
   useEffect(() => {
     if (loading) return;

@@ -65,13 +65,14 @@ export async function scheduleSpeciesOfTheDay(): Promise<void> {
   const { status } = await Notifications.getPermissionsAsync();
   if (status !== 'granted') return;
 
-  const { commonName, description } = pickDailySpecies();
+  const { commonName, description, id } = pickDailySpecies();
 
   await Notifications.scheduleNotificationAsync({
     identifier: SOTD_ID,
     content: {
       title: `Species of the day: ${commonName}`,
       body: description,
+      data: { speciesId: id },
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,

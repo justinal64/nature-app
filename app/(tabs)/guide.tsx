@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
@@ -10,7 +11,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
-import { CATALOG, getCategoryCount, isActiveNow } from '@/constants/catalog';
+import { CATALOG, Region, getCategoryCount, getRegionForCoords, isActiveNow } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 
@@ -32,6 +33,8 @@ export default function GuideScreen() {
   const [activeCategory, setActiveCategory] = useState(validCategory);
   const [activeRegion, setActiveRegion] = useState('ALL');
   const [visibleNow, setVisibleNow] = useState(false);
+  const [nearMe, setNearMe] = useState(false);
+  const [locLoading, setLocLoading] = useState(false);
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
 
@@ -55,14 +58,45 @@ export default function GuideScreen() {
       ? 'All regions'
       : activeRegion.charAt(0) + activeRegion.slice(1).toLowerCase();
 
-  const pickRegion = () =>
+  const pickRegion = () => {
+    setNearMe(false);
     Alert.alert('Filter by region', undefined, [
       { text: 'All regions', onPress: () => setActiveRegion('ALL') },
       { text: 'Sonoran', onPress: () => setActiveRegion('SONORAN') },
       { text: 'Mojave', onPress: () => setActiveRegion('MOJAVE') },
       { text: 'Chihuahuan', onPress: () => setActiveRegion('CHIHUAHUAN') },
+      { text: 'Great Basin', onPress: () => setActiveRegion('GREAT_BASIN') },
       { text: 'Cancel', style: 'cancel' },
     ]);
+  };
+
+  const toggleNearMe = async () => {
+    if (nearMe) {
+      setNearMe(false);
+      setActiveRegion('ALL');
+      return;
+    }
+    setLocLoading(true);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Location needed', 'Allow location access in Settings to filter by your region.');
+        return;
+      }
+      const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      const region = getRegionForCoords(pos.coords.latitude, pos.coords.longitude);
+      if (!region) {
+        Alert.alert('Outside catalog range', 'Your current location isn\'t in our covered desert regions.');
+        return;
+      }
+      setActiveRegion(region as Region);
+      setNearMe(true);
+    } catch {
+      Alert.alert('Error', 'Could not get your location. Please try again.');
+    } finally {
+      setLocLoading(false);
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -192,23 +226,46 @@ export default function GuideScreen() {
                 </Text>
               </Pressable>
               <Pressable
+                onPress={toggleNearMe}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: nearMe ? COLORS.dusk : COLORS.surface,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: nearMe ? COLORS.dusk : COLORS.sand,
+                }}
+              >
+                <Ionicons
+                  name={locLoading ? 'hourglass-outline' : 'location-outline'}
+                  size={12}
+                  color={nearMe ? COLORS.cream : COLORS.bark}
+                />
+                <Text style={{ color: nearMe ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                  Near me
+                </Text>
+              </Pressable>
+              <Pressable
                 onPress={pickRegion}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
-                  backgroundColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.surface,
+                  backgroundColor: activeRegion !== 'ALL' && !nearMe ? COLORS.clay : COLORS.surface,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 14,
                   borderWidth: 1,
-                  borderColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.sand,
+                  borderColor: activeRegion !== 'ALL' && !nearMe ? COLORS.clay : COLORS.sand,
                 }}
               >
-                <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
                   {regionLabel}
                 </Text>
-                <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
+                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
               </Pressable>
             </View>
           </View>

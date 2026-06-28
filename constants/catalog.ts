@@ -958,3 +958,19 @@ export function getCatalogByKind(kind: SpeciesKind): Species[] {
 export function getCategoryCount(kind: SpeciesKind): number {
   return getCatalogByKind(kind).length;
 }
+
+type BBox = { minLat: number; maxLat: number; minLng: number; maxLng: number };
+const REGION_BOXES: { region: Region; box: BBox }[] = [
+  // Check MOJAVE first — it overlaps Sonoran's northern edge and is more specific there
+  { region: 'MOJAVE',      box: { minLat: 33, maxLat: 38, minLng: -118, maxLng: -113 } },
+  { region: 'CHIHUAHUAN',  box: { minLat: 25, maxLat: 33, minLng: -108, maxLng: -100 } },
+  { region: 'GREAT_BASIN', box: { minLat: 36, maxLat: 45, minLng: -120, maxLng: -113 } },
+  { region: 'SONORAN',     box: { minLat: 25, maxLat: 35, minLng: -116, maxLng: -107 } },
+];
+
+export function getRegionForCoords(lat: number, lng: number): Region | null {
+  const match = REGION_BOXES.find(
+    ({ box }) => lat >= box.minLat && lat <= box.maxLat && lng >= box.minLng && lng <= box.maxLng,
+  );
+  return match?.region ?? null;
+}

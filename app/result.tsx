@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, {
   Easing,
@@ -71,8 +72,22 @@ export default function ResultScreen() {
   const [identifying, setIdentifying] = useState(true);
   const [results, setResults] = useState<IdentifyResult[]>([]);
   const [note, setNote] = useState('');
+  const locationRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
+
+  useEffect(() => {
+    // Opportunistically grab location — don't block identification on it
+    Location.requestForegroundPermissionsAsync().then(({ status }) => {
+      if (status === 'granted') {
+        Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
+          .then((pos) => {
+            locationRef.current = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          })
+          .catch(() => {});
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const uri = typeof photoUri === 'string' ? photoUri : null;
@@ -107,6 +122,7 @@ export default function ResultScreen() {
         photoUri: typeof photoUri === 'string' ? photoUri : undefined,
         notes: note.trim() || undefined,
         capturedAt: new Date().toISOString(),
+        location: locationRef.current ?? undefined,
       });
       router.replace('/(tabs)');
     } catch {

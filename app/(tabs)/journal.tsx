@@ -56,20 +56,47 @@ export default function JournalScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Reveal>
-          <View style={{ paddingHorizontal: 24, paddingTop: 12, paddingBottom: 18 }}>
-            <Text
+          <View
+            style={{
+              paddingHorizontal: 24,
+              paddingTop: 12,
+              paddingBottom: 18,
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  color: COLORS.bark,
+                  fontSize: 12,
+                  fontWeight: '700',
+                  letterSpacing: 0.6,
+                  textTransform: 'uppercase',
+                  marginBottom: 6,
+                }}
+              >
+                {loading ? '—' : `${speciesCount} species · ${photoCount} photos`}
+              </Text>
+              <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700' }}>Journal</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => router.push('/sightings-map' as never)}
               style={{
-                color: COLORS.bark,
-                fontSize: 12,
-                fontWeight: '700',
-                letterSpacing: 0.6,
-                textTransform: 'uppercase',
-                marginBottom: 6,
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: COLORS.surface,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+                marginBottom: 4,
               }}
             >
-              {loading ? '—' : `${speciesCount} species · ${photoCount} photos`}
-            </Text>
-            <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700' }}>Journal</Text>
+              <Ionicons name="map-outline" size={20} color={COLORS.clay} />
+            </TouchableOpacity>
           </View>
         </Reveal>
 

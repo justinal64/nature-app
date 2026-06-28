@@ -73,6 +73,12 @@
           "icon": "./assets/icon.png",
           "color": "#B85C3A"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "WildLens uses your location to record where you spotted a species."
+        }
       ]
     ],
     "experiments": {

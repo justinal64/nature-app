@@ -12,6 +12,7 @@ export type Sighting = {
   photoUri?: string;
   capturedAt: string; // ISO 8601
   notes?: string;
+  location?: { lat: number; lng: number };
 };
 
 const KEY = (uid: string) => `sightings:${uid}`;

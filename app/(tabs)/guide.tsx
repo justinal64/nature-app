@@ -10,7 +10,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
-import { CATALOG, getCategoryCount } from '@/constants/catalog';
+import { CATALOG, getCategoryCount, isActiveNow } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 
@@ -31,6 +31,7 @@ export default function GuideScreen() {
   const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Trees';
   const [activeCategory, setActiveCategory] = useState(validCategory);
   const [activeRegion, setActiveRegion] = useState('ALL');
+  const [visibleNow, setVisibleNow] = useState(false);
 
   const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
 
@@ -41,7 +42,8 @@ export default function GuideScreen() {
       sp.latin.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = sp.kind === activeKind;
     const matchesRegion = activeRegion === 'ALL' || sp.region === activeRegion;
-    return matchesSearch && matchesCategory && matchesRegion;
+    const matchesSeason = !visibleNow || isActiveNow(sp.id);
+    return matchesSearch && matchesCategory && matchesRegion && matchesSeason;
   });
 
   const seenCount = filtered.filter((sp) =>
@@ -170,25 +172,45 @@ export default function GuideScreen() {
               <Text style={{ fontWeight: '700' }}>{filtered.length}</Text> species ·{' '}
               <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{seenCount} seen</Text>
             </Text>
-            <Pressable
-              onPress={pickRegion}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 4,
-                backgroundColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.surface,
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 14,
-                borderWidth: 1,
-                borderColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.sand,
-              }}
-            >
-              <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
-                {regionLabel}
-              </Text>
-              <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
-            </Pressable>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Pressable
+                onPress={() => setVisibleNow((v) => !v)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: visibleNow ? COLORS.sage : COLORS.surface,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: visibleNow ? COLORS.sage : COLORS.sand,
+                }}
+              >
+                <Text style={{ color: visibleNow ? COLORS.ink : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                  Now
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={pickRegion}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.surface,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: activeRegion !== 'ALL' ? COLORS.clay : COLORS.sand,
+                }}
+              >
+                <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                  {regionLabel}
+                </Text>
+                <Text style={{ color: activeRegion !== 'ALL' ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
+              </Pressable>
+            </View>
           </View>
         </Reveal>
 

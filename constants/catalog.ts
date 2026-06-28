@@ -891,6 +891,62 @@ export const CATALOG: Species[] = [
   },
 ];
 
+// Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
+// Plants are year-round; animals reflect active / in-range seasons for the Sonoran Desert.
+const ALL: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const WARM: number[] = [3, 4, 5, 6, 7, 8, 9, 10];
+
+export const ACTIVE_MONTHS: Record<string, number[]> = {
+  // Plants — permanent fixtures, always visible
+  'saguaro':        ALL,
+  'joshua-tree':    ALL,
+  'palo-verde':     ALL,
+  'mesquite':       ALL,
+  'ocotillo':       ALL,
+  'ironwood':       ALL,
+  'barrel-cactus':  ALL,
+  'organ-pipe':     ALL,
+  'cholla':         ALL,
+  'desert-willow':  [3, 4, 5, 6, 7, 8, 9, 10], // deciduous; bare in winter
+
+  // Birds
+  'gambels-quail':          ALL,   // year-round resident
+  'roadrunner':             ALL,   // year-round resident
+  'gila-woodpecker':        ALL,   // year-round resident
+  'cactus-wren':            ALL,   // year-round resident
+  'vermilion-flycatcher':   ALL,   // year-round in low Sonoran
+  'turkey-vulture':         WARM,  // migratory; Apr–Oct in AZ
+  'costas-hummingbird':     [1, 2, 3, 4, 10, 11, 12], // winter/spring low desert
+  'great-horned-owl':       ALL,   // year-round resident
+  'phainopepla':            [1, 2, 3, 4, 10, 11, 12], // winter resident in low Sonoran
+  'mourning-dove':          ALL,   // year-round resident
+
+  // Insects & Arthropods
+  'tarantula-hawk':         [4, 5, 6, 7, 8, 9, 10],
+  'arizona-bark-scorpion':  ALL,   // shelter year-round; most active warm months
+  'desert-tarantula':       [4, 5, 6, 7, 8, 9, 10], // males roam Jul–Oct
+  'palo-verde-beetle':      [6, 7, 8], // monsoon emergence only
+  'monarch-butterfly':      [3, 4, 9, 10], // spring & fall migration
+  'velvet-ant':             [5, 6, 7, 8, 9, 10],
+  'giant-desert-centipede': WARM,
+  'black-widow':            ALL,   // present year-round; more visible Apr–Oct
+
+  // Snakes — ectothermic; inactive in cold months
+  'western-diamondback':    [3, 4, 5, 6, 7, 8, 9, 10, 11],
+  'mojave-rattlesnake':     WARM,
+  'sonoran-coral-snake':    [4, 5, 6, 7, 8, 9, 10], // most active after monsoon
+  'sidewinder':             WARM,
+  'gopher-snake':           [3, 4, 5, 6, 7, 8, 9, 10, 11],
+  'coachwhip':              [4, 5, 6, 7, 8, 9, 10],
+  'kingsnake':              [4, 5, 6, 7, 8, 9, 10],
+  'desert-nightsnake':      [4, 5, 6, 7, 8, 9, 10],
+};
+
+export function isActiveNow(speciesId: string): boolean {
+  const month = new Date().getMonth() + 1;
+  return (ACTIVE_MONTHS[speciesId] ?? ALL).includes(month);
+}
+
 export function getSpeciesById(id: string): Species | undefined {
   return CATALOG.find((s) => s.id === id);
 }

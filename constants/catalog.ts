@@ -2337,6 +2337,68 @@ export const CATALOG: Species[] = [
     idTips: ['Mouse-sized but bipedal, with huge hind legs', 'Long tufted tail with dark-and-white stripes', 'Bounces in zigzag pattern when fleeing', 'Active only at night; look for tracks in sand around shrubs'],
     stats: [{ label: 'Weight', value: '1.5–3 oz' }, { label: 'Water need', value: 'None (metabolic)' }, { label: 'Active', value: 'Nocturnal only' }, { label: 'Status', value: 'Stable' }],
   },
+
+  // ─── Final 5 to 150 ──────────────────────────────────────────────────────────
+  {
+    id: 'desert-horned-lizard',
+    commonName: 'Desert Horned Lizard',
+    latin: 'Phrynosoma platyrhinos',
+    family: 'Iguanas · Phrynosomatidae',
+    kind: 'snake',
+    region: 'MOJAVE',
+    description: 'The most widespread horned lizard in the Mojave and Great Basin, named for the single large horn projecting from its snout. Masters of heat regulation — they can darken their skin to absorb more solar radiation in the morning, then lighten it to reflect heat at midday. Rely almost entirely on camouflage; most people step within inches of them without noticing.',
+    didYouKnow: 'Desert Horned Lizards can change their skin darkness by 20% to regulate body temperature through selective solar absorption — essentially using pigment as a biological thermostat.',
+    idTips: ['Flat, round body with spiny margins and one large snout horn', 'Sandy tan to reddish-brown with dark spots, matching soil closely', 'Stays frozen until nearly stepped on', 'Often found on open sandy or gravelly flats in Mojave scrub'],
+    stats: [{ label: 'Length', value: '3–5 in' }, { label: 'Season', value: 'Apr–Sep' }, { label: 'Camouflage', value: 'Exceptional' }, { label: 'Status', value: 'Stable' }],
+  },
+  {
+    id: 'gambel-quail',
+    commonName: 'Gambel\'s Quail',
+    latin: 'Callipepla gambelii',
+    family: 'Pheasants · Phasianidae',
+    kind: 'bird',
+    region: 'SONORAN',
+    description: 'The most recognizable bird of the Sonoran Desert — the male\'s drooping black topknot plume is iconic. Travels in family coveys of 20–50 birds that give a constant chorus of calls. One of the few birds that can regulate clutch size based on rainfall: in drought years, females may not breed at all; in wet years, they can produce 12–16 eggs.',
+    didYouKnow: 'Gambel\'s Quail chicks can run within hours of hatching and begin finding their own food at 2 days old — among the most precocial birds in North America.',
+    idTips: ['Teardrop-shaped black topknot plume on male', 'Male: chestnut crown and flanks, black face, scaled belly', 'Female: plain gray-brown without topknot black markings', 'Runs ahead of threats rather than flying; coveys of 20–50'],
+    stats: [{ label: 'Length', value: '9–11 in' }, { label: 'Covey size', value: '20–50' }, { label: 'Season', value: 'Year-round' }, { label: 'Status', value: 'Stable' }],
+  },
+  {
+    id: 'desert-spiny-lizard',
+    commonName: 'Desert Spiny Lizard',
+    latin: 'Sceloporus magister',
+    family: 'Iguanas · Phrynosomatidae',
+    kind: 'snake',
+    region: 'SONORAN',
+    description: 'The largest spiny lizard in the United States and one of the most commonly seen lizards in the Sonoran Desert. Large enough to hunt small lizards and insects with equal ease. Males display brilliant iridescent blue-purple patches on each side of the belly and a blue throat that flash during territorial push-up displays on boulders and fence posts.',
+    didYouKnow: 'Desert Spiny Lizards are among the most cold-tolerant of the desert\'s diurnal lizards — they bask earlier in the morning and later in the evening than any other Sonoran Desert lizard species.',
+    idTips: ['Large, stout lizard 7–12 inches with strongly keeled spiny scales', 'Male: vivid blue belly patches and throat visible in display', 'Pale yellow to tan with dark chevrons on neck', 'Common on boulders, tree trunks, and fence posts in Sonoran scrub'],
+    stats: [{ label: 'Length', value: '7–12 in' }, { label: 'Season', value: 'Mar–Nov' }, { label: 'Display', value: 'Blue belly push-ups' }, { label: 'Status', value: 'Stable' }],
+  },
+  {
+    id: 'white-throated-swift',
+    commonName: 'White-throated Swift',
+    latin: 'Aeronautes saxatalis',
+    family: 'Swifts · Apodidae',
+    kind: 'bird',
+    region: 'MOJAVE',
+    description: 'The fastest bird in North America in level flight, recorded at 186 mph in a dive. Swifts are so aerial that they eat, drink, mate, and sleep on the wing — touching land only to nest in vertical cliff crevices. The bold black-and-white plumage and screaming, twittering call are unmistakable as flocks sweep above desert canyons.',
+    didYouKnow: 'White-throated Swifts mate in midair — the pair lock together and free-fall hundreds of feet before separating just before hitting the ground.',
+    idTips: ['Cigar-shaped body; very long swept-back wings', 'Bold black-and-white pattern: white throat, belly, and flank patches', 'Extremely fast, screaming "chitter-chitter" call', 'Almost always seen in flocks screaming over cliffs and canyons'],
+    stats: [{ label: 'Length', value: '6–7 in' }, { label: 'Speed', value: '186 mph (dive)' }, { label: 'Season', value: 'Mar–Oct' }, { label: 'Status', value: 'Stable' }],
+  },
+  {
+    id: 'desert-kangaroo-rat',
+    commonName: 'Desert Kangaroo Rat',
+    latin: 'Dipodomys deserti',
+    family: 'Kangaroo Rats · Heteromyidae',
+    kind: 'snake',
+    region: 'MOJAVE',
+    description: 'The largest kangaroo rat in North America — up to 14 inches including the tail. Inhabits the softest, loosest sand dunes and sandy washes in the Mojave where its powerful hind legs give it unmatched mobility. Sand-bathing is a daily ritual to keep the fur in condition and remove excess oil. A keystone prey species that also provides critical seed caching for many desert plants.',
+    didYouKnow: 'Desert Kangaroo Rats can convert dry seeds to metabolic water so efficiently that they never need to drink liquid water in their entire lives — their kidneys are among the most concentrated in any mammal.',
+    idTips: ['Large (to 14 in with tail), bipedal rodent on enormous hind legs', 'Pale yellowish-tan fur matching desert sand', 'Long tufted tail with white stripe', 'Soft sandy habitat — dunes and sandy washes specifically'],
+    stats: [{ label: 'Length', value: '12–14 in (with tail)' }, { label: 'Water', value: 'Zero drinking water needed' }, { label: 'Active', value: 'Nocturnal' }, { label: 'Status', value: 'Stable' }],
+  },
 ];
 
 // Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
@@ -2536,6 +2598,13 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'pygmy-rabbit':           ALL,
   'mule-deer':              ALL,
   'northern-pocket-gopher': ALL,
+
+  // Final 5
+  'desert-horned-lizard':   [4, 5, 6, 7, 8, 9],
+  'gambel-quail':           ALL,
+  'desert-spiny-lizard':    [3, 4, 5, 6, 7, 8, 9, 10, 11],
+  'white-throated-swift':   [3, 4, 5, 6, 7, 8, 9, 10],
+  'desert-kangaroo-rat':    ALL,
 };
 
 export function isActiveNow(speciesId: string): boolean {

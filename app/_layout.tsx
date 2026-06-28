@@ -29,7 +29,8 @@ function RootLayoutNav() {
     const isRegisterPage = root === 'register';
     const isVerifyPage = root === 'verify-email';
     const isForgotPasswordPage = root === 'forgot-password';
-    const isPublicPage = isLoginPage || isRegisterPage || isForgotPasswordPage;
+    const isPrivacyPolicyPage = root === 'privacy-policy';
+    const isPublicPage = isLoginPage || isRegisterPage || isForgotPasswordPage || isPrivacyPolicyPage;
 
     if (!user && !isPublicPage) {
       router.replace('/login');
@@ -60,6 +61,7 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="result" options={{ animation: 'fade' }} />
         <Stack.Screen name="species/[id]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="privacy-policy" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

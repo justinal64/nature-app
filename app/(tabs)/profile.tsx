@@ -343,6 +343,17 @@ export default function ProfileScreen() {
           </View>
         </Reveal>
 
+        <Animated.View entering={FadeInDown.delay(440).duration(400)}>
+          <Pressable
+            onPress={() => router.push('/privacy-policy' as never)}
+            style={{ marginTop: 28, alignItems: 'center', paddingVertical: 10 }}
+          >
+            <Text style={{ color: COLORS.bark, fontSize: 13, fontWeight: '500' }}>
+              Privacy Policy
+            </Text>
+          </Pressable>
+        </Animated.View>
+
         <Animated.View entering={FadeInDown.delay(460).duration(400)}>
           <Pressable
             onPress={() => {

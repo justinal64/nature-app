@@ -157,6 +157,21 @@ export default function CaptureScreen() {
 
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Pressable
+            onPress={() => router.push('/field-cam' as never)}
+            accessibilityLabel="Open field cam with AR overlays"
+            accessibilityRole="button"
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 21,
+              backgroundColor: 'rgba(10, 10, 24, 0.45)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="layers-outline" size={20} color={COLORS.cream} />
+          </Pressable>
+          <Pressable
             onPress={() => setFlash(f => (f === 'off' ? 'on' : 'off'))}
             style={{
               width: 42,

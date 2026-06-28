@@ -66,6 +66,7 @@ function RootLayoutNav() {
         <Stack.Screen name="privacy-policy" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sightings-map" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sound-id" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
+        <Stack.Screen name="field-cam" options={{ animation: 'fade', presentation: 'fullScreenModal' }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

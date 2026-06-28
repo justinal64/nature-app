@@ -22,6 +22,7 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { cancelStreakReminder, requestNotificationPermission, scheduleStreakReminder } from '@/lib/notifications';
 import { getUserFriendlyError } from '@/utils/errors';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
@@ -69,6 +70,7 @@ export default function ProfileScreen() {
     { value: 0, suffix: '', label: 'Badges' },
   ];
 
+  const [notificationsOn, setNotificationsOn] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
   const [deleteError, setDeleteError] = useState('');
@@ -342,6 +344,72 @@ export default function ProfileScreen() {
             )}
           </View>
         </Reveal>
+
+        <Animated.View entering={FadeInDown.delay(420).duration(400)}>
+          <Pressable
+            onPress={async () => {
+              if (notificationsOn) {
+                await cancelStreakReminder();
+                setNotificationsOn(false);
+              } else {
+                const granted = await requestNotificationPermission();
+                if (granted) {
+                  await scheduleStreakReminder();
+                  setNotificationsOn(true);
+                } else {
+                  Alert.alert(
+                    'Notifications blocked',
+                    'Go to Settings → WildLens → Notifications to enable streak reminders.',
+                  );
+                }
+              }
+            }}
+            style={{
+              marginTop: 28,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: COLORS.surface,
+              borderRadius: 16,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: COLORS.sand,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Ionicons name="notifications-outline" size={20} color={COLORS.ink} />
+              <View>
+                <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                  Streak reminders
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                  Daily nudge at 7 PM if you haven&apos;t logged a sighting
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: 44,
+                height: 26,
+                borderRadius: 13,
+                backgroundColor: notificationsOn ? COLORS.sage : COLORS.sand,
+                justifyContent: 'center',
+                paddingHorizontal: 2,
+              }}
+            >
+              <View
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: 11,
+                  backgroundColor: COLORS.cream,
+                  alignSelf: notificationsOn ? 'flex-end' : 'flex-start',
+                }}
+              />
+            </View>
+          </Pressable>
+        </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(440).duration(400)}>
           <Pressable

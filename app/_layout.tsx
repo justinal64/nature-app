@@ -8,6 +8,7 @@ import '../global.css';
 
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { scheduleStreakReminder } from '@/lib/notifications';
 import { updateStreak } from '@/lib/streak';
 
 function RootLayoutNav() {
@@ -18,6 +19,7 @@ function RootLayoutNav() {
   useEffect(() => {
     if (user?.emailVerified) {
       updateStreak(user.uid).catch(() => {});
+      scheduleStreakReminder().catch(() => {});
     }
   }, [user?.uid, user?.emailVerified]);
 

@@ -66,6 +66,13 @@
         {
           "photosPermission": "WildLens reads photos from your library so you can identify species from existing images."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#B85C3A"
+        }
       ]
     ],
     "experiments": {

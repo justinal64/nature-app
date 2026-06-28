@@ -22,18 +22,12 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { getEarnedBadges } from '@/lib/badges';
 import { cancelStreakReminder, requestNotificationPermission, scheduleStreakReminder } from '@/lib/notifications';
 import { getUserFriendlyError } from '@/utils/errors';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
 import { formatRelativeDate } from '@/utils/date';
-
-const BADGES: { name: string; kind: SpeciesKind }[] = [
-  { name: 'First Find', kind: 'cactus' },
-  { name: '10-day Streak', kind: 'bird' },
-  { name: 'Cactus Crew', kind: 'cactus' },
-  { name: 'Birder', kind: 'bird' },
-];
 
 function getInitial(user: { displayName?: string | null; email?: string | null }) {
   const name = user.displayName?.trim();
@@ -62,12 +56,13 @@ export default function ProfileScreen() {
   const speciesCount = new Set(sightings.map((s) => s.speciesId)).size;
   const photoCount = sightings.filter((s) => s.photoUri).length;
   const recentEntries = sightings.slice(0, 3);
+  const earnedBadges = getEarnedBadges(sightings, streak);
 
   const STATS = [
     { value: speciesCount, suffix: '', label: 'Species' },
     { value: photoCount, suffix: '', label: 'Photos' },
     { value: streak, suffix: 'd', label: 'Streak' },
-    { value: 0, suffix: '', label: 'Badges' },
+    { value: earnedBadges.length, suffix: '', label: 'Badges' },
   ];
 
   const [notificationsOn, setNotificationsOn] = useState(false);
@@ -227,55 +222,68 @@ export default function ProfileScreen() {
             }}
           >
             <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
-              Recent badges
+              Badges
             </Text>
-            <Pressable onPress={() => Alert.alert('Badges', 'Full badge history coming soon.')}>
-              <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>All ›</Text>
-            </Pressable>
+            <Text style={{ color: COLORS.bark, fontSize: 13 }}>
+              {earnedBadges.length}/{earnedBadges.length + (16 - earnedBadges.length)} earned
+            </Text>
           </View>
         </Reveal>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
+          contentContainerStyle={{ paddingHorizontal: 20, gap: 12, paddingBottom: 4 }}
         >
-          {BADGES.map((badge, i) => (
-            <Animated.View
-              key={badge.name}
-              entering={ZoomIn.delay(260 + i * 90).springify().damping(11).stiffness(180)}
-              style={{ width: 100, alignItems: 'center' }}
-            >
-              <View
-                style={[
-                  {
-                    width: 80,
-                    height: 80,
-                    borderRadius: 40,
-                    backgroundColor: COLORS.sage,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 3,
-                    borderColor: COLORS.gold,
-                  },
-                  glow(COLORS.gold, 8),
-                ]}
-              >
-                <SpeciesIcon kind={badge.kind} size={42} color={COLORS.cream} />
-              </View>
-              <Text
-                style={{
-                  color: COLORS.ink,
-                  fontSize: 12,
-                  fontWeight: '600',
-                  marginTop: 8,
-                  textAlign: 'center',
-                }}
-              >
-                {badge.name}
+          {earnedBadges.length === 0 ? (
+            <View style={{ paddingVertical: 12, paddingHorizontal: 4 }}>
+              <Text style={{ color: COLORS.bark, fontSize: 13 }}>
+                Log your first sighting to earn a badge.
               </Text>
-            </Animated.View>
-          ))}
+            </View>
+          ) : (
+            earnedBadges.map((badge, i) => (
+              <Animated.View
+                key={badge.id}
+                entering={ZoomIn.delay(260 + i * 90).springify().damping(11).stiffness(180)}
+                style={{ width: 100, alignItems: 'center' }}
+              >
+                <Pressable
+                  onPress={() => Alert.alert(badge.name, badge.description)}
+                  style={{ alignItems: 'center' }}
+                >
+                  <View
+                    style={[
+                      {
+                        width: 80,
+                        height: 80,
+                        borderRadius: 40,
+                        backgroundColor: COLORS.sage,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderWidth: 3,
+                        borderColor: COLORS.gold,
+                      },
+                      glow(COLORS.gold, 8),
+                    ]}
+                  >
+                    <SpeciesIcon kind={badge.kind} size={42} color={COLORS.cream} />
+                  </View>
+                  <Text
+                    style={{
+                      color: COLORS.ink,
+                      fontSize: 12,
+                      fontWeight: '600',
+                      marginTop: 8,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {badge.name}
+                  </Text>
+                </Pressable>
+              </Animated.View>
+            ))
+          )}
         </ScrollView>
 
         <Reveal delay={320}>

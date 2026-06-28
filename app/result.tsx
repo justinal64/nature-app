@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -20,20 +20,19 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { getSpeciesById } from '@/constants/catalog';
+import type { Species } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
+import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
+import type { IdentifyResult } from '@/lib/identify';
 import { addSighting } from '@/lib/sightings';
 
-const OTHER = [
-  { name: 'Cardón', pct: 11 },
-  { name: 'Organ Pipe', pct: 6 },
-  { name: 'Mexican Fence', pct: 3 },
-];
-
-const FACTS = [
-  { label: 'Habitat', value: 'Sonoran' },
-  { label: 'Height', value: '12–18 m' },
-  { label: 'Lifespan', value: '150 yr+' },
-];
+const KIND_LABEL: Record<Species['kind'], string> = {
+  cactus: 'Plant',
+  bird: 'Bird',
+  insect: 'Insect',
+  snake: 'Reptile',
+};
 
 function MatchBar({ pct, delay }: { pct: number; delay: number }) {
   const width = useSharedValue(0);
@@ -69,15 +68,51 @@ export default function ResultScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const [saving, setSaving] = useState(false);
-  const { photoUri, confidence: confidenceParam, noMatch } = useLocalSearchParams<{
-    photoUri?: string;
-    confidence?: string;
-    noMatch?: string;
-  }>();
+  const [identifying, setIdentifying] = useState(true);
+  const [results, setResults] = useState<IdentifyResult[]>([]);
 
-  const matchPct = confidenceParam !== undefined ? parseInt(confidenceParam, 10) : 96;
-  const isLowConfidence = noMatch === 'true' || matchPct < 50;
-  const noMatchMode = noMatch === 'true';
+  const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
+
+  useEffect(() => {
+    const uri = typeof photoUri === 'string' ? photoUri : null;
+    if (!uri) {
+      setResults(OFFLINE_FALLBACK);
+      setIdentifying(false);
+      return;
+    }
+    identifySpecies(uri)
+      .then(setResults)
+      .finally(() => setIdentifying(false));
+  }, [photoUri]);
+
+  const topResult = results[0] ?? null;
+  const alternatives = results.slice(1, 4);
+  const isOffline = topResult?.isOffline ?? false;
+  const matchPct = topResult?.confidence ?? 0;
+  const isLowConfidence = !topResult || (!isOffline && matchPct < 50);
+  const catalogEntry = topResult?.speciesId ? getSpeciesById(topResult.speciesId) : undefined;
+  const stats = catalogEntry?.stats ?? [];
+
+  async function saveTopResult() {
+    if (!user || !topResult) { router.replace('/(tabs)'); return; }
+    setSaving(true);
+    try {
+      await addSighting({
+        userId: user.uid,
+        speciesId: topResult.speciesId ?? topResult.latin.toLowerCase().replace(/\s+/g, '-'),
+        commonName: topResult.commonName,
+        latinName: topResult.latin,
+        kind: topResult.kind,
+        photoUri: typeof photoUri === 'string' ? photoUri : undefined,
+        capturedAt: new Date().toISOString(),
+      });
+      router.replace('/(tabs)');
+    } catch {
+      Alert.alert('Error', 'Could not save sighting. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -88,7 +123,7 @@ export default function ResultScreen() {
         <View style={{ height: 320, backgroundColor: COLORS.gold, overflow: 'hidden' }}>
           {photoUri ? (
             <Image
-              source={{ uri: photoUri }}
+              source={{ uri: photoUri as string }}
               style={{ width: '100%', height: '100%' }}
               contentFit="cover"
             />
@@ -143,8 +178,47 @@ export default function ResultScreen() {
                 <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
               </PressableScale>
             </Animated.View>
+
             <Animated.View entering={ZoomIn.delay(350).springify().damping(11).stiffness(220)}>
-              {isLowConfidence ? (
+              {identifying ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 8,
+                    backgroundColor: 'rgba(10, 10, 24, 0.55)',
+                    paddingHorizontal: 14,
+                    paddingVertical: 8,
+                    borderRadius: 18,
+                  }}
+                >
+                  <ActivityIndicator size="small" color={COLORS.cream} />
+                  <Text style={{ color: COLORS.cream, fontWeight: '600', fontSize: 13 }}>
+                    Identifying…
+                  </Text>
+                </View>
+              ) : isOffline ? (
+                <View
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                      backgroundColor: COLORS.dusk,
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 18,
+                      opacity: 0.92,
+                    },
+                    glow(COLORS.dusk, 8),
+                  ]}
+                >
+                  <Ionicons name="wifi-outline" size={14} color={COLORS.cream} />
+                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>
+                    Offline
+                  </Text>
+                </View>
+              ) : isLowConfidence ? (
                 <View
                   style={[
                     {
@@ -205,244 +279,278 @@ export default function ResultScreen() {
               softShadow(0.08, 16, 4),
             ]}
           >
-            {isLowConfidence ? (
+            {identifying ? (
+              <View style={{ alignItems: 'center', paddingVertical: 24 }}>
+                <ActivityIndicator size="large" color={COLORS.clay} />
+                <Text style={{ color: COLORS.bark, marginTop: 14, fontSize: 15 }}>
+                  Analyzing your photo…
+                </Text>
+              </View>
+            ) : isOffline ? (
               <>
                 <Text style={{ color: COLORS.ink, fontSize: 26, fontWeight: '700' }}>
-                  {noMatchMode ? "Couldn't identify this" : "We're not confident"}
+                  Working offline
                 </Text>
                 <Text
                   style={{ color: COLORS.bark, fontSize: 15, lineHeight: 22, marginTop: 10 }}
                 >
-                  {noMatchMode
-                    ? "Try repositioning the subject or taking a clearer, closer shot."
-                    : "The photo doesn't give us enough to be certain. Try getting closer or finding better lighting."}
+                  No connection available. Here are common species in your area — select the one
+                  you spotted.
+                </Text>
+              </>
+            ) : isLowConfidence ? (
+              <>
+                <Text style={{ color: COLORS.ink, fontSize: 26, fontWeight: '700' }}>
+                  We&apos;re not confident
+                </Text>
+                <Text
+                  style={{ color: COLORS.bark, fontSize: 15, lineHeight: 22, marginTop: 10 }}
+                >
+                  The photo doesn&apos;t give us enough to be certain. Try getting closer or
+                  finding better lighting.
                 </Text>
               </>
             ) : (
-              <>
-                <Text
-                  style={{
-                    color: COLORS.clay,
-                    fontSize: 12,
-                    fontWeight: '700',
-                    letterSpacing: 0.6,
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Cacti · Cactaceae
-                </Text>
-                <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700', marginTop: 6 }}>
-                  Saguaro
-                </Text>
-                <Text
-                  style={{
-                    color: COLORS.bark,
-                    fontStyle: 'italic',
-                    fontSize: 15,
-                    marginTop: 2,
-                  }}
-                >
-                  Carnegiea gigantea
-                </Text>
-
-                <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>
-                  {FACTS.map((fact, i) => (
-                    <Animated.View
-                      key={fact.label}
-                      entering={FadeInDown.delay(300 + i * 80).springify().damping(15).stiffness(160)}
-                      style={{
-                        flex: 1,
-                        backgroundColor: COLORS.cream,
-                        borderRadius: 14,
-                        padding: 12,
-                      }}
-                    >
-                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
-                        {fact.label}
-                      </Text>
-                      <Text
-                        style={{ color: COLORS.ink, fontSize: 15, fontWeight: '700', marginTop: 4 }}
-                      >
-                        {fact.value}
-                      </Text>
-                    </Animated.View>
-                  ))}
-                </View>
-              </>
-            )}
-          </View>
-        </Reveal>
-
-        <Reveal delay={260}>
-          <View style={{ marginHorizontal: 16, marginTop: 22 }}>
-            <Text
-              style={{
-                color: COLORS.bark,
-                fontSize: 12,
-                fontWeight: '700',
-                letterSpacing: 0.6,
-                textTransform: 'uppercase',
-                marginBottom: 10,
-              }}
-            >
-              {isLowConfidence ? 'Top suggestions' : 'Other possibilities'}
-            </Text>
-            <View
-              style={[
-                {
-                  backgroundColor: COLORS.surface,
-                  borderRadius: 16,
-                  overflow: 'hidden',
-                  borderWidth: 1,
-                  borderColor: COLORS.sand,
-                },
-                softShadow(0.04, 6, 2),
-              ]}
-            >
-              {OTHER.map((alt, i) => (
-                <View
-                  key={alt.name}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 14,
-                    borderTopWidth: i === 0 ? 0 : 1,
-                    borderTopColor: COLORS.sand,
-                  }}
-                >
-                  <View
+              topResult && (
+                <>
+                  <Text
                     style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 10,
-                      backgroundColor: COLORS.sage,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginRight: 12,
+                      color: COLORS.clay,
+                      fontSize: 12,
+                      fontWeight: '700',
+                      letterSpacing: 0.6,
+                      textTransform: 'uppercase',
                     }}
                   >
-                    <SpeciesIcon kind="cactus" size={22} color={COLORS.cream} />
-                  </View>
-                  <View style={{ flex: 1, marginRight: 12 }}>
-                    <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
-                      {alt.name}
-                    </Text>
-                    {/* scaled ~6x so single-digit percentages still read as bars */}
-                    <MatchBar pct={alt.pct * 6} delay={500 + i * 120} />
-                  </View>
-                  <Text style={{ color: COLORS.bark, fontSize: 15, fontWeight: '700' }}>
-                    {alt.pct}
-                    <Text style={{ fontSize: 12, fontWeight: '500' }}>%</Text>
+                    {KIND_LABEL[topResult.kind]}
+                    {catalogEntry ? ` · ${catalogEntry.family}` : ''}
                   </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </Reveal>
+                  <Text
+                    style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700', marginTop: 6 }}
+                  >
+                    {topResult.commonName}
+                  </Text>
+                  <Text
+                    style={{
+                      color: COLORS.bark,
+                      fontStyle: 'italic',
+                      fontSize: 15,
+                      marginTop: 2,
+                    }}
+                  >
+                    {topResult.latin}
+                  </Text>
 
-        <Reveal delay={380}>
-          <View style={{ flexDirection: 'row', marginHorizontal: 16, marginTop: 24, gap: 12 }}>
-            {isLowConfidence ? (
-              <>
-                <PressableScale
-                  onPress={() => router.replace('/capture')}
-                  scaleTo={0.97}
-                  style={[
-                    {
-                      flex: 2,
-                      backgroundColor: COLORS.clay,
-                      borderRadius: 24,
-                      paddingVertical: 16,
-                      alignItems: 'center',
-                    },
-                    glow(COLORS.clay, 10),
-                  ]}
-                >
-                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
-                    Retake photo
-                  </Text>
-                </PressableScale>
-                <PressableScale
-                  onPress={() => router.replace('/(tabs)/guide')}
-                  scaleTo={0.97}
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    borderRadius: 24,
-                    paddingVertical: 16,
-                    alignItems: 'center',
-                    borderWidth: 1.5,
-                    borderColor: COLORS.bark,
-                  }}
-                >
-                  <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
-                    Browse guide
-                  </Text>
-                </PressableScale>
-              </>
-            ) : (
-              <>
-                <PressableScale
-                  onPress={async () => {
-                    if (!user) { router.replace('/(tabs)'); return; }
-                    setSaving(true);
-                    try {
-                      await addSighting({
-                        userId: user.uid,
-                        speciesId: 'saguaro',
-                        commonName: 'Saguaro',
-                        latinName: 'Carnegiea gigantea',
-                        kind: 'cactus',
-                        photoUri: typeof photoUri === 'string' ? photoUri : undefined,
-                        capturedAt: new Date().toISOString(),
-                      });
-                      router.replace('/(tabs)');
-                    } catch {
-                      Alert.alert('Error', 'Could not save sighting. Please try again.');
-                    } finally {
-                      setSaving(false);
-                    }
-                  }}
-                  disabled={saving}
-                  scaleTo={0.97}
-                  style={[
-                    {
-                      flex: 2,
-                      backgroundColor: COLORS.clay,
-                      borderRadius: 24,
-                      paddingVertical: 16,
-                      alignItems: 'center',
-                      opacity: saving ? 0.6 : 1,
-                    },
-                    glow(COLORS.clay, 10),
-                  ]}
-                >
-                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
-                    {saving ? 'Saving…' : 'Save to Journal'}
-                  </Text>
-                </PressableScale>
-                <PressableScale
-                  onPress={() => router.replace('/capture')}
-                  scaleTo={0.97}
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    borderRadius: 24,
-                    paddingVertical: 16,
-                    alignItems: 'center',
-                    borderWidth: 1.5,
-                    borderColor: COLORS.bark,
-                  }}
-                >
-                  <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
-                    Retake
-                  </Text>
-                </PressableScale>
-              </>
+                  {stats.length > 0 && (
+                    <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>
+                      {stats.slice(0, 3).map((stat, i) => (
+                        <Animated.View
+                          key={stat.label}
+                          entering={FadeInDown.delay(300 + i * 80)
+                            .springify()
+                            .damping(15)
+                            .stiffness(160)}
+                          style={{
+                            flex: 1,
+                            backgroundColor: COLORS.cream,
+                            borderRadius: 14,
+                            padding: 12,
+                          }}
+                        >
+                          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                            {stat.label}
+                          </Text>
+                          <Text
+                            style={{
+                              color: COLORS.ink,
+                              fontSize: 15,
+                              fontWeight: '700',
+                              marginTop: 4,
+                            }}
+                          >
+                            {stat.value}
+                          </Text>
+                        </Animated.View>
+                      ))}
+                    </View>
+                  )}
+                </>
+              )
             )}
           </View>
         </Reveal>
+
+        {!identifying && alternatives.length > 0 && (
+          <Reveal delay={260}>
+            <View style={{ marginHorizontal: 16, marginTop: 22 }}>
+              <Text
+                style={{
+                  color: COLORS.bark,
+                  fontSize: 12,
+                  fontWeight: '700',
+                  letterSpacing: 0.6,
+                  textTransform: 'uppercase',
+                  marginBottom: 10,
+                }}
+              >
+                {isOffline ? 'Common in your area' : 'Other possibilities'}
+              </Text>
+              <View
+                style={[
+                  {
+                    backgroundColor: COLORS.surface,
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    borderWidth: 1,
+                    borderColor: COLORS.sand,
+                  },
+                  softShadow(0.04, 6, 2),
+                ]}
+              >
+                {alternatives.map((alt, i) => (
+                  <Pressable
+                    key={alt.speciesId ?? alt.latin}
+                    onPress={() =>
+                      alt.speciesId
+                        ? router.push(`/species/${alt.speciesId}` as never)
+                        : undefined
+                    }
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingVertical: 12,
+                      paddingHorizontal: 14,
+                      borderTopWidth: i === 0 ? 0 : 1,
+                      borderTopColor: COLORS.sand,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        backgroundColor: COLORS.sage,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginRight: 12,
+                      }}
+                    >
+                      <SpeciesIcon kind={alt.kind} size={22} color={COLORS.cream} />
+                    </View>
+                    <View style={{ flex: 1, marginRight: 12 }}>
+                      <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                        {alt.commonName}
+                      </Text>
+                      {!isOffline && (
+                        <MatchBar pct={alt.confidence} delay={500 + i * 120} />
+                      )}
+                    </View>
+                    {!isOffline && (
+                      <Text style={{ color: COLORS.bark, fontSize: 15, fontWeight: '700' }}>
+                        {alt.confidence}
+                        <Text style={{ fontSize: 12, fontWeight: '500' }}>%</Text>
+                      </Text>
+                    )}
+                    {alt.speciesId && (
+                      <Ionicons
+                        name="chevron-forward"
+                        size={16}
+                        color={COLORS.bark}
+                        style={{ marginLeft: isOffline ? 0 : 6 }}
+                      />
+                    )}
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+          </Reveal>
+        )}
+
+        {!identifying && (
+          <Reveal delay={380}>
+            <View style={{ flexDirection: 'row', marginHorizontal: 16, marginTop: 24, gap: 12 }}>
+              {isLowConfidence && !isOffline ? (
+                <>
+                  <PressableScale
+                    onPress={() => router.replace('/capture')}
+                    scaleTo={0.97}
+                    style={[
+                      {
+                        flex: 2,
+                        backgroundColor: COLORS.clay,
+                        borderRadius: 24,
+                        paddingVertical: 16,
+                        alignItems: 'center',
+                      },
+                      glow(COLORS.clay, 10),
+                    ]}
+                  >
+                    <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                      Retake photo
+                    </Text>
+                  </PressableScale>
+                  <PressableScale
+                    onPress={() => router.replace('/(tabs)/guide')}
+                    scaleTo={0.97}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      borderRadius: 24,
+                      paddingVertical: 16,
+                      alignItems: 'center',
+                      borderWidth: 1.5,
+                      borderColor: COLORS.bark,
+                    }}
+                  >
+                    <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                      Browse guide
+                    </Text>
+                  </PressableScale>
+                </>
+              ) : (
+                <>
+                  <PressableScale
+                    onPress={saveTopResult}
+                    disabled={saving || !topResult}
+                    scaleTo={0.97}
+                    style={[
+                      {
+                        flex: 2,
+                        backgroundColor: COLORS.clay,
+                        borderRadius: 24,
+                        paddingVertical: 16,
+                        alignItems: 'center',
+                        opacity: saving || !topResult ? 0.6 : 1,
+                      },
+                      glow(COLORS.clay, 10),
+                    ]}
+                  >
+                    <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                      {saving ? 'Saving…' : 'Save to Journal'}
+                    </Text>
+                  </PressableScale>
+                  <PressableScale
+                    onPress={() => router.replace('/capture')}
+                    scaleTo={0.97}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      borderRadius: 24,
+                      paddingVertical: 16,
+                      alignItems: 'center',
+                      borderWidth: 1.5,
+                      borderColor: COLORS.bark,
+                    }}
+                  >
+                    <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                      Retake
+                    </Text>
+                  </PressableScale>
+                </>
+              )}
+            </View>
+          </Reveal>
+        )}
       </ScrollView>
     </View>
   );

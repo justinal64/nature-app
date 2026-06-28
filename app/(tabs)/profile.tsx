@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { updateProfile } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -45,7 +46,7 @@ function getJoinedLabel(metadata?: { creationTime?: string }) {
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
-  const { user, signOut, deleteAccount } = useAuth();
+  const { user, signOut, deleteAccount, refreshUser } = useAuth();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
 
@@ -70,6 +71,9 @@ export default function ProfileScreen() {
   const [deletePassword, setDeletePassword] = useState('');
   const [deleteError, setDeleteError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [showEditName, setShowEditName] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [savingName, setSavingName] = useState(false);
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
@@ -84,6 +88,21 @@ export default function ProfileScreen() {
       setDeleting(false);
     }
   };
+
+  async function handleSaveName() {
+    const trimmed = newName.trim();
+    if (!trimmed || !user) return;
+    setSavingName(true);
+    try {
+      await updateProfile(user, { displayName: trimmed });
+      await refreshUser();
+      setShowEditName(false);
+    } catch {
+      Alert.alert('Error', 'Could not update your name. Please try again.');
+    } finally {
+      setSavingName(false);
+    }
+  }
 
   const confirmSignOut = () => {
     Alert.alert('Sign out', 'You can sign back in any time.', [
@@ -137,9 +156,17 @@ export default function ProfileScreen() {
             </View>
           </Animated.View>
           <Reveal delay={80} style={{ flex: 1 }}>
-            <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '700' }}>
-              {displayName}
-            </Text>
+            <Pressable
+              onPress={() => { setNewName(displayName); setShowEditName(true); }}
+              accessibilityLabel={`Edit display name, currently ${displayName}`}
+              accessibilityRole="button"
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+            >
+              <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '700' }}>
+                {displayName}
+              </Text>
+              <Ionicons name="pencil-outline" size={14} color={COLORS.bark} />
+            </Pressable>
             <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>{joinedLabel}</Text>
           </Reveal>
           <PressableScale
@@ -433,6 +460,12 @@ export default function ProfileScreen() {
           </Pressable>
         </Animated.View>
 
+        <Animated.View entering={FadeInDown.delay(450).duration(400)}>
+          <Text style={{ color: COLORS.sand, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}>
+            WildLens 1.0.0
+          </Text>
+        </Animated.View>
+
         <Animated.View entering={FadeInDown.delay(460).duration(400)}>
           <Pressable
             onPress={() => {
@@ -560,6 +593,54 @@ export default function ProfileScreen() {
             </View>
           </View>
         </KeyboardAvoidingView>
+      </Modal>
+
+      {/* Edit display name modal */}
+      <Modal
+        visible={showEditName}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowEditName(false)}
+      >
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' }}
+          onPress={() => setShowEditName(false)}
+        >
+          <Pressable
+            onPress={() => {}}
+            style={[{ backgroundColor: COLORS.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 24, paddingBottom: 36 }, softShadow(0.18, 20, 8)]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+              <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Edit display name</Text>
+              <Pressable onPress={() => setShowEditName(false)} accessibilityLabel="Cancel" accessibilityRole="button">
+                <Ionicons name="close" size={22} color={COLORS.bark} />
+              </Pressable>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: COLORS.sand, borderRadius: 14, padding: 14, backgroundColor: COLORS.surface, marginBottom: 20 }}>
+              <TextInput
+                value={newName}
+                onChangeText={setNewName}
+                placeholder="Your name"
+                placeholderTextColor={COLORS.bark}
+                autoFocus
+                maxLength={40}
+                style={{ color: COLORS.ink, fontSize: 16 }}
+                accessibilityLabel="Display name"
+              />
+            </View>
+            <Pressable
+              onPress={handleSaveName}
+              disabled={savingName || !newName.trim()}
+              accessibilityLabel="Save name"
+              accessibilityRole="button"
+              style={[{ backgroundColor: newName.trim() ? COLORS.clay : COLORS.sand, borderRadius: 24, paddingVertical: 16, alignItems: 'center' }, newName.trim() ? glow(COLORS.clay, 8) : {}]}
+            >
+              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>
+                {savingName ? 'Saving…' : 'Save'}
+              </Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
       </Modal>
     </View>
   );

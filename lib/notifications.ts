@@ -50,7 +50,7 @@ const SOTD_ID = 'species-of-the-day';
 // Fire at 8 AM every day
 const SOTD_HOUR = 8;
 
-function pickDailySpecies(): { commonName: string; description: string; id: string } {
+export function pickDailySpecies(): { commonName: string; description: string; id: string } {
   // Use the day of year as a stable seed so everyone gets the same species each day
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);

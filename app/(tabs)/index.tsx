@@ -11,10 +11,12 @@ import { LandscapeHeader } from '@/components/LandscapeHeader';
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
-import { COLORS, softShadow } from '@/constants/AppTheme';
-import { getCategoryCount } from '@/constants/catalog';
+import { COLORS, glow, softShadow } from '@/constants/AppTheme';
+import { getCategoryCount, getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
+import { useStreak } from '@/hooks/useStreak';
+import { pickDailySpecies } from '@/lib/notifications';
 import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
@@ -38,15 +40,26 @@ function greeting() {
   return 'Good evening,';
 }
 
+const sotd = pickDailySpecies();
+
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
   const { sightings } = useSightings(user?.uid);
+  const streak = useStreak(user?.uid);
 
   const firstName = user?.displayName?.trim().split(' ')[0] || user?.email?.split('@')[0] || 'friend';
   const initial = firstName.charAt(0).toUpperCase();
   const recentFinds = sightings.slice(0, 4);
+
+  // Today's activity
+  const todayStr = new Date().toDateString();
+  const todaySightings = sightings.filter((s) => new Date(s.capturedAt).toDateString() === todayStr);
+  const todayCount = todaySightings.length;
+  const uniqueKindsToday = new Set(todaySightings.map((s) => s.kind)).size;
+
+  const sotdSpecies = getSpeciesById(sotd.id);
 
   return (
     <ScrollView
@@ -220,6 +233,59 @@ export default function HomeScreen() {
         </PressableScale>
       </Reveal>
 
+      {/* Species of the Day */}
+      <Reveal delay={128}>
+        <PressableScale
+          onPress={() => router.push(`/species/${sotd.id}` as never)}
+          scaleTo={0.98}
+          accessibilityLabel={`Species of the day: ${sotd.commonName}`}
+          accessibilityRole="button"
+          style={[
+            {
+              marginHorizontal: 20,
+              marginTop: 14,
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: COLORS.sage,
+              borderRadius: 18,
+              padding: 14,
+              gap: 12,
+              overflow: 'hidden',
+            },
+            softShadow(0.08, 8, 3),
+          ]}
+        >
+          <View
+            style={[
+              {
+                width: 52,
+                height: 52,
+                borderRadius: 14,
+                backgroundColor: COLORS.cream,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              },
+              glow(COLORS.sage, 8),
+            ]}
+          >
+            <SpeciesIcon kind={(sotdSpecies?.kind ?? 'cactus') as SpeciesKind} size={34} color={COLORS.ink} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: COLORS.cream, fontSize: 10, fontWeight: '700', letterSpacing: 0.6, textTransform: 'uppercase', opacity: 0.85 }}>
+              Species of the Day
+            </Text>
+            <Text numberOfLines={1} style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15, marginTop: 2 }}>
+              {sotd.commonName}
+            </Text>
+            <Text numberOfLines={1} style={{ color: COLORS.cream, fontSize: 12, opacity: 0.8, marginTop: 1 }}>
+              {sotd.description.slice(0, 64)}…
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={COLORS.cream} style={{ opacity: 0.8 }} />
+        </PressableScale>
+      </Reveal>
+
       <Reveal delay={140}>
         <PressableScale
           onPress={() => router.push('/ask' as never)}
@@ -342,7 +408,46 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      <Reveal delay={280}>
+      {/* Today's Activity */}
+      <Reveal delay={270}>
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 24,
+            flexDirection: 'row',
+            gap: 10,
+          }}
+        >
+          {[
+            { label: "Today's finds", value: todayCount.toString(), icon: 'leaf-outline' as const, color: COLORS.sage },
+            { label: 'Kinds spotted', value: uniqueKindsToday.toString(), icon: 'apps-outline' as const, color: COLORS.clay },
+            { label: 'Day streak', value: streak.toString(), icon: 'flame-outline' as const, color: COLORS.gold },
+          ].map((stat) => (
+            <View
+              key={stat.label}
+              style={[
+                {
+                  flex: 1,
+                  backgroundColor: COLORS.surface,
+                  borderRadius: 16,
+                  padding: 12,
+                  alignItems: 'center',
+                  gap: 4,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                },
+                softShadow(0.04, 5, 1),
+              ]}
+            >
+              <Ionicons name={stat.icon} size={20} color={stat.color} />
+              <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '800' }}>{stat.value}</Text>
+              <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center', lineHeight: 13 }}>{stat.label}</Text>
+            </View>
+          ))}
+        </View>
+      </Reveal>
+
+      <Reveal delay={290}>
         <View style={{ paddingHorizontal: 24, marginTop: 28, marginBottom: 14 }}>
           <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Browse the guide</Text>
         </View>

@@ -33,3 +33,15 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
   const all = await getSightings(userId);
   await AsyncStorage.setItem(KEY(userId), JSON.stringify(all.filter((s) => s.id !== sightingId)));
 }
+
+export async function updateSighting(
+  userId: string,
+  sightingId: string,
+  patch: Partial<Pick<Sighting, 'notes'>>,
+): Promise<void> {
+  const all = await getSightings(userId);
+  await AsyncStorage.setItem(
+    KEY(userId),
+    JSON.stringify(all.map((s) => (s.id === sightingId ? { ...s, ...patch } : s))),
+  );
+}

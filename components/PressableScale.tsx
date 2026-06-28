@@ -10,11 +10,12 @@ type Props = {
   scaleTo?: number;
   disabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
+  onLongPress?: (event: GestureResponderEvent) => void;
   accessibilityLabel?: string;
   accessibilityRole?: AccessibilityRole;
 };
 
-export function PressableScale({ children, style, scaleTo = 0.96, disabled, onPress, ...a11y }: Props) {
+export function PressableScale({ children, style, scaleTo = 0.96, disabled, onPress, onLongPress, ...a11y }: Props) {
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
@@ -23,6 +24,7 @@ export function PressableScale({ children, style, scaleTo = 0.96, disabled, onPr
       {...a11y}
       disabled={disabled}
       onPress={onPress}
+      onLongPress={onLongPress}
       onPressIn={() => {
         scale.value = withSpring(scaleTo, { damping: 20, stiffness: 380 });
       }}

@@ -3,7 +3,16 @@ import * as Sharing from 'expo-sharing';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Image } from 'expo-image';
-import { Alert, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,17 +26,30 @@ import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 import { exportSightingsCsv } from '@/lib/export';
-import type { Sighting } from '@/lib/sightings';
+import type { Sighting, SpeciesKind } from '@/lib/sightings';
+import { deleteSighting, updateSighting } from '@/lib/sightings';
 import { formatRelativeDate } from '@/utils/date';
+
+const KIND_FILTERS: { label: string; value: SpeciesKind | 'all' }[] = [
+  { label: 'All', value: 'all' },
+  { label: 'Plants', value: 'cactus' },
+  { label: 'Birds', value: 'bird' },
+  { label: 'Insects', value: 'insect' },
+  { label: 'Snakes', value: 'snake' },
+];
 
 export default function JournalScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
-  const { sightings, loading } = useSightings(user?.uid);
+  const { sightings, loading, refresh } = useSightings(user?.uid);
   const [sharingSighting, setSharingSighting] = useState<Sighting | null>(null);
+  const [editingSighting, setEditingSighting] = useState<Sighting | null>(null);
+  const [editNotes, setEditNotes] = useState('');
+  const [kindFilter, setKindFilter] = useState<SpeciesKind | 'all'>('all');
   const viewShotRef = useRef<ViewShot>(null);
 
+  const filtered = kindFilter === 'all' ? sightings : sightings.filter((s) => s.kind === kindFilter);
   const speciesCount = new Set(sightings.map((s) => s.speciesId)).size;
   const photoCount = sightings.filter((s) => s.photoUri).length;
 
@@ -46,6 +68,43 @@ export default function JournalScreen() {
     } finally {
       setSharingSighting(null);
     }
+  }
+
+  function handleLongPress(entry: Sighting) {
+    Alert.alert(entry.commonName, undefined, [
+      {
+        text: 'Edit notes',
+        onPress: () => {
+          setEditNotes(entry.notes ?? '');
+          setEditingSighting(entry);
+        },
+      },
+      {
+        text: 'Delete entry',
+        style: 'destructive',
+        onPress: () =>
+          Alert.alert('Delete this entry?', 'This cannot be undone.', [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Delete',
+              style: 'destructive',
+              onPress: async () => {
+                if (!user) return;
+                await deleteSighting(user.uid, entry.id);
+                await refresh();
+              },
+            },
+          ]),
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
+
+  async function saveEdit() {
+    if (!editingSighting || !user) return;
+    await updateSighting(user.uid, editingSighting.id, { notes: editNotes.trim() || undefined });
+    await refresh();
+    setEditingSighting(null);
   }
 
   return (
@@ -131,6 +190,47 @@ export default function JournalScreen() {
           </View>
         </Reveal>
 
+        {/* Kind filter pills */}
+        {!loading && sightings.length > 0 && (
+          <Reveal delay={60}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20, gap: 8, paddingBottom: 16 }}
+            >
+              {KIND_FILTERS.map((f) => {
+                const active = kindFilter === f.value;
+                return (
+                  <Pressable
+                    key={f.value}
+                    onPress={() => setKindFilter(f.value)}
+                    accessibilityLabel={`Filter by ${f.label}`}
+                    accessibilityRole="button"
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 20,
+                      backgroundColor: active ? COLORS.clay : COLORS.surface,
+                      borderWidth: 1,
+                      borderColor: active ? COLORS.clay : COLORS.sand,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: active ? COLORS.cream : COLORS.ink,
+                        fontWeight: '600',
+                        fontSize: 13,
+                      }}
+                    >
+                      {f.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Reveal>
+        )}
+
         <View style={{ paddingHorizontal: 20 }}>
           {loading ? (
             <View style={{ paddingTop: 40, alignItems: 'center' }}>
@@ -154,6 +254,15 @@ export default function JournalScreen() {
                 </Text>
               </View>
             </Reveal>
+          ) : filtered.length === 0 ? (
+            <Reveal delay={60}>
+              <View style={{ paddingTop: 48, alignItems: 'center', gap: 8 }}>
+                <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
+                  No {KIND_FILTERS.find((f) => f.value === kindFilter)?.label.toLowerCase()} logged yet
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 13 }}>Try a different filter.</Text>
+              </View>
+            </Reveal>
           ) : (
             <View>
               <View
@@ -167,7 +276,7 @@ export default function JournalScreen() {
                   backgroundColor: COLORS.sand,
                 }}
               />
-              {sightings.map((entry, i) => (
+              {filtered.map((entry, i) => (
                 <Animated.View
                   key={entry.id}
                   entering={FadeInDown.delay(120 + i * 80).springify().damping(15).stiffness(150)}
@@ -190,7 +299,8 @@ export default function JournalScreen() {
                   <PressableScale
                     scaleTo={0.98}
                     onPress={() => router.push(`/species/${entry.speciesId}` as never)}
-                    accessibilityLabel={`${entry.commonName} — ${formatRelativeDate(entry.capturedAt)}`}
+                    onLongPress={() => handleLongPress(entry)}
+                    accessibilityLabel={`${entry.commonName} — ${formatRelativeDate(entry.capturedAt)}. Long press to edit or delete.`}
                     accessibilityRole="button"
                     style={[
                       {
@@ -333,6 +443,90 @@ export default function JournalScreen() {
             </>
           )}
         </View>
+      </Modal>
+
+      {/* Edit notes modal */}
+      <Modal
+        visible={!!editingSighting}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setEditingSighting(null)}
+      >
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' }}
+          onPress={() => setEditingSighting(null)}
+        >
+          <Pressable
+            onPress={() => {}}
+            style={[
+              {
+                backgroundColor: COLORS.background,
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                padding: 24,
+                paddingBottom: 36,
+              },
+              softShadow(0.18, 20, 8),
+            ]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+              <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>
+                Edit notes
+              </Text>
+              <TouchableOpacity
+                onPress={() => setEditingSighting(null)}
+                accessibilityLabel="Cancel"
+                accessibilityRole="button"
+              >
+                <Ionicons name="close" size={22} color={COLORS.bark} />
+              </TouchableOpacity>
+            </View>
+            {editingSighting && (
+              <Text style={{ color: COLORS.bark, fontSize: 13, fontStyle: 'italic', marginBottom: 12 }}>
+                {editingSighting.commonName} · {formatRelativeDate(editingSighting.capturedAt)}
+              </Text>
+            )}
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+                borderRadius: 14,
+                padding: 14,
+                minHeight: 100,
+                backgroundColor: COLORS.surface,
+                marginBottom: 20,
+              }}
+            >
+              <TextInput
+                value={editNotes}
+                onChangeText={setEditNotes}
+                placeholder="Add field notes…"
+                placeholderTextColor={COLORS.bark}
+                multiline
+                style={{ color: COLORS.ink, fontSize: 15, lineHeight: 22 }}
+                autoFocus
+                maxLength={500}
+                accessibilityLabel="Field notes"
+              />
+            </View>
+            <Pressable
+              onPress={saveEdit}
+              accessibilityLabel="Save notes"
+              accessibilityRole="button"
+              style={[
+                {
+                  backgroundColor: COLORS.clay,
+                  borderRadius: 24,
+                  paddingVertical: 16,
+                  alignItems: 'center',
+                },
+                glow(COLORS.clay, 8),
+              ]}
+            >
+              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>Save</Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
       </Modal>
     </View>
   );

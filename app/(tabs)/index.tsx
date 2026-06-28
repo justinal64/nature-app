@@ -199,6 +199,48 @@ export default function HomeScreen() {
         </PressableScale>
       </Reveal>
 
+      <Reveal delay={140}>
+        <PressableScale
+          onPress={() => router.push('/ask' as never)}
+          scaleTo={0.98}
+          accessibilityLabel="Ask the Field Guide AI a question"
+          accessibilityRole="button"
+          style={[
+            {
+              marginHorizontal: 20,
+              marginTop: 14,
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: COLORS.surface,
+              borderRadius: 18,
+              padding: 14,
+              borderWidth: 1,
+              borderColor: COLORS.sand,
+              gap: 12,
+            },
+            softShadow(0.05, 8, 2),
+          ]}
+        >
+          <View
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: COLORS.clay,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.cream} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>Ask the Field Guide</Text>
+            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>On-device AI · No internet needed</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+        </PressableScale>
+      </Reveal>
+
       <Reveal delay={170}>
         <View
           style={{

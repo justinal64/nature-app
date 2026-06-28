@@ -155,6 +155,23 @@ export default function JournalScreen() {
             </View>
             <View style={{ flexDirection: 'row', gap: 8, marginBottom: 4 }}>
               <TouchableOpacity
+                onPress={() => router.push('/journal-stats' as never)}
+                accessibilityLabel="View field stats"
+                accessibilityRole="button"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: COLORS.surface,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                }}
+              >
+                <Ionicons name="stats-chart-outline" size={20} color={COLORS.clay} />
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => router.push('/sightings-map' as never)}
                 accessibilityLabel="View sightings on map"
                 accessibilityRole="button"

@@ -105,6 +105,7 @@ function RootLayoutNav() {
         <Stack.Screen name="search" options={{ animation: 'fade', presentation: 'modal' }} />
         <Stack.Screen name="favorites" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="compare" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="journal-stats" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <StatusBar style="dark" />
     </ThemeProvider>

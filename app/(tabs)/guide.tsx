@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -27,7 +27,7 @@ export default function GuideScreen() {
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category?: string }>();
   const { user } = useAuth();
-  const { sightings } = useSightings(user?.uid);
+  const { sightings, loading: sightingsLoading, refresh: refreshSightings } = useSightings(user?.uid);
   const [search, setSearch] = useState('');
   const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Trees';
   const [activeCategory, setActiveCategory] = useState(validCategory);
@@ -105,6 +105,14 @@ export default function GuideScreen() {
       <ScrollView
         contentContainerStyle={{ paddingTop: top + 12, paddingBottom: 30 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={sightingsLoading}
+            onRefresh={refreshSightings}
+            tintColor={COLORS.clay}
+            colors={[COLORS.clay]}
+          />
+        }
       >
         <Reveal>
           <View style={{ paddingHorizontal: 24, paddingTop: 8, paddingBottom: 14 }}>

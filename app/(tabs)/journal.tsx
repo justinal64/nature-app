@@ -8,6 +8,7 @@ import {
   Alert,
   Modal,
   Pressable,
+  RefreshControl,
   ScrollView,
   Text,
   TextInput,
@@ -117,6 +118,14 @@ export default function JournalScreen() {
       <ScrollView
         contentContainerStyle={{ paddingTop: top + 16, paddingBottom: 30 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={refresh}
+            tintColor={COLORS.clay}
+            colors={[COLORS.clay]}
+          />
+        }
       >
         <Reveal>
           <View

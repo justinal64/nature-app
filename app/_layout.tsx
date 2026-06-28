@@ -10,6 +10,7 @@ import '../global.css';
 
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ONBOARDING_KEY } from './onboarding';
 import { scheduleSpeciesOfTheDay, scheduleStreakReminder } from '@/lib/notifications';
 import { updateStreak } from '@/lib/streak';
@@ -109,8 +110,10 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

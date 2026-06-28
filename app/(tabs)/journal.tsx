@@ -83,6 +83,8 @@ export default function JournalScreen() {
             </View>
             <TouchableOpacity
               onPress={() => router.push('/sightings-map' as never)}
+              accessibilityLabel="View sightings on map"
+              accessibilityRole="button"
               style={{
                 width: 40,
                 height: 40,
@@ -159,6 +161,8 @@ export default function JournalScreen() {
                   <PressableScale
                     scaleTo={0.98}
                     onPress={() => router.push(`/species/${entry.speciesId}` as never)}
+                    accessibilityLabel={`${entry.commonName} — ${formatRelativeDate(entry.capturedAt)}`}
+                    accessibilityRole="button"
                     style={[
                       {
                         flex: 1,
@@ -230,6 +234,8 @@ export default function JournalScreen() {
                         e.stopPropagation();
                         setSharingSighting(entry);
                       }}
+                      accessibilityLabel={`Share ${entry.commonName} sighting`}
+                      accessibilityRole="button"
                       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       style={{ padding: 4 }}
                     >

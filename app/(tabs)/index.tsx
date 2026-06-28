@@ -114,6 +114,8 @@ export default function HomeScreen() {
         <PressableScale
           onPress={() => router.push('/capture')}
           scaleTo={0.98}
+          accessibilityLabel="Identify a species with AI — take a photo"
+          accessibilityRole="button"
           style={[
             {
               marginHorizontal: 20,
@@ -209,7 +211,11 @@ export default function HomeScreen() {
           }}
         >
           <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700' }}>Recent finds</Text>
-          <Pressable onPress={() => router.push('/(tabs)/journal')}>
+          <Pressable
+            onPress={() => router.push('/(tabs)/journal')}
+            accessibilityLabel="See all journal entries"
+            accessibilityRole="button"
+          >
             <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
           </Pressable>
         </View>
@@ -234,6 +240,8 @@ export default function HomeScreen() {
             >
               <PressableScale
                 onPress={() => router.push(`/species/${item.speciesId}` as never)}
+                accessibilityLabel={`${item.commonName}, spotted ${formatRelativeDate(item.capturedAt)}`}
+                accessibilityRole="button"
                 style={[
                   {
                     width: 130,
@@ -294,6 +302,8 @@ export default function HomeScreen() {
             <PressableScale
               onPress={() => router.push(`/(tabs)/guide?category=${cat.name}` as never)}
               scaleTo={0.97}
+              accessibilityLabel={`Browse ${cat.name}, ${getCategoryCount(cat.kind)} species`}
+              accessibilityRole="button"
               style={[
                 {
                   borderRadius: 18,

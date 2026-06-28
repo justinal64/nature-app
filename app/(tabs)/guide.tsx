@@ -285,6 +285,8 @@ export default function GuideScreen() {
               <PressableScale
                 onPress={() => router.push(`/species/${sp.id}`)}
                 scaleTo={0.98}
+                accessibilityLabel={`${sp.commonName}, ${sp.latin}`}
+                accessibilityRole="button"
                 style={[
                   {
                     flexDirection: 'row',

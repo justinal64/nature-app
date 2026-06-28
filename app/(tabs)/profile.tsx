@@ -372,6 +372,9 @@ export default function ProfileScreen() {
                 }
               }
             }}
+            accessibilityRole="switch"
+            accessibilityLabel="Streak reminders"
+            accessibilityState={{ checked: notificationsOn }}
             style={{
               marginTop: 28,
               marginHorizontal: 20,

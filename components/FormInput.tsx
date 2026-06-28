@@ -14,6 +14,7 @@ export default function FormInput({ label, ...inputProps }: FormInputProps) {
       <TextInput
         className="border border-border bg-card rounded-xl p-4 text-base text-text"
         placeholderTextColor={COLORS.textDim}
+        accessibilityLabel={label}
         {...inputProps}
       />
     </View>

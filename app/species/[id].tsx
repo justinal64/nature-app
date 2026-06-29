@@ -23,7 +23,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { IUCN_LABEL, getActiveMonths, getIUCNStatus, getRelatedSpecies, getSpeciesById } from '@/constants/catalog';
+import { IUCN_LABEL, getActiveMonths, getIUCNStatus, getRelatedSpecies, getSpeciesById, getTaxonomy } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
@@ -50,6 +50,7 @@ export default function SpeciesDetailScreen() {
   const [imageIndex, setImageIndex] = useState(0);
   const [note, setNote] = useState('');
   const [editingNote, setEditingNote] = useState(false);
+  const [taxonomyExpanded, setTaxonomyExpanded] = useState(false);
   const noteInputRef = useRef<TextInput>(null);
 
   const species = speciesId ? getSpeciesById(speciesId) : undefined;
@@ -373,6 +374,58 @@ export default function SpeciesDetailScreen() {
                 </View>
               </View>
             ) : null}
+
+            {/* Taxonomy lineage */}
+            {speciesId && getTaxonomy(speciesId) && (() => {
+              const tax = getTaxonomy(speciesId)!;
+              const ranks: [string, string][] = [
+                ['Kingdom', tax.kingdom],
+                ['Phylum', tax.phylum],
+                ['Class', tax.class],
+                ['Order', tax.order],
+                ['Family', tax.family],
+                ['Genus', tax.genus],
+                ['Species', `${tax.genus} ${tax.species}`],
+              ];
+              return (
+                <Pressable
+                  onPress={() => setTaxonomyExpanded((v) => !v)}
+                  style={[
+                    {
+                      marginHorizontal: 16,
+                      marginTop: 20,
+                      backgroundColor: COLORS.surface,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      borderColor: COLORS.sand,
+                      overflow: 'hidden',
+                    },
+                    softShadow(0.04, 6, 2),
+                  ]}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 14 }}>
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      Taxonomy
+                    </Text>
+                    <Ionicons name={taxonomyExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={COLORS.bark} />
+                  </View>
+                  {taxonomyExpanded && (
+                    <View style={{ paddingHorizontal: 14, paddingBottom: 14, gap: 6 }}>
+                      {ranks.map(([rank, value], i) => (
+                        <View key={rank} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                          <View style={{ width: 72 }}>
+                            <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700' }}>{rank}</Text>
+                          </View>
+                          <Text style={{ color: i === ranks.length - 1 ? COLORS.clay : COLORS.ink, fontSize: 13, fontStyle: i >= ranks.length - 2 ? 'italic' : 'normal', fontWeight: i === ranks.length - 1 ? '700' : '400', flex: 1 }}>
+                            {value}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </Pressable>
+              );
+            })()}
 
             {/* Wikipedia link */}
             {species?.latin ? (

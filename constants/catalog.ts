@@ -4,6 +4,16 @@ export type Region = 'SONORAN' | 'MOJAVE' | 'CHIHUAHUAN' | 'GREAT_BASIN';
 
 export type IUCNStatus = 'LC' | 'NT' | 'VU' | 'EN' | 'CR' | 'EW' | 'EX' | 'DD';
 
+export type Taxonomy = {
+  kingdom: string;
+  phylum: string;
+  class: string;
+  order: string;
+  family: string;
+  genus: string;
+  species: string; // binomial epithet only, e.g. "gigantea"
+};
+
 export type SpeciesStat = { label: string; value: string };
 
 export type Species = {
@@ -2577,3 +2587,73 @@ export const IUCN_LABEL: Record<IUCNStatus, string> = {
   EX: 'Extinct',
   DD: 'Data Deficient',
 };
+
+const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
+  // ── Plants ──────────────────────────────────────────────────────────────────
+  'saguaro':         { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',       genus:'Carnegiea',    species:'gigantea'    },
+  'joshua-tree':     { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Yucca',         species:'brevifolia'  },
+  'palo-verde':      { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Parkinsonia',   species:'florida'     },
+  'mesquite':        { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Prosopis',      species:'velutina'    },
+  'ocotillo':        { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Ericales',       family:'Fouquieriaceae',   genus:'Fouquieria',    species:'splendens'   },
+  'ironwood':        { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Olneya',        species:'tesota'      },
+  'barrel-cactus':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Ferocactus',    species:'wislizeni'   },
+  'organ-pipe':      { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Stenocereus',   species:'thurberi'    },
+  'cholla':          { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Cylindropuntia',species:'bigelovii'   },
+  'desert-willow':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Lamiales',       family:'Bignoniaceae',     genus:'Chilopsis',     species:'linearis'    },
+  'creosote-bush':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Zygophyllales',  family:'Zygophyllaceae',   genus:'Larrea',        species:'tridentata'  },
+  'mojave-yucca':    { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Yucca',         species:'schidigera'  },
+  'big-sagebrush':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Asterales',      family:'Asteraceae',       genus:'Artemisia',     species:'tridentata'  },
+  'prickly-pear':    { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Opuntia',       species:'engelmannii' },
+  'blue-palo-verde': { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Parkinsonia',   species:'florida'     },
+  'lechuguilla':     { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Agave',         species:'lechuguilla' },
+  // ── Birds ───────────────────────────────────────────────────────────────────
+  'gambels-quail':          { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Galliformes',    family:'Odontophoridae',  genus:'Callipepla',     species:'gambelii'      },
+  'roadrunner':             { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Cuculiformes',   family:'Cuculidae',       genus:'Geococcyx',      species:'californianus' },
+  'gila-woodpecker':        { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Piciformes',     family:'Picidae',         genus:'Melanerpes',     species:'uropygialis'   },
+  'cactus-wren':            { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Passeriformes',  family:'Troglodytidae',   genus:'Campylorhynchus',species:'brunneicapillus'},
+  'vermilion-flycatcher':   { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Passeriformes',  family:'Tyrannidae',      genus:'Pyrocephalus',   species:'rubinus'       },
+  'turkey-vulture':         { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Cathartiformes', family:'Cathartidae',     genus:'Cathartes',      species:'aura'          },
+  'costas-hummingbird':     { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Apodiformes',    family:'Trochilidae',     genus:'Calypte',        species:'costae'        },
+  'great-horned-owl':       { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Strigiformes',   family:'Strigidae',       genus:'Bubo',           species:'virginianus'   },
+  'phainopepla':            { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Passeriformes',  family:'Ptilogonatidae',  genus:'Phainopepla',    species:'nitens'        },
+  'mourning-dove':          { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Columbiformes',  family:'Columbidae',      genus:'Zenaida',        species:'macroura'      },
+  'elf-owl':                { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Strigiformes',   family:'Strigidae',       genus:'Micrathene',     species:'whitneyi'      },
+  'harris-hawk':            { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Accipitriformes',family:'Accipitridae',    genus:'Parabuteo',      species:'unicinctus'    },
+  'golden-eagle':           { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Accipitriformes',family:'Accipitridae',    genus:'Aquila',         species:'chrysaetos'    },
+  'ferruginous-hawk':       { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Accipitriformes',family:'Accipitridae',    genus:'Buteo',          species:'regalis'       },
+  'burrowing-owl':          { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Strigiformes',   family:'Strigidae',       genus:'Athene',         species:'cunicularia'   },
+  'black-throated-sparrow': { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Passeriformes',  family:'Passerellidae',   genus:'Amphispiza',     species:'bilineata'     },
+  'scaled-quail':           { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Galliformes',    family:'Odontophoridae',  genus:'Callipepla',     species:'squamata'      },
+  'sage-thrasher':          { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Passeriformes',  family:'Mimidae',         genus:'Oreoscoptes',    species:'montanus'      },
+  // ── Insects & Arachnids ─────────────────────────────────────────────────────
+  'tarantula-hawk':         { kingdom:'Animalia', phylum:'Arthropoda', class:'Insecta',   order:'Hymenoptera', family:'Pompilidae',      genus:'Pepsis',         species:'grossa'        },
+  'arizona-bark-scorpion':  { kingdom:'Animalia', phylum:'Arthropoda', class:'Arachnida', order:'Scorpiones',  family:'Buthidae',        genus:'Centruroides',   species:'sculpturatus'  },
+  'desert-tarantula':       { kingdom:'Animalia', phylum:'Arthropoda', class:'Arachnida', order:'Araneae',     family:'Theraphosidae',   genus:'Aphonopelma',    species:'chalcodes'     },
+  'monarch-butterfly':      { kingdom:'Animalia', phylum:'Arthropoda', class:'Insecta',   order:'Lepidoptera', family:'Nymphalidae',     genus:'Danaus',         species:'plexippus'     },
+  'black-widow':            { kingdom:'Animalia', phylum:'Arthropoda', class:'Arachnida', order:'Araneae',     family:'Theridiidae',     genus:'Latrodectus',    species:'hesperus'      },
+  'palo-verde-beetle':      { kingdom:'Animalia', phylum:'Arthropoda', class:'Insecta',   order:'Coleoptera',  family:'Cerambycidae',    genus:'Derobrachus',    species:'geminatus'     },
+  'velvet-ant':             { kingdom:'Animalia', phylum:'Arthropoda', class:'Insecta',   order:'Hymenoptera', family:'Mutillidae',      genus:'Dasymutilla',    species:'gloriosa'      },
+  'giant-desert-centipede': { kingdom:'Animalia', phylum:'Arthropoda', class:'Chilopoda', order:'Scolopendromorpha', family:'Scolopendridae', genus:'Scolopendra', species:'heros'        },
+  // ── Reptiles ────────────────────────────────────────────────────────────────
+  'western-diamondback':    { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Viperidae',       genus:'Crotalus',       species:'atrox'         },
+  'mojave-rattlesnake':     { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Viperidae',       genus:'Crotalus',       species:'scutulatus'    },
+  'sonoran-coral-snake':    { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Elapidae',        genus:'Micruroides',    species:'euryxanthus'   },
+  'sidewinder':             { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Viperidae',       genus:'Crotalus',       species:'cerastes'      },
+  'gopher-snake':           { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Colubridae',      genus:'Pituophis',      species:'catenifer'     },
+  'coachwhip':              { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Colubridae',      genus:'Masticophis',    species:'flagellum'     },
+  'kingsnake':              { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Colubridae',      genus:'Lampropeltis',   species:'getula'        },
+  'desert-nightsnake':      { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Colubridae',      genus:'Hypsiglena',     species:'torquata'      },
+  'desert-tortoise':        { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Testudines', family:'Testudinidae',    genus:'Gopherus',       species:'agassizii'     },
+  'chuckwalla':             { kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Iguanidae',       genus:'Sauromalus',     species:'ater'          },
+  'great-basin-rattlesnake':{ kingdom:'Animalia', phylum:'Chordata', class:'Reptilia', order:'Squamata',   family:'Viperidae',       genus:'Crotalus',       species:'oreganus'      },
+  // ── Mammals ─────────────────────────────────────────────────────────────────
+  'american-pronghorn':     { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Artiodactyla', family:'Antilocapridae', genus:'Antilocapra',   species:'americana'     },
+  'mule-deer':              { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Artiodactyla', family:'Cervidae',       genus:'Odocoileus',    species:'hemionus'      },
+  'mohave-ground-squirrel': { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Rodentia',     family:'Sciuridae',      genus:'Xerospermophilus',species:'mohavensis'   },
+  'pygmy-rabbit':           { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Lagomorpha',   family:'Leporidae',      genus:'Brachylagus',   species:'idahoensis'    },
+  'badger':                 { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Carnivora',    family:'Mustelidae',     genus:'Taxidea',       species:'taxus'         },
+};
+
+export function getTaxonomy(speciesId: string): Taxonomy | undefined {
+  return TAXONOMY_MAP[speciesId];
+}

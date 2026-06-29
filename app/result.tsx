@@ -29,7 +29,7 @@ import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
 import { cancelStreakReminder } from '@/lib/notifications';
-import { addSighting, type ObservationType } from '@/lib/sightings';
+import { addSighting, findDuplicateSighting, type ObservationType } from '@/lib/sightings';
 import { maybeRequestReview } from '@/lib/review';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
@@ -116,7 +116,7 @@ export default function ResultScreen() {
   const catalogEntry = topResult?.speciesId ? getSpeciesById(topResult.speciesId) : undefined;
   const stats = catalogEntry?.stats ?? [];
 
-  async function saveTopResult() {
+  async function doSave() {
     if (!user || !topResult) { router.replace('/(tabs)'); return; }
     setSaving(true);
     try {
@@ -140,6 +140,24 @@ export default function ResultScreen() {
       Alert.alert('Error', 'Could not save sighting. Please try again.');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function saveTopResult() {
+    if (!user || !topResult) { router.replace('/(tabs)'); return; }
+    const speciesId = topResult.speciesId ?? topResult.latin.toLowerCase().replace(/\s+/g, '-');
+    const dupe = await findDuplicateSighting(user.uid, speciesId, capturedAt, locationRef.current ?? undefined);
+    if (dupe) {
+      Alert.alert(
+        'Already logged',
+        `You logged a ${topResult.commonName} recently. Save another entry?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Save anyway', onPress: doSave },
+        ],
+      );
+    } else {
+      doSave();
     }
   }
 

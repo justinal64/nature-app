@@ -44,6 +44,30 @@ export async function addSighting(sighting: Omit<Sighting, 'id'>): Promise<Sight
   return record;
 }
 
+// Returns an existing sighting if one with the same speciesId was logged within
+// windowMs (default 24 h) at roughly the same location (within ~2 km if both
+// have GPS, or same day/species if neither has GPS).
+const DEG_PER_2KM = 0.018; // ~2 km
+export async function findDuplicateSighting(
+  userId: string,
+  speciesId: string,
+  capturedAt: Date,
+  location?: { lat: number; lng: number },
+  windowMs = 24 * 60 * 60 * 1000,
+): Promise<Sighting | undefined> {
+  const all = await getSightings(userId);
+  return all.find((s) => {
+    if (s.speciesId !== speciesId) return false;
+    if (Math.abs(new Date(s.capturedAt).getTime() - capturedAt.getTime()) > windowMs) return false;
+    if (location && s.location) {
+      const dLat = Math.abs(s.location.lat - location.lat);
+      const dLng = Math.abs(s.location.lng - location.lng);
+      return dLat < DEG_PER_2KM && dLng < DEG_PER_2KM;
+    }
+    return true;
+  });
+}
+
 export async function deleteSighting(userId: string, sightingId: string): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(KEY(userId), JSON.stringify(all.filter((s) => s.id !== sightingId)));

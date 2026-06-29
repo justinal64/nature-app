@@ -28,12 +28,44 @@ export type Sighting = {
   observationType?: ObservationType;
   notes?: string;
   location?: { lat: number; lng: number };
+  locationObscured?: boolean; // true when GPS snapped to ~0.2° grid for sensitive species
   // iNaturalist-style annotations
   sex?: Sex;
   lifeStage?: LifeStage;
   activity?: Activity;   // animals only
   phenology?: Phenology; // plants only
 };
+
+// Species whose GPS location is automatically obscured to a ~0.2° grid (~22 km)
+// to protect sensitive populations from targeted collection or disturbance.
+const SENSITIVE_SPECIES = new Set([
+  'saguaro',           // protected under AZ law; illegal to relocate without permit
+  'organ-pipe',        // Organ Pipe Cactus National Monument core species
+  'desert-tortoise',   // VU; collection from wild is federally protected
+  'mohave-ground-squirrel', // VU; Mojave Desert only
+  'monarch-butterfly', // EN; roost site disclosure can attract disturbance
+  'aplomado-falcon',   // endangered raptor; nest site secrecy is critical
+  'joshua-tree',       // EN (western); legally protected in California
+  'sonoran-coral-snake', // rare; endemic range makes specific sites sensitive
+  'colorado-river-toad', // collected for venom; location disclosure harmful
+  'burrowing-owl',     // population declining; nest colony sites sensitive
+  'golden-eagle',      // nest sites protected under BGEPA
+  'ferruginous-hawk',  // declining; nest sites sensitive
+]);
+
+// Snaps coordinates to a 0.2° grid, matching iNaturalist's obscuring algorithm.
+// The result is the SW corner of the 0.2° cell — precise to ~22 km.
+export function obscureLocation(loc: { lat: number; lng: number }): { lat: number; lng: number } {
+  const GRID = 0.2;
+  return {
+    lat: Math.floor(loc.lat / GRID) * GRID,
+    lng: Math.floor(loc.lng / GRID) * GRID,
+  };
+}
+
+export function isSensitiveSpecies(speciesId: string): boolean {
+  return SENSITIVE_SPECIES.has(speciesId);
+}
 
 export type QualityGrade = 'casual' | 'needs_id' | 'research';
 
@@ -61,7 +93,13 @@ export async function getSightingById(userId: string, sightingId: string): Promi
 
 export async function addSighting(sighting: Omit<Sighting, 'id'>): Promise<Sighting> {
   const all = await getSightings(sighting.userId);
-  const record: Sighting = { ...sighting, id: `${Date.now()}-${Math.random().toString(36).slice(2)}` };
+  let { location, ...rest } = sighting;
+  let locationObscured = false;
+  if (location && isSensitiveSpecies(sighting.speciesId)) {
+    location = obscureLocation(location);
+    locationObscured = true;
+  }
+  const record: Sighting = { ...rest, location, locationObscured: locationObscured || undefined, id: `${Date.now()}-${Math.random().toString(36).slice(2)}` };
   await AsyncStorage.setItem(KEY(sighting.userId), JSON.stringify([record, ...all]));
   return record;
 }

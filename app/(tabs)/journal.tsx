@@ -400,6 +400,12 @@ export default function JournalScreen() {
                           );
                         })()}
                       </View>
+                      {entry.locationObscured && (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 }}>
+                          <Ionicons name="eye-off-outline" size={11} color={COLORS.bark} />
+                          <Text style={{ color: COLORS.bark, fontSize: 10, fontStyle: 'italic' }}>Location obscured</Text>
+                        </View>
+                      )}
                       {entry.notes ? (
                         <Text
                           numberOfLines={1}

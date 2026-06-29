@@ -535,22 +535,31 @@ export default function SpeciesDetailScreen() {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}>
                 {related.map((rel) => (
-                  <PressableScale
-                    key={rel.id}
-                    onPress={() => router.push(`/species/${rel.id}` as never)}
-                    scaleTo={0.96}
-                    accessibilityLabel={`View ${rel.commonName}`}
-                    accessibilityRole="button"
-                    style={[{ width: 110, borderRadius: 18, backgroundColor: COLORS.surface, padding: 12, borderWidth: 1, borderColor: COLORS.sand, alignItems: 'center', gap: 8 }, softShadow(0.04, 6, 2)]}
-                  >
-                    <View style={{ width: 60, height: 60, borderRadius: 14, backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center' }}>
-                      <SpeciesIcon kind={rel.kind as SpeciesKind} size={38} color={COLORS.ink} />
-                    </View>
-                    <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12, textAlign: 'center', lineHeight: 16 }}>
-                      {rel.commonName}
-                    </Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
-                  </PressableScale>
+                  <View key={rel.id} style={[{ width: 120, borderRadius: 18, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.sand, overflow: 'hidden' }, softShadow(0.04, 6, 2)]}>
+                    <PressableScale
+                      onPress={() => router.push(`/species/${rel.id}` as never)}
+                      scaleTo={0.96}
+                      accessibilityLabel={`View ${rel.commonName}`}
+                      accessibilityRole="button"
+                      style={{ padding: 12, alignItems: 'center', gap: 8 }}
+                    >
+                      <View style={{ width: 60, height: 60, borderRadius: 14, backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center' }}>
+                        <SpeciesIcon kind={rel.kind as SpeciesKind} size={38} color={COLORS.ink} />
+                      </View>
+                      <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12, textAlign: 'center', lineHeight: 16 }}>
+                        {rel.commonName}
+                      </Text>
+                      <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
+                    </PressableScale>
+                    <Pressable
+                      onPress={() => router.push(`/compare?a=${speciesId}&b=${rel.id}` as never)}
+                      accessibilityLabel={`Compare with ${rel.commonName}`}
+                      style={{ borderTopWidth: 1, borderTopColor: COLORS.sand, paddingVertical: 7, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 4 }}
+                    >
+                      <Ionicons name="git-compare-outline" size={12} color={COLORS.clay} />
+                      <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700' }}>Compare</Text>
+                    </Pressable>
+                  </View>
                 ))}
               </ScrollView>
             </Animated.View>

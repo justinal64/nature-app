@@ -94,12 +94,13 @@ function SpeciesCard({ sp }: { sp: Species }) {
 export default function CompareScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
-  const { a } = useLocalSearchParams<{ a?: string }>();
+  const { a, b } = useLocalSearchParams<{ a?: string; b?: string }>();
 
   const speciesA = a ? getSpeciesById(a) : undefined;
-  const [speciesB, setSpeciesB] = useState<Species | undefined>(undefined);
+  const initialB = b ? getSpeciesById(b) : undefined;
+  const [speciesB, setSpeciesB] = useState<Species | undefined>(initialB);
   const [query, setQuery] = useState('');
-  const [picking, setPicking] = useState(!speciesB);
+  const [picking, setPicking] = useState(!initialB);
 
   const q = query.trim().toLowerCase();
   const searchResults = q

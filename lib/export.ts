@@ -46,7 +46,7 @@ export async function exportSightingsCsv(sightings: Sighting[]): Promise<void> {
     s.location ? String(s.location.lat) : '',
     s.location ? String(s.location.lng) : '',
     'false',
-    escapeCsv(s.kind === 'cactus' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind),
+    escapeCsv(s.kind === 'cactus' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind === 'arachnid' ? 'arachnida' : s.kind),
   ]);
 
   const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');

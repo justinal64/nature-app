@@ -544,7 +544,7 @@ export const CATALOG: Species[] = [
     commonName: 'Arizona Bark Scorpion',
     latin: 'Centruroides sculpturatus',
     family: 'Scorpions · Buthidae',
-    kind: 'insect',
+    kind: 'arachnid',
     region: 'SONORAN',
     description:
       'The most venomous scorpion in North America. Unlike most scorpions that burrow, the Bark Scorpion climbs — it can be found on walls, in shoes, or clinging upside-down to bark. It glows bright blue-green under ultraviolet light.',
@@ -568,7 +568,7 @@ export const CATALOG: Species[] = [
     commonName: 'Desert Blonde Tarantula',
     latin: 'Aphonopelma chalcodes',
     family: 'Tarantulas · Theraphosidae',
-    kind: 'insect',
+    kind: 'arachnid',
     region: 'SONORAN',
     description:
       'The most commonly encountered tarantula in the Sonoran Desert. Females can live 25 years; males die within a year of their first mating season. Late summer monsoons trigger males to wander in search of mates.',
@@ -2250,6 +2250,44 @@ export const CATALOG: Species[] = [
     idTips: ['Large (to 14 in with tail), bipedal rodent on enormous hind legs', 'Pale yellowish-tan fur matching desert sand', 'Long tufted tail with white stripe', 'Soft sandy habitat — dunes and sandy washes specifically'],
     stats: [{ label: 'Length', value: '12–14 in (with tail)' }, { label: 'Water', value: 'Zero drinking water needed' }, { label: 'Active', value: 'Nocturnal' }, { label: 'Status', value: 'Stable' }],
   },
+
+  // ── Arachnids ─────────────────────────────────────────────────────────────
+  {
+    id: 'western-black-widow',
+    commonName: 'Western Black Widow',
+    latin: 'Latrodectus hesperus',
+    family: 'Cobweb Spiders · Theridiidae',
+    kind: 'arachnid',
+    region: 'SONORAN',
+    description: 'The most medically significant spider in North America. Females are jet black with a vivid red hourglass on the underside of the abdomen. Venom contains a potent neurotoxin (latrotoxin) that causes severe muscle cramps, sweating, and nausea, but fatalities in healthy adults are rare with modern medical treatment. Found under rocks, woodpiles, and debris across all four North American deserts.',
+    didYouKnow: 'The "widow" name comes from the female\'s habit of occasionally eating the male after mating — though this happens far less often in the wild than in captivity.',
+    idTips: ['Female: shiny black, 1.5 in leg span; red or orange hourglass on underside', 'Messy, irregular cobweb close to ground in sheltered spots', 'Male is much smaller and patterned; rarely encountered', 'Do not confuse with false black widow (Steatoda) — no hourglass'],
+    stats: [{ label: 'Body', value: '0.5 in (female)' }, { label: 'Venom', value: 'Neurotoxic' }, { label: 'Active', value: 'Nocturnal' }, { label: 'Status', value: 'Very common' }],
+  },
+  {
+    id: 'giant-desert-hairy-scorpion',
+    commonName: 'Giant Desert Hairy Scorpion',
+    latin: 'Hadrurus arizonensis',
+    family: 'Caraboctonidae',
+    kind: 'arachnid',
+    region: 'SONORAN',
+    description: 'The largest scorpion in North America at up to 5.5 inches. Despite its imposing size, its venom is far weaker than the bark scorpion\'s — roughly equivalent to a bee sting for most people. Covered in sensory hairs (trichobothria) that detect vibrations in air and substrate, allowing it to hunt insects and small lizards with precision in total darkness.',
+    didYouKnow: 'Giant hairy scorpions are surprisingly effective predators of other scorpions, including the venomous bark scorpion, making them a natural check on the most dangerous species.',
+    idTips: ['Very large (to 5.5 in), yellowish body with dark dorsal stripe', 'Dense brown hairs covering body — distinctive up close', 'Found in burrows in sandy desert washes and rocky bajadas', 'Sting is bee-sting level; unlikely to require treatment'],
+    stats: [{ label: 'Length', value: 'To 5.5 in' }, { label: 'Venom', value: 'Mild (bee-level)' }, { label: 'Burrow', value: '8–12 in deep' }, { label: 'Active', value: 'Nocturnal' }],
+  },
+  {
+    id: 'vinegaroon',
+    commonName: 'Giant Vinegaroon',
+    latin: 'Mastigoproctus tohono',
+    family: 'Thelyphonidae',
+    kind: 'arachnid',
+    region: 'SONORAN',
+    description: 'A strange and prehistoric-looking arachnid that is neither a spider nor a scorpion, but a whip scorpion. Has no venom at all, but defends itself by spraying a mist of 85% acetic acid (strong vinegar) from glands at the base of its whiplike tail — hence the name. Slow-moving and harmless to humans, it is a voracious predator of insects, crickets, and small invertebrates.',
+    didYouKnow: 'Vinegaroons have tiny eyes but are functionally blind; they navigate almost entirely by touch using their long front legs, which function more like antennae than locomotor limbs.',
+    idTips: ['Large, dark, lobster-like body 2–3 in; long whip tail, no stinger', 'Pincer-like "pedipalps" (not true claws) at front', 'Sprays vinegar-smelling acid when threatened — harmless to skin', 'Found under rocks, logs, and debris in dry washes'],
+    stats: [{ label: 'Length', value: '2–3 in body' }, { label: 'Venom', value: 'None' }, { label: 'Spray', value: '85% acetic acid' }, { label: 'Active', value: 'Nocturnal' }],
+  },
 ];
 
 // Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
@@ -2456,6 +2494,11 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'desert-spiny-lizard':    [3, 4, 5, 6, 7, 8, 9, 10, 11],
   'white-throated-swift':   [3, 4, 5, 6, 7, 8, 9, 10],
   'desert-kangaroo-rat':    ALL,
+
+  // Arachnids
+  'western-black-widow':        ALL,
+  'giant-desert-hairy-scorpion': [4, 5, 6, 7, 8, 9, 10],
+  'vinegaroon':                 [7, 8, 9, 10],   // monsoon season emergence
 };
 
 export function isActiveNow(speciesId: string): boolean {

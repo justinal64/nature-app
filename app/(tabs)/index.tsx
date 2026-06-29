@@ -28,6 +28,7 @@ const CATEGORIES = [
   { name: 'Snakes', kind: 'snake' as SpeciesKind },
   { name: 'Amphibians', kind: 'amphibian' as SpeciesKind },
   { name: 'Insects', kind: 'insect' as SpeciesKind },
+  { name: 'Arachnids', kind: 'arachnid' as SpeciesKind },
 ];
 
 function todayLabel() {

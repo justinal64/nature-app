@@ -27,6 +27,7 @@ const KIND_LABEL: Record<Species['kind'], string> = {
   mammal: 'Mammal',
   lizard: 'Reptile',
   amphibian: 'Amphibian',
+  arachnid: 'Arachnid',
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
@@ -37,6 +38,7 @@ const KIND_COLOR: Record<Species['kind'], string> = {
   mammal: COLORS.bark,
   lizard: COLORS.dusk,
   amphibian: COLORS.sage,
+  arachnid: COLORS.ink,
 };
 
 const REGION_LABEL: Record<string, string> = {

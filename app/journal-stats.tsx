@@ -17,6 +17,7 @@ const KIND_LABELS: Record<string, string> = {
   mammal: 'Mammals',
   lizard: 'Lizards',
   amphibian: 'Amphibians',
+  arachnid: 'Arachnids',
 };
 
 const KIND_COLOR: Record<string, string> = {
@@ -27,6 +28,7 @@ const KIND_COLOR: Record<string, string> = {
   mammal: COLORS.bark,
   lizard: COLORS.dusk,
   amphibian: COLORS.sage,
+  arachnid: COLORS.ink,
 };
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

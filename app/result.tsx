@@ -29,7 +29,7 @@ import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
 import { cancelStreakReminder } from '@/lib/notifications';
-import { addSighting } from '@/lib/sightings';
+import { addSighting, type ObservationType } from '@/lib/sightings';
 import { maybeRequestReview } from '@/lib/review';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
@@ -78,6 +78,7 @@ export default function ResultScreen() {
   const [note, setNote] = useState('');
   const [capturedAt, setCapturedAt] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [observationType, setObservationType] = useState<ObservationType>('organism');
   const locationRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
@@ -128,6 +129,7 @@ export default function ResultScreen() {
         photoUri: typeof photoUri === 'string' ? photoUri : undefined,
         notes: note.trim() || undefined,
         capturedAt: capturedAt.toISOString(),
+        observationType,
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -537,6 +539,41 @@ export default function ResultScreen() {
                   }}
                 />
               )}
+
+              {/* Observation type */}
+              <View style={{ gap: 8 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  What did you find?
+                </Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                  {([
+                    ['organism', 'Organism'],
+                    ['track',    'Track'],
+                    ['scat',     'Scat'],
+                    ['nest',     'Nest'],
+                    ['shed',     'Shed skin'],
+                    ['sound',    'Sound'],
+                    ['other',    'Other'],
+                  ] as [ObservationType, string][]).map(([type, label]) => (
+                    <Pressable
+                      key={type}
+                      onPress={() => setObservationType(type)}
+                      style={{
+                        paddingHorizontal: 12,
+                        paddingVertical: 7,
+                        borderRadius: 20,
+                        borderWidth: 1.5,
+                        borderColor: observationType === type ? COLORS.clay : COLORS.sand,
+                        backgroundColor: observationType === type ? COLORS.clay : COLORS.surface,
+                      }}
+                    >
+                      <Text style={{ color: observationType === type ? COLORS.cream : COLORS.bark, fontSize: 13, fontWeight: '600' }}>
+                        {label}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
 
               {/* Note input */}
               <View

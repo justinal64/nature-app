@@ -2,6 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake';
 
+export type ObservationType =
+  | 'organism'    // saw the animal/plant directly
+  | 'track'       // footprints
+  | 'scat'        // droppings
+  | 'nest'        // nest, burrow, den
+  | 'shed'        // shed skin or exoskeleton
+  | 'sound'       // heard but not seen
+  | 'other';
+
 export type Sighting = {
   id: string;
   userId: string;
@@ -11,6 +20,7 @@ export type Sighting = {
   kind: SpeciesKind;
   photoUri?: string;
   capturedAt: string; // ISO 8601
+  observationType?: ObservationType;
   notes?: string;
   location?: { lat: number; lng: number };
 };

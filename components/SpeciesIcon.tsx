@@ -2,7 +2,7 @@ import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
 import { COLORS } from '@/constants/AppTheme';
 
-export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid';
+export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid' | 'fungus';
 
 type Props = {
   kind: SpeciesKind;
@@ -97,6 +97,16 @@ export function SpeciesIcon({ kind, size = 50, color = COLORS.cream }: Props) {
           {/* 4 legs left, 4 legs right — pairs spread out */}
           <Path d="M32 30 C20 24 14 18 10 14 M32 32 C18 28 12 26 6 22 M32 35 C18 36 10 38 4 34 M32 38 C18 42 10 48 6 56" stroke={color} strokeWidth={4} fill="none" strokeLinecap="round" />
           <Path d="M48 30 C60 24 66 18 70 14 M48 32 C62 28 68 26 74 22 M48 35 C62 36 70 38 76 34 M48 38 C62 42 70 48 74 56" stroke={color} strokeWidth={4} fill="none" strokeLinecap="round" />
+        </>
+      )}
+      {kind === 'fungus' && (
+        <>
+          {/* Cap: broad dome */}
+          <Path d="M12 46 C12 14 68 14 68 46 Z" fill={color} />
+          {/* Underside rim of cap */}
+          <Ellipse cx={40} cy={46} rx={28} ry={5} fill={color} />
+          {/* Stem */}
+          <Path d="M33 46 L33 70 L47 70 L47 46 Z" fill={color} />
         </>
       )}
     </Svg>

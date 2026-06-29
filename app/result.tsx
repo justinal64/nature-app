@@ -43,6 +43,7 @@ const KIND_LABEL: Record<Species['kind'], string> = {
   lizard: 'Reptile',
   amphibian: 'Amphibian',
   arachnid: 'Arachnid',
+  fungus: 'Fungi / Lichen',
 };
 
 function MatchBar({ pct, delay }: { pct: number; delay: number }) {

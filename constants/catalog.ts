@@ -2288,6 +2288,67 @@ export const CATALOG: Species[] = [
     idTips: ['Large, dark, lobster-like body 2–3 in; long whip tail, no stinger', 'Pincer-like "pedipalps" (not true claws) at front', 'Sprays vinegar-smelling acid when threatened — harmless to skin', 'Found under rocks, logs, and debris in dry washes'],
     stats: [{ label: 'Length', value: '2–3 in body' }, { label: 'Venom', value: 'None' }, { label: 'Spray', value: '85% acetic acid' }, { label: 'Active', value: 'Nocturnal' }],
   },
+  // ── Fungi & Lichens ─────────────────────────────────────────────────────────
+  {
+    id: 'desert-inky-cap',
+    commonName: 'Desert Inky Cap',
+    latin: 'Coprinellus micaceus',
+    family: 'Psathyrellaceae',
+    kind: 'fungus',
+    region: 'SONORAN',
+    description: 'One of the most common desert mushrooms, emerging in dense clusters from disturbed soil and buried wood after monsoon rains. The bell-shaped brown cap is covered with tiny mica-like flakes when young, giving it a glistening appearance. As it matures it dissolves into an inky black liquid — autodigestion — which disperses its spores.',
+    didYouKnow: 'The "ink" produced by self-digesting inky caps was historically used to write documents; its iron content makes it surprisingly permanent.',
+    idTips: ['Clusters of slender brown mushrooms from buried wood or disturbed soil', 'Cap covered with glittering mica-like flakes when young', 'Gills and cap turn to black ink when mature — do not eat', 'Appears 1–3 days after heavy summer rain'],
+    stats: [{ label: 'Cap', value: '0.5–1.5 in' }, { label: 'Edibility', value: 'Not edible' }, { label: 'Season', value: 'Jul–Sep' }, { label: 'Growth', value: 'Clustered' }],
+  },
+  {
+    id: 'desert-puffball',
+    commonName: 'Desert Puffball',
+    latin: 'Calvatia booniana',
+    family: 'Agaricaceae',
+    kind: 'fungus',
+    region: 'SONORAN',
+    description: 'A large round puffball that emerges from desert grasslands after summer monsoon rains. When young and white inside it is prized by foragers; as it matures the interior turns yellow then olive then dark brown as spores develop. When fully ripe the outer skin breaks down releasing a cloud of billions of spores.',
+    didYouKnow: 'A single giant puffball can contain over seven trillion spores — more than enough, if each germinated, to create a mass of fungi larger than the Earth.',
+    idTips: ['Large round to lumpy white ball, 4–12 in across, in open sandy areas', 'Slice in half — must be pure white inside to be edible', 'Never has gills, stem, or visible cap — entirely enclosed', 'Found in open desert grassland, not forest'],
+    stats: [{ label: 'Size', value: '4–12 in' }, { label: 'Edibility', value: 'Edible when white' }, { label: 'Season', value: 'Jul–Oct' }, { label: 'Spores', value: 'Trillions per fruiting body' }],
+  },
+  {
+    id: 'turkey-tail-fungus',
+    commonName: 'Turkey Tail',
+    latin: 'Trametes versicolor',
+    family: 'Polyporaceae',
+    kind: 'fungus',
+    region: 'SONORAN',
+    description: 'A bracket fungus that fans out in concentric rings of brown, tan, rust, and cream on dead desert trees — particularly mesquite and cottonwood. One of the most studied medicinal fungi in the world; its polysaccharopeptides are used as cancer immunotherapy adjuncts in Japan and China. Found year-round, actively returning dead wood carbon to the ecosystem.',
+    didYouKnow: 'Turkey tail is a white-rot fungus — it can break down lignin, the tough polymer that gives wood its structure. Without fungi like this, dead trees would accumulate indefinitely rather than decay.',
+    idTips: ['Thin fan-shaped brackets in overlapping rosettes on dead wood', 'Concentric color bands of brown, rust, tan, and white', 'Underside has tiny white pores, not gills', 'Flexible when fresh, dry and stiff when old'],
+    stats: [{ label: 'Size', value: '1–4 in brackets' }, { label: 'Edibility', value: 'Medicinal tea only' }, { label: 'Season', value: 'Year-round' }, { label: 'Rot type', value: 'White-rot' }],
+  },
+  {
+    id: 'sunburst-lichen',
+    commonName: 'Sunburst Lichen',
+    latin: 'Xanthoria parietina',
+    family: 'Teloschistaceae',
+    kind: 'fungus',
+    region: 'MOJAVE',
+    description: 'A brilliant orange-yellow foliose lichen that encrusts desert rocks, cliffs, and canyon walls throughout the Southwest. Its vivid color comes from parietin, which functions as a UV sunscreen. Lichens are a symbiotic partnership between a fungus and photosynthetic algae or cyanobacteria — two organisms living as one.',
+    didYouKnow: 'Parietin, the orange pigment in sunburst lichen, is being investigated as an antiviral — it inhibits an enzyme several viruses use to replicate.',
+    idTips: ['Vivid orange-yellow leafy patches on sun-exposed rocks', 'Lobed edges with cup-shaped orange fruiting bodies', 'More intensely orange in full sun; greener in shade', 'No smell; bright color rules out most lookalikes'],
+    stats: [{ label: 'Color', value: 'Orange-yellow' }, { label: 'Growth', value: 'Foliose (leafy)' }, { label: 'Season', value: 'Year-round' }, { label: 'Pigment', value: 'Parietin (UV filter)' }],
+  },
+  {
+    id: 'map-lichen',
+    commonName: 'Map Lichen',
+    latin: 'Rhizocarpon geographicum',
+    family: 'Rhizocarpaceae',
+    kind: 'fungus',
+    region: 'GREAT_BASIN',
+    description: 'A crustose lichen found on granite boulders throughout the Great Basin at higher desert elevations. Its chartreuse-to-yellow-green color and black margins between adjacent colonies create a mosaic remarkably similar to a topographic map. One of the slowest-growing organisms on Earth — individual colonies may live thousands of years.',
+    didYouKnow: 'Scientists use map lichen to date glacier retreat via lichenometry — by measuring colony size on recently exposed boulders they can calculate when the ice last covered them.',
+    idTips: ['Bright chartreuse or yellow-green patches embedded in granite', 'Black borders between adjacent thalli create map-like pattern', 'Crustose — cannot be peeled off without damaging the rock', 'Grows at higher elevations on northeast-facing rock faces'],
+    stats: [{ label: 'Color', value: 'Chartreuse-yellow' }, { label: 'Growth', value: 'Crustose (embedded)' }, { label: 'Lifespan', value: 'Thousands of years' }, { label: 'Scientific use', value: 'Lichenometry dating' }],
+  },
 ];
 
 // Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
@@ -2499,6 +2560,12 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'western-black-widow':        ALL,
   'giant-desert-hairy-scorpion': [4, 5, 6, 7, 8, 9, 10],
   'vinegaroon':                 [7, 8, 9, 10],   // monsoon season emergence
+  // Fungi & lichens
+  'desert-inky-cap':            [7, 8, 9],       // monsoon fruiting only
+  'desert-puffball':            [7, 8, 9, 10],   // post-monsoon grassland flush
+  'turkey-tail-fungus':         ALL,              // bracket fungi fruit year-round
+  'sunburst-lichen':            ALL,              // lichen — permanent
+  'map-lichen':                 ALL,              // lichen — permanent
 };
 
 export function isActiveNow(speciesId: string): boolean {
@@ -2695,6 +2762,12 @@ const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
   'mohave-ground-squirrel': { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Rodentia',     family:'Sciuridae',      genus:'Xerospermophilus',species:'mohavensis'   },
   'pygmy-rabbit':           { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Lagomorpha',   family:'Leporidae',      genus:'Brachylagus',   species:'idahoensis'    },
   'badger':                 { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Carnivora',    family:'Mustelidae',     genus:'Taxidea',       species:'taxus'         },
+  // ── Fungi & Lichens ─────────────────────────────────────────────────────────
+  'desert-inky-cap':        { kingdom:'Fungi', phylum:'Basidiomycota', class:'Agaricomycetes', order:'Agaricales',    family:'Psathyrellaceae', genus:'Coprinellus',  species:'micaceus'      },
+  'desert-puffball':        { kingdom:'Fungi', phylum:'Basidiomycota', class:'Agaricomycetes', order:'Agaricales',    family:'Agaricaceae',     genus:'Calvatia',     species:'booniana'      },
+  'turkey-tail-fungus':     { kingdom:'Fungi', phylum:'Basidiomycota', class:'Agaricomycetes', order:'Polyporales',   family:'Polyporaceae',    genus:'Trametes',     species:'versicolor'    },
+  'sunburst-lichen':        { kingdom:'Fungi', phylum:'Ascomycota',    class:'Lecanoromycetes', order:'Teloschistales', family:'Teloschistaceae', genus:'Xanthoria',   species:'parietina'     },
+  'map-lichen':             { kingdom:'Fungi', phylum:'Ascomycota',    class:'Lecanoromycetes', order:'Rhizocarpales', family:'Rhizocarpaceae',  genus:'Rhizocarpon',  species:'geographicum'  },
 };
 
 export function getTaxonomy(speciesId: string): Taxonomy | undefined {
@@ -2854,6 +2927,12 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'gambel-quail':               'native',
   // ── Introduced ─────────────────────────────────────────────────────────────
   'western-honey-bee':          'introduced', // Apis mellifera — European origin
+  // ── Fungi & Lichens ─────────────────────────────────────────────────────────
+  'desert-inky-cap':            'native',
+  'desert-puffball':            'native',
+  'turkey-tail-fungus':         'native',
+  'sunburst-lichen':            'native',
+  'map-lichen':                 'native',
 };
 
 export function getEstablishmentStatus(speciesId: string): EstablishmentStatus | undefined {

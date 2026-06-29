@@ -35,6 +35,7 @@ export type Sighting = {
   lifeStage?: LifeStage;
   activity?: Activity;   // animals only
   phenology?: Phenology; // plants only
+  dataQualityFlags?: DataQualityFlags;
 };
 
 // Species whose GPS location is automatically obscured to a ~0.2° grid (~22 km)
@@ -67,6 +68,13 @@ export function obscureLocation(loc: { lat: number; lng: number }): { lat: numbe
 export function isSensitiveSpecies(speciesId: string): boolean {
   return SENSITIVE_SPECIES.has(speciesId);
 }
+
+export type DataQualityFlags = {
+  evidencePresent?: boolean;   // photo/sound clearly shows the organism
+  dateAccurate?: boolean;      // date was set intentionally, not auto-now
+  locationAccurate?: boolean;  // GPS position was confirmed correct
+  wildOrganism?: boolean;      // wild, not captive/cultivated/planted
+};
 
 export type QualityGrade = 'casual' | 'needs_id' | 'research';
 
@@ -138,7 +146,7 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris'>>,
+  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags'>>,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(

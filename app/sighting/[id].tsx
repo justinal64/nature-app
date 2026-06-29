@@ -19,7 +19,7 @@ import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
-import type { Sighting } from '@/lib/sightings';
+import type { DataQualityFlags, Sighting } from '@/lib/sightings';
 import { deleteSighting, getSightingById, updateSighting } from '@/lib/sightings';
 
 const KIND_COLOR: Record<string, string> = {
@@ -49,6 +49,7 @@ export default function SightingDetailScreen() {
   const [sighting, setSighting] = useState<Sighting | null>(null);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
+  const [flags, setFlags] = useState<DataQualityFlags>({});
 
   useEffect(() => {
     if (!user || !id) return;
@@ -56,9 +57,20 @@ export default function SightingDetailScreen() {
       if (s) {
         setSighting(s);
         setNotes(s.notes ?? '');
+        setFlags(s.dataQualityFlags ?? {});
       }
     });
   }, [user, id]);
+
+  async function toggleFlag(key: keyof DataQualityFlags) {
+    if (!user || !sighting) return;
+    const current = flags[key];
+    const next: DataQualityFlags = { ...flags, [key]: current === undefined ? true : current === true ? false : undefined };
+    setFlags(next);
+    setSighting((prev) => prev ? { ...prev, dataQualityFlags: next } : prev);
+    await updateSighting(user.uid, sighting.id, { dataQualityFlags: next });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  }
 
   async function saveNotes() {
     if (!user || !sighting) return;
@@ -258,6 +270,51 @@ export default function SightingDetailScreen() {
               {sighting.notes ?? 'No notes yet — tap Edit to add some.'}
             </Text>
           )}
+        </Animated.View>
+
+        {/* Data quality flags */}
+        <Animated.View entering={FadeInDown.delay(260).duration(280)} style={[
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
+          softShadow(0.03, 4, 1),
+        ]}>
+          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>
+            Data quality review
+          </Text>
+          {(
+            [
+              ['evidencePresent',  'Evidence of organism present'],
+              ['dateAccurate',     'Date is accurate'],
+              ['locationAccurate', 'Location is correct'],
+              ['wildOrganism',     'Wild (not captive / cultivated)'],
+            ] as [keyof DataQualityFlags, string][]
+          ).map(([key, label]) => {
+            const val = flags[key];
+            return (
+              <Pressable
+                key={key}
+                onPress={() => toggleFlag(key)}
+                accessibilityLabel={`${label}: ${val === true ? 'passes' : val === false ? 'flagged' : 'unreviewed'}. Tap to cycle.`}
+                accessibilityRole="button"
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: COLORS.sand }}
+              >
+                <Text style={{ color: COLORS.ink, fontSize: 14, flex: 1 }}>{label}</Text>
+                <View style={{
+                  width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: val === true ? COLORS.sage : val === false ? COLORS.clay : COLORS.cream,
+                  borderWidth: 1.5, borderColor: val === undefined ? COLORS.sand : 'transparent',
+                }}>
+                  <Ionicons
+                    name={val === true ? 'checkmark' : val === false ? 'close' : 'help'}
+                    size={15}
+                    color={val === undefined ? COLORS.bark : COLORS.cream}
+                  />
+                </View>
+              </Pressable>
+            );
+          })}
+          <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 10, fontStyle: 'italic' }}>
+            Tap to cycle: unreviewed → passes → flagged
+          </Text>
         </Animated.View>
 
         {/* View species button */}

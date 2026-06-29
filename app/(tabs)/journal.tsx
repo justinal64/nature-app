@@ -29,7 +29,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 import { exportSightingsCsv } from '@/lib/export';
 import type { Sighting, SpeciesKind } from '@/lib/sightings';
-import { deleteSighting, updateSighting } from '@/lib/sightings';
+import { deleteSighting, getQualityGrade, updateSighting } from '@/lib/sightings';
 import { formatRelativeDate } from '@/utils/date';
 
 const KIND_FILTERS: { label: string; value: SpeciesKind | 'all' }[] = [
@@ -380,9 +380,26 @@ export default function JournalScreen() {
                       >
                         {entry.latinName}
                       </Text>
-                      <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 4 }}>
-                        {formatRelativeDate(entry.capturedAt)}
-                      </Text>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 }}>
+                        <Text style={{ color: COLORS.bark, fontSize: 12 }}>
+                          {formatRelativeDate(entry.capturedAt)}
+                        </Text>
+                        {(() => {
+                          const grade = getQualityGrade(entry);
+                          const gradeConfig = {
+                            research:  { label: 'Research Grade', color: COLORS.sage },
+                            needs_id:  { label: 'Needs ID',       color: COLORS.gold },
+                            casual:    { label: 'Casual',          color: COLORS.bark },
+                          }[grade];
+                          return (
+                            <View style={{ backgroundColor: gradeConfig.color + '30', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1, borderWidth: 1, borderColor: gradeConfig.color + '60' }}>
+                              <Text style={{ color: gradeConfig.color, fontSize: 10, fontWeight: '700' }}>
+                                {gradeConfig.label}
+                              </Text>
+                            </View>
+                          );
+                        })()}
+                      </View>
                       {entry.notes ? (
                         <Text
                           numberOfLines={1}

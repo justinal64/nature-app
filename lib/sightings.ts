@@ -35,6 +35,18 @@ export type Sighting = {
   phenology?: Phenology; // plants only
 };
 
+export type QualityGrade = 'casual' | 'needs_id' | 'research';
+
+// Mirrors iNaturalist's quality grade system, adapted for single-user offline use:
+// - casual: no GPS location recorded (can't place the observation)
+// - needs_id: location present but no photo attached
+// - research: location + photo = strongest evidence a solo observer can provide
+export function getQualityGrade(s: Pick<Sighting, 'location' | 'photoUri'>): QualityGrade {
+  if (!s.location) return 'casual';
+  if (!s.photoUri) return 'needs_id';
+  return 'research';
+}
+
 const KEY = (uid: string) => `sightings:${uid}`;
 
 export async function getSightings(userId: string): Promise<Sighting[]> {

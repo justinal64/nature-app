@@ -14,6 +14,9 @@ const KIND_LABELS: Record<string, string> = {
   bird: 'Birds',
   insect: 'Insects',
   snake: 'Reptiles',
+  mammal: 'Mammals',
+  lizard: 'Lizards',
+  amphibian: 'Amphibians',
 };
 
 const KIND_COLOR: Record<string, string> = {
@@ -21,6 +24,9 @@ const KIND_COLOR: Record<string, string> = {
   bird: COLORS.clay,
   insect: COLORS.gold,
   snake: COLORS.dusk,
+  mammal: COLORS.bark,
+  lizard: COLORS.dusk,
+  amphibian: COLORS.sage,
 };
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

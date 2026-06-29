@@ -26,6 +26,7 @@ const CATEGORIES = [
   { name: 'Mammals', kind: 'mammal' as SpeciesKind },
   { name: 'Lizards', kind: 'lizard' as SpeciesKind },
   { name: 'Snakes', kind: 'snake' as SpeciesKind },
+  { name: 'Amphibians', kind: 'amphibian' as SpeciesKind },
   { name: 'Insects', kind: 'insect' as SpeciesKind },
 ];
 

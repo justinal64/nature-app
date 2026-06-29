@@ -22,6 +22,7 @@ const CATS = [
   { name: 'Mammals', kind: 'mammal' as SpeciesKind },
   { name: 'Lizards', kind: 'lizard' as SpeciesKind },
   { name: 'Snakes', kind: 'snake' as SpeciesKind },
+  { name: 'Amphibians', kind: 'amphibian' as SpeciesKind },
   { name: 'Insects', kind: 'insect' as SpeciesKind },
 ];
 
@@ -33,7 +34,7 @@ export default function GuideScreen() {
   const { preferScientific, displayName: spName } = useDisplayPrefs();
   const { sightings, loading: sightingsLoading, refresh: refreshSightings } = useSightings(user?.uid);
   const [search, setSearch] = useState('');
-  const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Trees';
+  const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Plants';
   const [activeCategory, setActiveCategory] = useState(validCategory);
   const [activeRegion, setActiveRegion] = useState('ALL');
   const [visibleNow, setVisibleNow] = useState(false);

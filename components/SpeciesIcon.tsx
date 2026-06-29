@@ -2,7 +2,7 @@ import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
 import { COLORS } from '@/constants/AppTheme';
 
-export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard';
+export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian';
 
 type Props = {
   kind: SpeciesKind;
@@ -71,6 +71,21 @@ export function SpeciesIcon({ kind, size = 50, color = COLORS.cream }: Props) {
           <Path d="M22 46 C14 52 10 56 8 62" stroke={color} strokeWidth={7} fill="none" strokeLinecap="round" />
           {/* Legs */}
           <Path d="M46 50 L42 62 M30 50 L34 62 M46 34 L42 22 M30 34 L34 22" stroke={color} strokeWidth={4} fill="none" strokeLinecap="round" />
+        </>
+      )}
+      {kind === 'amphibian' && (
+        <>
+          {/* Body: squat round frog shape */}
+          <Ellipse cx={40} cy={46} rx={22} ry={16} fill={color} />
+          {/* Head: wide, low */}
+          <Ellipse cx={40} cy={30} rx={17} ry={12} fill={color} />
+          {/* Bulging eyes */}
+          <Circle cx={28} cy={22} r={6} fill={color} />
+          <Circle cx={52} cy={22} r={6} fill={color} />
+          {/* Front legs */}
+          <Path d="M20 50 C10 56 8 62 12 66 M60 50 C70 56 72 62 68 66" stroke={color} strokeWidth={5} fill="none" strokeLinecap="round" />
+          {/* Hind legs (wide spread) */}
+          <Path d="M24 58 C14 66 12 72 16 76 M56 58 C66 66 68 72 64 76" stroke={color} strokeWidth={5} fill="none" strokeLinecap="round" />
         </>
       )}
     </Svg>

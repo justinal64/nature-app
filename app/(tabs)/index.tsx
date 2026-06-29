@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,7 +17,7 @@ import { getCategoryCount, getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
-import { pickDailySpecies } from '@/lib/notifications';
+import { pickDailySpecies, scheduleStreakReminder } from '@/lib/notifications';
 import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
@@ -48,6 +49,13 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
+
+  // Schedule a 7 PM reminder if user has an active streak but no sighting today.
+  // Cancels automatically when a sighting is saved (result.tsx calls cancelStreakReminder).
+  useEffect(() => {
+    if (!user?.uid || streak === 0) return;
+    scheduleStreakReminder(user.uid, streak).catch(() => {});
+  }, [user?.uid, streak]);
 
   const firstName = user?.displayName?.trim().split(' ')[0] || user?.email?.split('@')[0] || 'friend';
   const initial = firstName.charAt(0).toUpperCase();

@@ -22,6 +22,8 @@ const KIND_LABEL: Record<Species['kind'], string> = {
   bird: 'Bird',
   insect: 'Insect',
   snake: 'Reptile',
+  mammal: 'Mammal',
+  lizard: 'Reptile',
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
@@ -29,6 +31,8 @@ const KIND_COLOR: Record<Species['kind'], string> = {
   bird: COLORS.clay,
   insect: COLORS.gold,
   snake: COLORS.dusk,
+  mammal: COLORS.bark,
+  lizard: COLORS.dusk,
 };
 
 function StatCol({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {

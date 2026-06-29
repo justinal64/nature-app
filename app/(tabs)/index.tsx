@@ -21,10 +21,12 @@ import { pickDailySpecies, scheduleStreakReminder } from '@/lib/notifications';
 import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
-  { name: 'Trees', kind: 'cactus' as SpeciesKind },
+  { name: 'Plants', kind: 'cactus' as SpeciesKind },
   { name: 'Birds', kind: 'bird' as SpeciesKind },
-  { name: 'Insects', kind: 'insect' as SpeciesKind },
+  { name: 'Mammals', kind: 'mammal' as SpeciesKind },
+  { name: 'Lizards', kind: 'lizard' as SpeciesKind },
   { name: 'Snakes', kind: 'snake' as SpeciesKind },
+  { name: 'Insects', kind: 'insect' as SpeciesKind },
 ];
 
 function todayLabel() {

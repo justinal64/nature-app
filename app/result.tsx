@@ -39,6 +39,8 @@ const KIND_LABEL: Record<Species['kind'], string> = {
   bird: 'Bird',
   insect: 'Insect',
   snake: 'Reptile',
+  mammal: 'Mammal',
+  lizard: 'Reptile',
 };
 
 function MatchBar({ pct, delay }: { pct: number; delay: number }) {

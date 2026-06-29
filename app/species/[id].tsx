@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
+import { Dimensions, Linking, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -352,6 +352,52 @@ export default function SpeciesDetailScreen() {
                   </Text>
                 </View>
               </View>
+            ) : null}
+
+            {/* Wikipedia link */}
+            {species?.latin ? (
+              <Pressable
+                onPress={() =>
+                  Linking.openURL(
+                    `https://en.wikipedia.org/wiki/${encodeURIComponent(species.latin.replace(/ /g, '_'))}`,
+                  )
+                }
+                style={[
+                  {
+                    marginHorizontal: 16,
+                    marginTop: 20,
+                    backgroundColor: COLORS.surface,
+                    borderRadius: 16,
+                    padding: 14,
+                    borderWidth: 1,
+                    borderColor: COLORS.sand,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  },
+                  softShadow(0.04, 6, 2),
+                ]}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 10,
+                      backgroundColor: COLORS.cream,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text style={{ color: COLORS.ink, fontWeight: '900', fontSize: 15 }}>W</Text>
+                  </View>
+                  <View>
+                    <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>Read on Wikipedia</Text>
+                    <Text style={{ color: COLORS.bark, fontSize: 12, fontStyle: 'italic' }}>{species.latin}</Text>
+                  </View>
+                </View>
+                <Ionicons name="open-outline" size={16} color={COLORS.bark} />
+              </Pressable>
             ) : null}
 
             {/* Personal notes */}

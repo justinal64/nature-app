@@ -199,7 +199,7 @@ export default function SightingDetailScreen() {
           )}
         </Animated.View>
 
-        {/* Date & Location */}
+        {/* Date, Location & Privacy */}
         <Animated.View entering={FadeInDown.delay(140).duration(280)} style={[
           { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand, gap: 12 },
           softShadow(0.03, 4, 1),
@@ -216,6 +216,24 @@ export default function SightingDetailScreen() {
               </Text>
             </View>
           )}
+          <Pressable
+            onPress={async () => {
+              if (!user || !sighting) return;
+              const next = !sighting.isPrivate;
+              setSighting((prev) => prev ? { ...prev, isPrivate: next } : prev);
+              await updateSighting(user.uid, sighting.id, { isPrivate: next });
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            accessibilityLabel={sighting.isPrivate ? 'Make observation public' : 'Make observation private'}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: !!sighting.isPrivate }}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
+          >
+            <Ionicons name={sighting.isPrivate ? 'lock-closed' : 'lock-open-outline'} size={18} color={sighting.isPrivate ? COLORS.dusk : COLORS.bark} />
+            <Text style={{ color: sighting.isPrivate ? COLORS.dusk : COLORS.bark, fontSize: 14, flex: 1, fontWeight: sighting.isPrivate ? '600' : '400' }}>
+              {sighting.isPrivate ? 'Private — excluded from exports' : 'Public (tap to make private)'}
+            </Text>
+          </Pressable>
         </Animated.View>
 
         {/* Notes */}

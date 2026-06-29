@@ -36,6 +36,7 @@ export type Sighting = {
   activity?: Activity;   // animals only
   phenology?: Phenology; // plants only
   dataQualityFlags?: DataQualityFlags;
+  isPrivate?: boolean; // excluded from exports and species photo gallery
 };
 
 // Species whose GPS location is automatically obscured to a ~0.2° grid (~22 km)
@@ -146,7 +147,7 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags'>>,
+  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags' | 'isPrivate'>>,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(

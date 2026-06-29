@@ -16,6 +16,7 @@ function formatDate(iso: string): string {
 }
 
 export async function exportSightingsCsv(sightings: Sighting[]): Promise<void> {
+  sightings = sightings.filter((s) => !s.isPrivate);
   const headers = [
     'taxon_name',
     'observed_on',

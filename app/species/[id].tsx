@@ -688,9 +688,9 @@ export default function SpeciesDetailScreen() {
               <View style={{ marginTop: 20 }}>
                 {/* Photo gallery grid */}
                 {(() => {
-                  const allPhotos = speciesSightings.flatMap((s) =>
-                    s.photoUris?.length ? s.photoUris : s.photoUri ? [s.photoUri] : [],
-                  );
+                  const allPhotos = speciesSightings
+                    .filter((s) => !s.isPrivate)
+                    .flatMap((s) => s.photoUris?.length ? s.photoUris : s.photoUri ? [s.photoUri] : []);
                   if (allPhotos.length === 0) return null;
                   const CELL = (SCREEN_WIDTH - 40 - 8) / 3;
                   return (

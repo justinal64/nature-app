@@ -19,6 +19,8 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 
+import * as ImagePicker from 'expo-image-picker';
+
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
@@ -83,6 +85,7 @@ export default function ResultScreen() {
   const [lifeStage, setLifeStage] = useState<LifeStage | undefined>(undefined);
   const [activity, setActivity] = useState<Activity | undefined>(undefined);
   const [phenology, setPhenology] = useState<Phenology | undefined>(undefined);
+  const [extraPhotos, setExtraPhotos] = useState<string[]>([]);
   const locationRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
@@ -120,9 +123,24 @@ export default function ResultScreen() {
   const catalogEntry = topResult?.speciesId ? getSpeciesById(topResult.speciesId) : undefined;
   const stats = catalogEntry?.stats ?? [];
 
+  async function pickExtraPhotos() {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') return;
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 0.85,
+    });
+    if (!result.canceled) {
+      setExtraPhotos((prev) => [...prev, ...result.assets.map((a) => a.uri)]);
+    }
+  }
+
   async function doSave() {
     if (!user || !topResult) { router.replace('/(tabs)'); return; }
     setSaving(true);
+    const primaryUri = typeof photoUri === 'string' ? photoUri : undefined;
+    const allPhotoUris = [primaryUri, ...extraPhotos].filter(Boolean) as string[];
     try {
       await addSighting({
         userId: user.uid,
@@ -130,7 +148,7 @@ export default function ResultScreen() {
         commonName: topResult.commonName,
         latinName: topResult.latin,
         kind: topResult.kind,
-        photoUri: typeof photoUri === 'string' ? photoUri : undefined,
+        photoUris: allPhotoUris.length > 0 ? allPhotoUris : undefined,
         notes: note.trim() || undefined,
         capturedAt: capturedAt.toISOString(),
         observationType,
@@ -565,6 +583,41 @@ export default function ResultScreen() {
                   }}
                 />
               )}
+
+              {/* Extra photos strip */}
+              <View style={{ gap: 8 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  Photos
+                </Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+                  {extraPhotos.map((uri, i) => (
+                    <View key={`${uri}-${i}`} style={{ position: 'relative' }}>
+                      <Image source={{ uri }} style={{ width: 72, height: 72, borderRadius: 12 }} contentFit="cover" />
+                      <Pressable
+                        onPress={() => setExtraPhotos((prev) => prev.filter((_, idx) => idx !== i))}
+                        accessibilityLabel="Remove photo"
+                        accessibilityRole="button"
+                        style={{ position: 'absolute', top: -6, right: -6, backgroundColor: COLORS.clay, borderRadius: 10, width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <Ionicons name="close" size={12} color={COLORS.cream} />
+                      </Pressable>
+                    </View>
+                  ))}
+                  <Pressable
+                    onPress={pickExtraPhotos}
+                    accessibilityLabel="Add more photos"
+                    accessibilityRole="button"
+                    style={{
+                      width: 72, height: 72, borderRadius: 12,
+                      borderWidth: 1.5, borderColor: COLORS.sand, borderStyle: 'dashed',
+                      backgroundColor: COLORS.surface, alignItems: 'center', justifyContent: 'center', gap: 4,
+                    }}
+                  >
+                    <Ionicons name="add" size={22} color={COLORS.clay} />
+                    <Text style={{ color: COLORS.clay, fontSize: 10, fontWeight: '700' }}>Add</Text>
+                  </Pressable>
+                </ScrollView>
+              </View>
 
               {/* Observation type */}
               <View style={{ gap: 8 }}>

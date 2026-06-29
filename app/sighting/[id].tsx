@@ -137,24 +137,33 @@ export default function SightingDetailScreen() {
 
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 48 }} showsVerticalScrollIndicator={false}>
 
-        {/* Photo / species icon */}
+        {/* Photo carousel / species icon */}
         <Animated.View entering={FadeIn.duration(300)} style={{ marginBottom: 20 }}>
-          {sighting.photoUri ? (
-            <Image
-              source={{ uri: sighting.photoUri }}
-              style={{ width: '100%', height: 240, borderRadius: 20 }}
-              contentFit="cover"
-            />
-          ) : (
-            <View
-              style={{
-                width: '100%', height: 180, borderRadius: 20,
-                backgroundColor: kindColor, alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              <SpeciesIcon kind={sighting.kind as never} size={80} color={COLORS.cream} />
-            </View>
-          )}
+          {(() => {
+            const photos = sighting.photoUris?.length ? sighting.photoUris : sighting.photoUri ? [sighting.photoUri] : [];
+            if (photos.length === 0) {
+              return (
+                <View style={{ width: '100%', height: 180, borderRadius: 20, backgroundColor: kindColor, alignItems: 'center', justifyContent: 'center' }}>
+                  <SpeciesIcon kind={sighting.kind as never} size={80} color={COLORS.cream} />
+                </View>
+              );
+            }
+            if (photos.length === 1) {
+              return (
+                <Image source={{ uri: photos[0] }} style={{ width: '100%', height: 240, borderRadius: 20 }} contentFit="cover" />
+              );
+            }
+            return (
+              <View>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
+                  {photos.map((uri, i) => (
+                    <Image key={`${uri}-${i}`} source={{ uri }} style={{ width: 260, height: 240, borderRadius: 20 }} contentFit="cover" />
+                  ))}
+                </ScrollView>
+                <Text style={{ color: COLORS.bark, fontSize: 11, textAlign: 'center', marginTop: 6 }}>{photos.length} photos · swipe to browse</Text>
+              </View>
+            );
+          })()}
         </Animated.View>
 
         {/* Identity */}

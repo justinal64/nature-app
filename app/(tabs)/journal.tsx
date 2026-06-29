@@ -53,7 +53,7 @@ export default function JournalScreen() {
 
   const filtered = kindFilter === 'all' ? sightings : sightings.filter((s) => s.kind === kindFilter);
   const speciesCount = new Set(sightings.map((s) => s.speciesId)).size;
-  const photoCount = sightings.filter((s) => s.photoUri).length;
+  const photoCount = sightings.filter((s) => (s.photoUris?.length ?? 0) > 0 || !!s.photoUri).length;
 
   async function handleShare() {
     if (!viewShotRef.current) return;
@@ -363,26 +363,37 @@ export default function JournalScreen() {
                       softShadow(0.04, 6, 2),
                     ]}
                   >
-                    {entry.photoUri ? (
-                      <Image
-                        source={{ uri: entry.photoUri }}
-                        style={{ width: 56, height: 56, borderRadius: 14 }}
-                        contentFit="cover"
-                      />
-                    ) : (
-                      <View
-                        style={{
-                          width: 56,
-                          height: 56,
-                          borderRadius: 14,
-                          backgroundColor: COLORS.sage,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <SpeciesIcon kind={entry.kind} size={34} color={COLORS.cream} />
-                      </View>
-                    )}
+                    {(() => {
+                      const thumbUri = entry.photoUris?.[0] ?? entry.photoUri;
+                      const extraCount = (entry.photoUris?.length ?? 0) - 1;
+                      return thumbUri ? (
+                        <View style={{ position: 'relative' }}>
+                          <Image
+                            source={{ uri: thumbUri }}
+                            style={{ width: 56, height: 56, borderRadius: 14 }}
+                            contentFit="cover"
+                          />
+                          {extraCount > 0 && (
+                            <View style={{ position: 'absolute', bottom: 2, right: 2, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 6, paddingHorizontal: 4, paddingVertical: 1 }}>
+                              <Text style={{ color: '#fff', fontSize: 9, fontWeight: '700' }}>+{extraCount}</Text>
+                            </View>
+                          )}
+                        </View>
+                      ) : (
+                        <View
+                          style={{
+                            width: 56,
+                            height: 56,
+                            borderRadius: 14,
+                            backgroundColor: COLORS.sage,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <SpeciesIcon kind={entry.kind} size={34} color={COLORS.cream} />
+                        </View>
+                      );
+                    })()}
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
                         {entry.commonName}

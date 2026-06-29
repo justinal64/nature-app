@@ -107,7 +107,7 @@ export default function BatchImportScreen() {
           commonName: item.species!.commonName,
           latinName: item.species!.latin,
           kind: item.species!.kind,
-          photoUri: item.uri,
+          photoUris: [item.uri],
           capturedAt: item.capturedAt.toISOString(),
         });
       }

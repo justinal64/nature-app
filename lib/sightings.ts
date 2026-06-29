@@ -23,7 +23,8 @@ export type Sighting = {
   commonName: string;
   latinName: string;
   kind: SpeciesKind;
-  photoUri?: string;
+  photoUri?: string;    // legacy: single photo (still read for backward compat)
+  photoUris?: string[]; // new: ordered photo array; use this going forward
   capturedAt: string; // ISO 8601
   observationType?: ObservationType;
   notes?: string;
@@ -73,9 +74,10 @@ export type QualityGrade = 'casual' | 'needs_id' | 'research';
 // - casual: no GPS location recorded (can't place the observation)
 // - needs_id: location present but no photo attached
 // - research: location + photo = strongest evidence a solo observer can provide
-export function getQualityGrade(s: Pick<Sighting, 'location' | 'photoUri'>): QualityGrade {
+export function getQualityGrade(s: Pick<Sighting, 'location' | 'photoUri' | 'photoUris'>): QualityGrade {
   if (!s.location) return 'casual';
-  if (!s.photoUri) return 'needs_id';
+  const hasPhoto = (s.photoUris?.length ?? 0) > 0 || !!s.photoUri;
+  if (!hasPhoto) return 'needs_id';
   return 'research';
 }
 
@@ -136,7 +138,7 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology'>>,
+  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris'>>,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(

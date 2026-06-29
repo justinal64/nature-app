@@ -19,6 +19,8 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 
+import { Image } from 'expo-image';
+
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
@@ -681,48 +683,85 @@ export default function SpeciesDetailScreen() {
                 </Text>
               </View>
             ) : (
-              <View style={{ paddingHorizontal: 20, marginTop: 20, gap: 10 }}>
-                {speciesSightings.map((s) => (
-                  <View
-                    key={s.id}
-                    style={[
-                      {
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        backgroundColor: COLORS.surface,
-                        borderRadius: 16,
-                        padding: 14,
-                        borderWidth: 1,
-                        borderColor: COLORS.sand,
-                        gap: 14,
-                      },
-                      softShadow(0.04, 6, 2),
-                    ]}
-                  >
-                    <View
-                      style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 12,
-                        backgroundColor: COLORS.sage,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <SpeciesIcon kind={s.kind as SpeciesKind} size={30} color={COLORS.cream} />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
-                        {formatRelativeDate(s.capturedAt)}
+              <View style={{ marginTop: 20 }}>
+                {/* Photo gallery grid */}
+                {(() => {
+                  const allPhotos = speciesSightings.flatMap((s) =>
+                    s.photoUris?.length ? s.photoUris : s.photoUri ? [s.photoUri] : [],
+                  );
+                  if (allPhotos.length === 0) return null;
+                  const CELL = (SCREEN_WIDTH - 40 - 8) / 3;
+                  return (
+                    <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
+                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 10 }}>
+                        Your photos · {allPhotos.length}
                       </Text>
-                      {s.notes ? (
-                        <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>
-                          {s.notes}
-                        </Text>
-                      ) : null}
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+                        {allPhotos.map((uri, i) => (
+                          <Image
+                            key={`${uri}-${i}`}
+                            source={{ uri }}
+                            style={{ width: CELL, height: CELL, borderRadius: 10 }}
+                            contentFit="cover"
+                          />
+                        ))}
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  );
+                })()}
+
+                {/* Sighting list */}
+                <View style={{ paddingHorizontal: 20, gap: 10 }}>
+                  {speciesSightings.map((s) => {
+                    const thumbUri = s.photoUris?.[0] ?? s.photoUri;
+                    return (
+                      <PressableScale
+                        key={s.id}
+                        scaleTo={0.98}
+                        onPress={() => router.push(`/sighting/${s.id}` as never)}
+                        accessibilityLabel={`Sighting on ${formatRelativeDate(s.capturedAt)}`}
+                        accessibilityRole="button"
+                        style={[
+                          {
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            backgroundColor: COLORS.surface,
+                            borderRadius: 16,
+                            padding: 14,
+                            borderWidth: 1,
+                            borderColor: COLORS.sand,
+                            gap: 14,
+                          },
+                          softShadow(0.04, 6, 2),
+                        ]}
+                      >
+                        {thumbUri ? (
+                          <Image source={{ uri: thumbUri }} style={{ width: 52, height: 52, borderRadius: 12 }} contentFit="cover" />
+                        ) : (
+                          <View style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center' }}>
+                            <SpeciesIcon kind={s.kind as SpeciesKind} size={30} color={COLORS.cream} />
+                          </View>
+                        )}
+                        <View style={{ flex: 1 }}>
+                          <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
+                            {formatRelativeDate(s.capturedAt)}
+                          </Text>
+                          {s.notes ? (
+                            <Text numberOfLines={1} style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>
+                              {s.notes}
+                            </Text>
+                          ) : null}
+                          {(s.photoUris?.length ?? 0) > 1 && (
+                            <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 2 }}>
+                              {s.photoUris!.length} photos
+                            </Text>
+                          )}
+                        </View>
+                        <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+                      </PressableScale>
+                    );
+                  })}
+                </View>
               </View>
             )}
           </Animated.View>

@@ -21,6 +21,7 @@ import Svg, { G, Path, Rect } from 'react-native-svg';
 
 import { Image } from 'expo-image';
 
+import { DesertRangeMap } from '@/components/DesertRangeMap';
 import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
@@ -344,6 +345,27 @@ export default function SpeciesDetailScreen() {
                 {species?.description ?? ''}
               </Text>
             </View>
+
+            {/* Range / distribution map */}
+            {species?.region ? (
+              <Animated.View entering={FadeInDown.delay(120).duration(280)} style={[
+                { marginTop: 22, marginHorizontal: 16, backgroundColor: COLORS.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: COLORS.sand },
+                softShadow(0.04, 6, 2),
+              ]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    Range
+                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: COLORS.clay }} />
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                      {species.region.replace('_', ' ')} Desert
+                    </Text>
+                  </View>
+                </View>
+                <DesertRangeMap region={species.region} />
+              </Animated.View>
+            ) : null}
 
             {species?.didYouKnow ? (
               <View

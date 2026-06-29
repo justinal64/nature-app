@@ -16,8 +16,21 @@ import { addSighting } from '@/lib/sightings';
 type ImportItem = {
   uri: string;
   capturedAt: Date;
+  location?: { lat: number; lng: number };
   species?: Species;
 };
+
+function parseExifGps(exif: Record<string, unknown>): { lat: number; lng: number } | undefined {
+  const lat = exif.GPSLatitude as number | undefined;
+  const lng = exif.GPSLongitude as number | undefined;
+  const latRef = exif.GPSLatitudeRef as string | undefined;
+  const lngRef = exif.GPSLongitudeRef as string | undefined;
+  if (lat == null || lng == null) return undefined;
+  return {
+    lat: latRef === 'S' ? -lat : lat,
+    lng: lngRef === 'W' ? -lng : lng,
+  };
+}
 
 export default function BatchImportScreen() {
   const { top, bottom } = useSafeAreaInsets();
@@ -61,14 +74,16 @@ export default function BatchImportScreen() {
     }
     setItems(
       result.assets.map((a) => {
+        const exif = a.exif as Record<string, unknown> | undefined;
         // Parse EXIF date if present (format: "YYYY:MM:DD HH:MM:SS")
         let capturedAt = new Date();
-        const exifDate = (a.exif as Record<string, unknown>)?.DateTimeOriginal;
+        const exifDate = exif?.DateTimeOriginal;
         if (typeof exifDate === 'string') {
           const parsed = new Date(exifDate.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3'));
           if (!isNaN(parsed.getTime())) capturedAt = parsed;
         }
-        return { uri: a.uri, capturedAt };
+        const location = exif ? parseExifGps(exif) : undefined;
+        return { uri: a.uri, capturedAt, location };
       }),
     );
   }
@@ -109,6 +124,7 @@ export default function BatchImportScreen() {
           kind: item.species!.kind,
           photoUris: [item.uri],
           capturedAt: item.capturedAt.toISOString(),
+          location: item.location,
         });
       }
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -271,13 +287,18 @@ export default function BatchImportScreen() {
                   <Text style={{ color: COLORS.bark, fontSize: 14 }}>Assign species…</Text>
                 </View>
               )}
-              <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 4 }}>
-                {item.capturedAt.toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11 }}>
+                  {item.capturedAt.toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Text>
+                {item.location && (
+                  <Ionicons name="location" size={11} color={COLORS.sage} />
+                )}
+              </View>
             </Pressable>
             <TouchableOpacity
               onPress={() => removeItem(idx)}

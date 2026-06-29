@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { updateProfile } from 'firebase/auth';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -24,7 +24,14 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { getEarnedBadges } from '@/lib/badges';
-import { cancelStreakReminder, requestNotificationPermission, scheduleStreakReminder } from '@/lib/notifications';
+import {
+  cancelSpeciesOfTheDay,
+  cancelStreakReminder,
+  getScheduledReminders,
+  requestNotificationPermission,
+  scheduleSpeciesOfTheDay,
+  scheduleStreakReminder,
+} from '@/lib/notifications';
 import { getUserFriendlyError } from '@/utils/errors';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
@@ -67,6 +74,7 @@ export default function ProfileScreen() {
   ];
 
   const [notificationsOn, setNotificationsOn] = useState(false);
+  const [sotdOn, setSotdOn] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
   const [deleteError, setDeleteError] = useState('');
@@ -74,6 +82,13 @@ export default function ProfileScreen() {
   const [showEditName, setShowEditName] = useState(false);
   const [newName, setNewName] = useState('');
   const [savingName, setSavingName] = useState(false);
+
+  useEffect(() => {
+    getScheduledReminders().then(({ streak, sotd }) => {
+      setNotificationsOn(streak);
+      setSotdOn(sotd);
+    }).catch(() => {});
+  }, []);
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
@@ -449,7 +464,76 @@ export default function ProfileScreen() {
           </Pressable>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(435).duration(400)}>
+        <Animated.View entering={FadeInDown.delay(432).duration(400)}>
+          <Pressable
+            onPress={async () => {
+              if (sotdOn) {
+                await cancelSpeciesOfTheDay();
+                setSotdOn(false);
+              } else {
+                const granted = await requestNotificationPermission();
+                if (granted) {
+                  await scheduleSpeciesOfTheDay();
+                  setSotdOn(true);
+                } else {
+                  Alert.alert(
+                    'Notifications blocked',
+                    'Go to Settings → WildLens → Notifications to enable species-of-the-day.',
+                  );
+                }
+              }
+            }}
+            accessibilityRole="switch"
+            accessibilityLabel="Species of the day"
+            accessibilityState={{ checked: sotdOn }}
+            style={{
+              marginTop: 10,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: COLORS.surface,
+              borderRadius: 16,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: COLORS.sand,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Ionicons name="sunny-outline" size={20} color={COLORS.ink} />
+              <View>
+                <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                  Species of the day
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                  Daily featured species at 8 AM
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: 44,
+                height: 26,
+                borderRadius: 13,
+                backgroundColor: sotdOn ? COLORS.sage : COLORS.sand,
+                justifyContent: 'center',
+                paddingHorizontal: 2,
+              }}
+            >
+              <View
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: 11,
+                  backgroundColor: COLORS.cream,
+                  alignSelf: sotdOn ? 'flex-end' : 'flex-start',
+                }}
+              />
+            </View>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(445).duration(400)}>
           <Pressable
             onPress={() => router.push('/favorites' as never)}
             accessibilityLabel="View favorites"

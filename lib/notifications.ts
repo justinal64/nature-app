@@ -57,6 +57,16 @@ export async function cancelStreakReminder(): Promise<void> {
   await Notifications.cancelScheduledNotificationAsync(STREAK_REMINDER_ID).catch(() => {});
 }
 
+export async function cancelSpeciesOfTheDay(): Promise<void> {
+  await Notifications.cancelScheduledNotificationAsync(SOTD_ID).catch(() => {});
+}
+
+export async function getScheduledReminders(): Promise<{ streak: boolean; sotd: boolean }> {
+  const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+  const ids = new Set(scheduled.map((n) => n.identifier));
+  return { streak: ids.has(STREAK_REMINDER_ID), sotd: ids.has(SOTD_ID) };
+}
+
 const SOTD_ID = 'species-of-the-day';
 // Fire at 8 AM every day
 const SOTD_HOUR = 8;

@@ -570,26 +570,62 @@ export default function SpeciesDetailScreen() {
           </View>
         )}
 
-        {/* Seasonal activity bar — shown on Overview and ID Tips tabs */}
-        {tab !== 'Your sightings' && speciesId && (
-          <Animated.View entering={FadeInDown.delay(180).duration(300)} style={{ paddingHorizontal: 24, marginTop: 28 }}>
-            <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 12 }}>
-              Activity by month
-            </Text>
-            <View style={{ flexDirection: 'row', gap: 4 }}>
-              {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => {
-                const activeMonths = getActiveMonths(speciesId);
-                const active = activeMonths.includes(i + 1);
-                return (
-                  <View key={`${m}-${i}`} style={{ flex: 1, alignItems: 'center', gap: 4 }}>
-                    <View style={{ width: '100%', height: 32, borderRadius: 6, backgroundColor: active ? COLORS.sage : COLORS.sand, opacity: active ? 1 : 0.4 }} />
-                    <Text style={{ color: COLORS.bark, fontSize: 9, fontWeight: '600' }}>{m}</Text>
+        {/* Phenology histogram — shown on Overview and ID Tips tabs */}
+        {tab !== 'Your sightings' && speciesId && (() => {
+          const activeMonths = getActiveMonths(speciesId);
+          const currentMonth = new Date().getMonth() + 1;
+          const MAX_H = 44;
+          const MONTH_LABELS = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+
+          // Binary base: 1 = active, 0 = inactive
+          const base = Array.from({ length: 12 }, (_, i) => activeMonths.includes(i + 1) ? 1 : 0);
+          // Smooth edges: ramp up/down at the boundary between active and inactive periods
+          const curve = base.map((v, i) => {
+            if (v === 1) return 1.0;
+            const adj1L = base[(i + 11) % 12];
+            const adj1R = base[(i + 1) % 12];
+            if (adj1L === 1 || adj1R === 1) return 0.45;
+            const adj2L = base[(i + 10) % 12];
+            const adj2R = base[(i + 2) % 12];
+            if (adj2L === 1 || adj2R === 1) return 0.15;
+            return 0;
+          });
+
+          return (
+            <Animated.View entering={FadeInDown.delay(180).duration(300)} style={{ paddingHorizontal: 16, marginTop: 28 }}>
+              <View style={[{ backgroundColor: COLORS.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    Phenology
+                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.clay }} />
+                    <Text style={{ color: COLORS.bark, fontSize: 10, fontWeight: '600' }}>this month</Text>
                   </View>
-                );
-              })}
-            </View>
-          </Animated.View>
-        )}
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                  {curve.map((intensity, i) => {
+                    const barH = Math.max(3, Math.round(intensity * MAX_H));
+                    const isCurrent = (i + 1) === currentMonth;
+                    const isActive = base[i] === 1;
+                    const barColor = isCurrent ? COLORS.clay : isActive ? COLORS.sage : COLORS.sand;
+                    const barOpacity = isCurrent ? 1 : isActive ? 0.85 : 0.45;
+                    return (
+                      <View key={i} style={{ flex: 1, alignItems: 'center' }}>
+                        <View style={{ height: MAX_H, width: '100%', justifyContent: 'flex-end' }}>
+                          <View style={{ height: barH, width: '100%', borderRadius: 4, backgroundColor: barColor, opacity: barOpacity }} />
+                        </View>
+                        <Text style={{ color: isCurrent ? COLORS.clay : COLORS.bark, fontSize: 9, fontWeight: isCurrent ? '800' : '500', marginTop: 5 }}>
+                          {MONTH_LABELS[i]}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            </Animated.View>
+          );
+        })()}
 
         {/* Related species — shown on Overview tab */}
         {tab === 'Overview' && species && (() => {

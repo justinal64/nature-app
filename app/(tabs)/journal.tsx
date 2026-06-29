@@ -26,6 +26,7 @@ import { SightingShareCard } from '@/components/SightingShareCard';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { useSightings } from '@/hooks/useSightings';
 import { exportSightingsCsv } from '@/lib/export';
 import type { Sighting, SpeciesKind } from '@/lib/sightings';
@@ -45,6 +46,7 @@ export default function JournalScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { sightings, loading, refresh } = useSightings(user?.uid);
+  const { preferScientific } = useDisplayPrefs();
   const [sharingSighting, setSharingSighting] = useState<Sighting | null>(null);
   const [editingSighting, setEditingSighting] = useState<Sighting | null>(null);
   const [editNotes, setEditNotes] = useState('');
@@ -395,18 +397,18 @@ export default function JournalScreen() {
                       );
                     })()}
                     <View style={{ flex: 1 }}>
-                      <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
-                        {entry.commonName}
+                      <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16, fontStyle: preferScientific ? 'italic' : 'normal' }}>
+                        {preferScientific ? entry.latinName : entry.commonName}
                       </Text>
                       <Text
                         style={{
                           color: COLORS.bark,
-                          fontStyle: 'italic',
+                          fontStyle: preferScientific ? 'normal' : 'italic',
                           fontSize: 13,
                           marginTop: 1,
                         }}
                       >
-                        {entry.latinName}
+                        {preferScientific ? entry.commonName : entry.latinName}
                       </Text>
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 }}>
                         <Text style={{ color: COLORS.bark, fontSize: 12 }}>

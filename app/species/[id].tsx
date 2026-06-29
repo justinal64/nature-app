@@ -27,6 +27,7 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getEstablishmentStatus, getIUCNStatus, getRelatedSpecies, getSpeciesById, getTaxonomy } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
+import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
 import { formatRelativeDate } from '@/utils/date';
@@ -45,6 +46,7 @@ export default function SpeciesDetailScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
+  const { preferScientific } = useDisplayPrefs();
   const { sightings } = useSightings(user?.uid);
   const speciesSightings = sightings.filter((s) => s.speciesId === speciesId);
   const [tab, setTab] = useState<TabName>('Overview');
@@ -202,18 +204,18 @@ export default function SpeciesDetailScreen() {
             >
               {species?.family ?? '—'}
             </Text>
-            <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}>
-              {species?.commonName ?? 'Unknown species'}
+            <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4, fontStyle: preferScientific ? 'italic' : 'normal' }}>
+              {preferScientific ? (species?.latin ?? 'Unknown species') : (species?.commonName ?? 'Unknown species')}
             </Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 8, flexWrap: 'wrap' }}>
               <Text
                 style={{
                   color: COLORS.bark,
-                  fontStyle: 'italic',
+                  fontStyle: preferScientific ? 'normal' : 'italic',
                   fontSize: 15,
                 }}
               >
-                {species?.latin ?? ''}
+                {preferScientific ? (species?.commonName ?? '') : (species?.latin ?? '')}
               </Text>
               {speciesId && (() => {
                 const status = getIUCNStatus(speciesId);

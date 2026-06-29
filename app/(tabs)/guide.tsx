@@ -13,6 +13,7 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, softShadow } from '@/constants/AppTheme';
 import { CATALOG, Region, getCategoryCount, getRegionForCoords, isActiveNow } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
+import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { useSightings } from '@/hooks/useSightings';
 
 const CATS = [
@@ -27,6 +28,7 @@ export default function GuideScreen() {
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category?: string }>();
   const { user } = useAuth();
+  const { preferScientific, displayName: spName } = useDisplayPrefs();
   const { sightings, loading: sightingsLoading, refresh: refreshSightings } = useSightings(user?.uid);
   const [search, setSearch] = useState('');
   const validCategory = CATS.some((c) => c.name === category) ? (category as string) : 'Trees';
@@ -347,18 +349,18 @@ export default function GuideScreen() {
                 </View>
 
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
-                    {sp.commonName}
+                  <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16, fontStyle: preferScientific ? 'italic' : 'normal' }}>
+                    {spName(sp)}
                   </Text>
                   <Text
                     style={{
                       color: COLORS.bark,
-                      fontStyle: 'italic',
+                      fontStyle: preferScientific ? 'normal' : 'italic',
                       fontSize: 13,
                       marginTop: 1,
                     }}
                   >
-                    {sp.latin}
+                    {preferScientific ? sp.commonName : sp.latin}
                   </Text>
                   <View
                     style={{

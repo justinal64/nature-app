@@ -4,7 +4,8 @@ import * as Haptics from 'expo-haptics';
 import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import Animated, {
   Easing,
   FadeIn,
@@ -75,6 +76,8 @@ export default function ResultScreen() {
   const [identifying, setIdentifying] = useState(true);
   const [results, setResults] = useState<IdentifyResult[]>([]);
   const [note, setNote] = useState('');
+  const [capturedAt, setCapturedAt] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const locationRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
@@ -124,7 +127,7 @@ export default function ResultScreen() {
         kind: topResult.kind,
         photoUri: typeof photoUri === 'string' ? photoUri : undefined,
         notes: note.trim() || undefined,
-        capturedAt: new Date().toISOString(),
+        capturedAt: capturedAt.toISOString(),
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -491,35 +494,76 @@ export default function ResultScreen() {
         )}
 
         {!identifying && !isLowConfidence && (
-          <Reveal delay={320}>
-            <View
-              style={[
-                {
-                  marginHorizontal: 16,
-                  marginTop: 16,
+          <Reveal delay={300}>
+            <View style={{ marginHorizontal: 16, marginTop: 16, gap: 10 }}>
+              {/* Date row */}
+              <Pressable
+                onPress={() => setShowDatePicker(true)}
+                style={[
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: COLORS.sand,
+                    backgroundColor: COLORS.surface,
+                    paddingHorizontal: 14,
+                    paddingVertical: 13,
+                  },
+                ]}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Ionicons name="calendar-outline" size={16} color={COLORS.bark} />
+                  <Text style={{ color: COLORS.bark, fontSize: 13, fontWeight: '600' }}>Date observed</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Text style={{ color: COLORS.ink, fontSize: 14, fontWeight: '600' }}>
+                    {capturedAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </Text>
+                  <Ionicons name="chevron-forward" size={14} color={COLORS.bark} />
+                </View>
+              </Pressable>
+
+              {showDatePicker && (
+                <DateTimePicker
+                  value={capturedAt}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                  maximumDate={new Date()}
+                  onChange={(_: DateTimePickerEvent, date?: Date) => {
+                    if (Platform.OS !== 'ios') setShowDatePicker(false);
+                    if (date) setCapturedAt(date);
+                  }}
+                />
+              )}
+
+              {/* Note input */}
+              <View
+                style={{
                   borderRadius: 16,
                   borderWidth: 1,
                   borderColor: COLORS.sand,
                   backgroundColor: COLORS.surface,
                   paddingHorizontal: 14,
                   paddingVertical: 10,
-                },
-              ]}
-            >
-              <TextInput
-                value={note}
-                onChangeText={setNote}
-                placeholder="Add a note… (optional)"
-                placeholderTextColor={COLORS.bark}
-                multiline
-                maxLength={300}
-                style={{
-                  color: COLORS.ink,
-                  fontSize: 14,
-                  lineHeight: 20,
-                  minHeight: 44,
                 }}
-              />
+              >
+                <TextInput
+                  value={note}
+                  onChangeText={setNote}
+                  placeholder="Add a note… (optional)"
+                  placeholderTextColor={COLORS.bark}
+                  multiline
+                  maxLength={300}
+                  style={{
+                    color: COLORS.ink,
+                    fontSize: 14,
+                    lineHeight: 20,
+                    minHeight: 44,
+                  }}
+                />
+              </View>
             </View>
           </Reveal>
         )}

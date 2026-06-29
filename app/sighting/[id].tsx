@@ -20,7 +20,7 @@ import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import type { DataQualityFlags, Sighting, SightingComment } from '@/lib/sightings';
-import { addComment, deleteComment, deleteSighting, getSightingById, updateSighting } from '@/lib/sightings';
+import { addComment, deleteComment, deleteSighting, getQualityGrade, getSightingById, updateSighting } from '@/lib/sightings';
 
 const KIND_COLOR: Record<string, string> = {
   cactus: COLORS.sage,
@@ -403,9 +403,24 @@ export default function SightingDetailScreen() {
           { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
           softShadow(0.03, 4, 1),
         ]}>
-          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>
-            Data quality review
-          </Text>
+          {(() => {
+            const grade = getQualityGrade(sighting);
+            const cfg = {
+              research: { label: 'Research Grade', color: COLORS.sage },
+              needs_id: { label: 'Needs ID',       color: COLORS.gold },
+              casual:   { label: 'Casual',          color: COLORS.bark },
+            }[grade];
+            return (
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                  Data quality review
+                </Text>
+                <View style={{ backgroundColor: cfg.color + '25', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, borderWidth: 1, borderColor: cfg.color + '55' }}>
+                  <Text style={{ color: cfg.color, fontSize: 11, fontWeight: '700' }}>{cfg.label}</Text>
+                </View>
+              </View>
+            );
+          })()}
           {(
             [
               ['evidencePresent',  'Evidence of organism present'],

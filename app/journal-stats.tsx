@@ -43,7 +43,7 @@ export default function JournalStatsScreen() {
   const uniqueSpecies = new Set(sightings.map((s) => s.speciesId)).size;
 
   // Sightings by kind
-  const byKind = ['cactus', 'bird', 'insect', 'snake'].map((kind) => ({
+  const byKind = ['cactus', 'bird', 'mammal', 'snake', 'lizard', 'insect', 'arachnid', 'amphibian'].map((kind) => ({
     kind,
     count: sightings.filter((s) => s.kind === kind).length,
   }));

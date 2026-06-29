@@ -2,6 +2,8 @@ import { SpeciesKind } from '@/lib/sightings';
 
 export type Region = 'SONORAN' | 'MOJAVE' | 'CHIHUAHUAN' | 'GREAT_BASIN';
 
+export type IUCNStatus = 'LC' | 'NT' | 'VU' | 'EN' | 'CR' | 'EW' | 'EX' | 'DD';
+
 export type SpeciesStat = { label: string; value: string };
 
 export type Species = {
@@ -2495,3 +2497,83 @@ export function getRegionForCoords(lat: number, lng: number): Region | null {
   );
   return match?.region ?? null;
 }
+
+// IUCN Red List statuses — sourced from iucnredlist.org. Only includes species
+// with confirmed assessments; others return undefined (no badge shown).
+const IUCN_STATUSES: Partial<Record<string, IUCNStatus>> = {
+  // Plants
+  'saguaro':             'LC',
+  'joshua-tree':         'EN', // western Joshua tree (Yucca jaegeriana, 2023 reassessment)
+  'palo-verde':          'LC',
+  'mesquite':            'LC',
+  'ocotillo':            'LC',
+  'ironwood':            'LC',
+  'barrel-cactus':       'LC',
+  'organ-pipe':          'LC',
+  'cholla':              'LC',
+  'desert-willow':       'LC',
+  'creosote-bush':       'LC',
+  'mojave-yucca':        'LC',
+  'big-sagebrush':       'LC',
+  'prickly-pear':        'LC',
+  'blue-palo-verde':     'LC',
+  'lechuguilla':         'LC',
+  // Birds
+  'gambels-quail':       'LC',
+  'roadrunner':          'LC',
+  'gila-woodpecker':     'LC',
+  'cactus-wren':         'LC',
+  'vermilion-flycatcher':'LC',
+  'turkey-vulture':      'LC',
+  'costas-hummingbird':  'LC',
+  'great-horned-owl':    'LC',
+  'phainopepla':         'LC',
+  'mourning-dove':       'LC',
+  'elf-owl':             'LC',
+  'harris-hawk':         'LC',
+  'golden-eagle':        'LC',
+  'ferruginous-hawk':    'LC',
+  'burrowing-owl':       'LC',
+  'black-throated-sparrow': 'LC',
+  'scaled-quail':        'LC',
+  'sage-thrasher':       'LC',
+  // Insects & Arachnids
+  'monarch-butterfly':   'EN', // assessed as Endangered (Danaus plexippus) since 2022
+  'desert-tarantula':    'LC',
+  // Reptiles
+  'western-diamondback': 'LC',
+  'mojave-rattlesnake':  'LC',
+  'sonoran-coral-snake': 'LC',
+  'sidewinder':          'LC',
+  'gopher-snake':        'LC',
+  'coachwhip':           'LC',
+  'kingsnake':           'LC',
+  'desert-nightsnake':   'LC',
+  'desert-tortoise':     'VU', // Gopherus agassizii — Vulnerable
+  'chuckwalla':          'LC',
+  'texas-horned-lizard': 'LC',
+  'great-basin-rattlesnake': 'LC',
+  'great-basin-fence-lizard': 'LC',
+  'checkered-whipsnake': 'LC',
+  // Mammals
+  'american-pronghorn':  'LC',
+  'mule-deer':           'LC',
+  'mohave-ground-squirrel': 'VU', // Xerospermophilus mohavensis — Vulnerable
+  'pygmy-rabbit':        'NT', // Brachylagus idahoensis — Near Threatened
+  'badger':              'LC',
+};
+
+export function getIUCNStatus(speciesId: string): IUCNStatus | undefined {
+  return IUCN_STATUSES[speciesId];
+}
+
+export const IUCN_LABEL: Record<IUCNStatus, string> = {
+  LC: 'Least Concern',
+  NT: 'Near Threatened',
+  VU: 'Vulnerable',
+  EN: 'Endangered',
+  CR: 'Critically Endangered',
+  EW: 'Extinct in the Wild',
+  EX: 'Extinct',
+  DD: 'Data Deficient',
+};

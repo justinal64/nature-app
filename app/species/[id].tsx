@@ -23,7 +23,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { getActiveMonths, getRelatedSpecies, getSpeciesById } from '@/constants/catalog';
+import { IUCN_LABEL, getActiveMonths, getIUCNStatus, getRelatedSpecies, getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
@@ -202,16 +202,36 @@ export default function SpeciesDetailScreen() {
             <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}>
               {species?.commonName ?? 'Unknown species'}
             </Text>
-            <Text
-              style={{
-                color: COLORS.bark,
-                fontStyle: 'italic',
-                fontSize: 15,
-                marginTop: 2,
-              }}
-            >
-              {species?.latin ?? ''}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 10 }}>
+              <Text
+                style={{
+                  color: COLORS.bark,
+                  fontStyle: 'italic',
+                  fontSize: 15,
+                }}
+              >
+                {species?.latin ?? ''}
+              </Text>
+              {speciesId && (() => {
+                const status = getIUCNStatus(speciesId);
+                if (!status) return null;
+                const iucnColors: Record<string, string> = {
+                  LC: COLORS.sage, NT: COLORS.sage,
+                  VU: COLORS.gold, EN: COLORS.clay, CR: '#C0392B',
+                  EW: '#7F1D1D', EX: '#4A1010', DD: COLORS.bark,
+                };
+                return (
+                  <View style={{ backgroundColor: iucnColors[status] ?? COLORS.bark, borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
+                    <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '800' }}>{status}</Text>
+                  </View>
+                );
+              })()}
+            </View>
+            {speciesId && getIUCNStatus(speciesId) && (
+              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+                IUCN {IUCN_LABEL[getIUCNStatus(speciesId)!]}
+              </Text>
+            )}
           </View>
         </Reveal>
 

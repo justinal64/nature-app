@@ -2657,3 +2657,162 @@ const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
 export function getTaxonomy(speciesId: string): Taxonomy | undefined {
   return TAXONOMY_MAP[speciesId];
 }
+
+// ─── Taxon Establishment Status ──────────────────────────────────────────────
+
+export type EstablishmentStatus = 'native' | 'introduced' | 'endemic';
+
+export const ESTABLISHMENT_LABEL: Record<EstablishmentStatus, string> = {
+  native: 'Native',
+  introduced: 'Introduced',
+  endemic: 'Endemic',
+};
+
+// "endemic" = naturally occurring only within one specific desert region.
+// "introduced" = non-native, brought in by humans.
+// "native" = native to the broader region/continent but not restricted to one desert.
+const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
+  // ── Desert endemics ────────────────────────────────────────────────────────
+  saguaro:              'endemic',  // Sonoran Desert only
+  'organ-pipe':         'endemic',  // Sonoran Desert only
+  cholla:               'endemic',  // Sonoran Desert (Teddy Bear Cholla)
+  lechuguilla:          'endemic',  // Chihuahuan Desert diagnostic
+  candelilla:           'endemic',  // Chihuahuan Desert endemic shrub
+  'sonoran-coral-snake':'endemic',  // only western US coral snake; Sonoran range
+  'colorado-river-toad':'endemic',  // Sonoran Desert endemic amphibian
+  'gila-woodpecker':    'endemic',  // Sonoran Desert only
+  'desert-tortoise':    'endemic',  // Mojave/Colorado Desert endemic
+  sidewinder:           'endemic',  // sandy Mojave + lower Sonoran; restricted range
+  'mojave-rattlesnake': 'endemic',  // Mojave Desert endemic
+  'mohave-ground-squirrel': 'endemic', // Mojave Desert only
+  'palo-verde-beetle':  'endemic',  // Sonoran Desert endemic
+  chuckwalla:           'endemic',  // Mojave + Sonoran rocky desert endemic
+  'le-conte-thrasher':  'endemic',  // lower Sonoran/Mojave endemic
+  'desert-iguana':      'endemic',  // Mojave + lower Sonoran; restricted range
+  'arizona-bark-scorpion': 'endemic', // Sonoran Desert endemic
+  // ── Native — Sonoran ───────────────────────────────────────────────────────
+  'palo-verde':                 'native',
+  mesquite:                     'native',
+  ocotillo:                     'native',
+  ironwood:                     'native',
+  'barrel-cactus':              'native',
+  'desert-willow':              'native',
+  'prickly-pear':               'native',
+  'desert-marigold':            'native',
+  brittlebush:                  'native',
+  'blue-palo-verde':            'native',
+  'desert-poppy':               'native',
+  'gambels-quail':              'native',
+  roadrunner:                   'native',
+  'cactus-wren':                'native',
+  'vermilion-flycatcher':       'native',
+  'turkey-vulture':             'native',
+  'costas-hummingbird':         'native',
+  'great-horned-owl':           'native',
+  phainopepla:                  'native',
+  'mourning-dove':              'native',
+  'tarantula-hawk':             'native',
+  'desert-tarantula':           'native',
+  'monarch-butterfly':          'native',
+  'velvet-ant':                 'native',
+  'giant-desert-centipede':     'native',
+  'black-widow':                'native',
+  'western-diamondback':        'native',
+  'gopher-snake':               'native',
+  coachwhip:                    'native',
+  kingsnake:                    'native',
+  'desert-nightsnake':          'native',
+  'elf-owl':                    'native',
+  pyrrhuloxia:                  'native',
+  'curved-billed-thrasher':     'native',
+  'harris-hawk':                'native',
+  'lesser-nighthawk':           'native',
+  'desert-blister-beetle':      'native',
+  'painted-lady':               'native',
+  'tiger-rattlesnake':          'native',
+  'long-nosed-snake':           'native',
+  'scott-oriole':               'native',
+  'pepsis-wasp':                'native',
+  'saguaro-cactus-wren':        'native',
+  'white-winged-dove':          'native',
+  'common-raven':               'native',
+  verdin:                       'native',
+  'beavertail-cactus':          'native',
+  'desert-five-spot':           'native',
+  'pyrrhuloxia-texas':          'native',
+  'zone-tailed-hawk':           'native',
+  'checkered-garter-snake':     'native',
+  'sonoran-coachwhip':          'native',
+  'black-chinned-hummingbird':  'native',
+  'desert-broom':               'native',
+  'white-throated-swift':       'native',
+  'desert-kangaroo-rat':        'native',
+  javelina:                     'native',
+  coyote:                       'native',
+  'black-tailed-jackrabbit':    'native',
+  'desert-cottontail':          'native',
+  // ── Native — Mojave ────────────────────────────────────────────────────────
+  'creosote-bush':              'native',
+  'mojave-yucca':               'native',
+  'black-throated-sparrow':     'native',
+  'mojave-sidewinder':          'endemic',
+  'desert-holly':               'native',
+  'silver-cholla':              'native',
+  // ── Native — Chihuahuan ────────────────────────────────────────────────────
+  'scaled-quail':               'native',
+  'checkered-whipsnake':        'native',
+  'black-tailed-rattlesnake':   'native',
+  'texas-banded-gecko':         'native',
+  sotol:                        'native',
+  'mexican-golden-poppy':       'native',
+  'chihuahuan-raven':           'native',
+  'aplomado-falcon':            'native',
+  'texas-horned-lizard':        'native',
+  'creosote-chihuahuan':        'native',
+  'yucca-chihuahuan':           'native',
+  'elf-owl-chihuahuan':         'native',
+  // ── Native — Great Basin ───────────────────────────────────────────────────
+  'big-sagebrush':              'native',
+  rabbitbrush:                  'native',
+  'sage-thrasher':              'native',
+  'great-basin-rattlesnake':    'native',
+  'great-basin-spadefoot':      'native',
+  'loggerhead-shrike':          'native',
+  'sagebrush-lizard':           'native',
+  'great-basin-gopher-snake':   'native',
+  'short-horned-lizard':        'native',
+  'western-meadowlark':         'native',
+  'horned-lark':                'native',
+  'western-rattlesnake':        'native',
+  'burrowing-owl':              'native',
+  'utah-juniper':               'native',
+  'single-leaf-pinyon':         'native',
+  winterfat:                    'native',
+  'black-billed-magpie':        'native',
+  'sage-sparrow':               'native',
+  'great-basin-collared-lizard':'native',
+  'great-basin-fence-lizard':   'native',
+  badger:                       'native',
+  'striped-skunk':              'native',
+  'white-tailed-antelope-squirrel': 'native',
+  'golden-eagle':               'native',
+  'ferruginous-hawk':           'native',
+  'desert-millipede':           'native',
+  'northern-pocket-gopher':     'native',
+  'desert-horned-lizard':       'native',
+  'desert-spiny-lizard':        'native',
+  'kit-fox':                    'native',
+  pronghorn:                    'native',
+  'american-pronghorn':         'native',
+  'mule-deer':                  'native',
+  'pygmy-rabbit':               'native',
+  shadscale:                    'native',
+  greasewood:                   'native',
+  'gambel-quail':               'native',
+  // ── Introduced ─────────────────────────────────────────────────────────────
+  'western-honey-bee':          'introduced', // Apis mellifera — European origin
+};
+
+export function getEstablishmentStatus(speciesId: string): EstablishmentStatus | undefined {
+  return ESTABLISHMENT_MAP[speciesId];
+}

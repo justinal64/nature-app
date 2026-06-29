@@ -23,7 +23,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { IUCN_LABEL, getActiveMonths, getIUCNStatus, getRelatedSpecies, getSpeciesById, getTaxonomy } from '@/constants/catalog';
+import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getEstablishmentStatus, getIUCNStatus, getRelatedSpecies, getSpeciesById, getTaxonomy } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
 import { useSightings } from '@/hooks/useSightings';
@@ -203,7 +203,7 @@ export default function SpeciesDetailScreen() {
             <Text style={{ color: COLORS.ink, fontSize: 32, fontWeight: '700', marginTop: 4 }}>
               {species?.commonName ?? 'Unknown species'}
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 8, flexWrap: 'wrap' }}>
               <Text
                 style={{
                   color: COLORS.bark,
@@ -224,6 +224,20 @@ export default function SpeciesDetailScreen() {
                 return (
                   <View style={{ backgroundColor: iucnColors[status] ?? COLORS.bark, borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
                     <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '800' }}>{status}</Text>
+                  </View>
+                );
+              })()}
+              {speciesId && (() => {
+                const est = getEstablishmentStatus(speciesId);
+                if (!est) return null;
+                const estColors: Record<string, string> = {
+                  native: COLORS.sage,
+                  endemic: COLORS.dusk,
+                  introduced: COLORS.clay,
+                };
+                return (
+                  <View style={{ backgroundColor: estColors[est], borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
+                    <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '700' }}>{ESTABLISHMENT_LABEL[est]}</Text>
                   </View>
                 );
               })()}

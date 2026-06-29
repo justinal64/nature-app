@@ -1,8 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Dimensions, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -47,13 +48,34 @@ export default function SpeciesDetailScreen() {
   const [tab, setTab] = useState<TabName>('Overview');
   const [liked, setLiked] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
+  const [note, setNote] = useState('');
+  const [editingNote, setEditingNote] = useState(false);
+  const noteInputRef = useRef<TextInput>(null);
 
   const species = speciesId ? getSpeciesById(speciesId) : undefined;
+
+  const noteKey = user && speciesId ? `notes:${user.uid}:${speciesId}` : null;
 
   useEffect(() => {
     if (!user || !speciesId) return;
     isFavorited(user.uid, speciesId).then(setLiked);
   }, [user, speciesId]);
+
+  useEffect(() => {
+    if (!noteKey) return;
+    AsyncStorage.getItem(noteKey).then((v) => { if (v) setNote(v); });
+  }, [noteKey]);
+
+  async function saveNote() {
+    if (!noteKey) return;
+    const trimmed = note.trim();
+    if (trimmed) {
+      await AsyncStorage.setItem(noteKey, trimmed);
+    } else {
+      await AsyncStorage.removeItem(noteKey);
+    }
+    setEditingNote(false);
+  }
 
   const scrollY = useSharedValue(0);
   const heartScale = useSharedValue(1);
@@ -331,6 +353,66 @@ export default function SpeciesDetailScreen() {
                 </View>
               </View>
             ) : null}
+
+            {/* Personal notes */}
+            <View
+              style={[
+                {
+                  marginHorizontal: 16,
+                  marginTop: 20,
+                  backgroundColor: COLORS.surface,
+                  borderRadius: 16,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                },
+                softShadow(0.04, 6, 2),
+              ]}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  My notes
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    if (editingNote) {
+                      saveNote();
+                    } else {
+                      setEditingNote(true);
+                      setTimeout(() => noteInputRef.current?.focus(), 50);
+                    }
+                  }}
+                  hitSlop={8}
+                >
+                  <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '700' }}>
+                    {editingNote ? 'Save' : 'Edit'}
+                  </Text>
+                </Pressable>
+              </View>
+              {editingNote ? (
+                <TextInput
+                  ref={noteInputRef}
+                  value={note}
+                  onChangeText={setNote}
+                  multiline
+                  placeholder="Add your field observations, habitat notes, behaviors..."
+                  placeholderTextColor={COLORS.bark}
+                  style={{
+                    color: COLORS.ink,
+                    fontSize: 14,
+                    lineHeight: 21,
+                    minHeight: 72,
+                    textAlignVertical: 'top',
+                  }}
+                />
+              ) : (
+                <Pressable onPress={() => { setEditingNote(true); setTimeout(() => noteInputRef.current?.focus(), 50); }}>
+                  <Text style={{ color: note ? COLORS.ink : COLORS.bark, fontSize: 14, lineHeight: 21, fontStyle: note ? 'normal' : 'italic' }}>
+                    {note || 'Add your field observations, habitat notes, behaviors...'}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
           </Animated.View>
         )}
 

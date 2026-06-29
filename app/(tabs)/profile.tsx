@@ -23,6 +23,7 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { getEarnedBadges } from '@/lib/badges';
 import {
   cancelSpeciesOfTheDay,
@@ -54,6 +55,7 @@ export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user, signOut, deleteAccount, refreshUser } = useAuth();
+  const { preferScientific, toggleNameDisplay } = useDisplayPrefs();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
 
@@ -533,7 +535,60 @@ export default function ProfileScreen() {
           </Pressable>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(445).duration(400)}>
+        <Animated.View entering={FadeInDown.delay(444).duration(400)}>
+          <Pressable
+            onPress={toggleNameDisplay}
+            accessibilityRole="switch"
+            accessibilityLabel="Show scientific names"
+            accessibilityState={{ checked: preferScientific }}
+            style={{
+              marginTop: 10,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: COLORS.surface,
+              borderRadius: 16,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: COLORS.sand,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Ionicons name="text-outline" size={20} color={COLORS.ink} />
+              <View>
+                <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                  Scientific names
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                  Show latin names as primary display
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: 44,
+                height: 26,
+                borderRadius: 13,
+                backgroundColor: preferScientific ? COLORS.sage : COLORS.sand,
+                justifyContent: 'center',
+                paddingHorizontal: 2,
+              }}
+            >
+              <View
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: 11,
+                  backgroundColor: COLORS.cream,
+                  alignSelf: preferScientific ? 'flex-end' : 'flex-start',
+                }}
+              />
+            </View>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(455).duration(400)}>
           <Pressable
             onPress={() => router.push('/favorites' as never)}
             accessibilityLabel="View favorites"

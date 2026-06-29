@@ -10,6 +10,7 @@ import '../global.css';
 
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { DisplayPrefsProvider } from '@/context/DisplayPrefsContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OfflineBar } from '@/components/OfflineBar';
 import { ONBOARDING_KEY } from './onboarding';
@@ -119,9 +120,11 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <RootLayoutNav />
-      </AuthProvider>
+      <DisplayPrefsProvider>
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
+      </DisplayPrefsProvider>
     </ErrorBoundary>
   );
 }

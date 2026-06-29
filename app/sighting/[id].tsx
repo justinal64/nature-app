@@ -19,8 +19,8 @@ import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { getSpeciesById } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
-import type { DataQualityFlags, Sighting } from '@/lib/sightings';
-import { deleteSighting, getSightingById, updateSighting } from '@/lib/sightings';
+import type { DataQualityFlags, Sighting, SightingComment } from '@/lib/sightings';
+import { addComment, deleteComment, deleteSighting, getSightingById, updateSighting } from '@/lib/sightings';
 
 const KIND_COLOR: Record<string, string> = {
   cactus: COLORS.sage,
@@ -53,6 +53,9 @@ export default function SightingDetailScreen() {
   const [editingNotes, setEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
   const [flags, setFlags] = useState<DataQualityFlags>({});
+  const [comments, setComments] = useState<SightingComment[]>([]);
+  const [commentDraft, setCommentDraft] = useState('');
+  const [postingComment, setPostingComment] = useState(false);
 
   useEffect(() => {
     if (!user || !id) return;
@@ -61,6 +64,7 @@ export default function SightingDetailScreen() {
         setSighting(s);
         setNotes(s.notes ?? '');
         setFlags(s.dataQualityFlags ?? {});
+        setComments(s.comments ?? []);
       }
     });
   }, [user, id]);
@@ -81,6 +85,23 @@ export default function SightingDetailScreen() {
     setSighting((prev) => prev ? { ...prev, notes: notes.trim() || undefined } : prev);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setEditingNotes(false);
+  }
+
+  async function handleAddComment() {
+    if (!user || !sighting || !commentDraft.trim() || postingComment) return;
+    setPostingComment(true);
+    const comment = await addComment(user.uid, sighting.id, commentDraft);
+    setComments((prev) => [...prev, comment]);
+    setCommentDraft('');
+    setPostingComment(false);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
+
+  async function handleDeleteComment(commentId: string) {
+    if (!user || !sighting) return;
+    await deleteComment(user.uid, sighting.id, commentId);
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }
 
   async function handleDelete() {
@@ -291,6 +312,89 @@ export default function SightingDetailScreen() {
               {sighting.notes ?? 'No notes yet — tap Edit to add some.'}
             </Text>
           )}
+        </Animated.View>
+
+        {/* Comments */}
+        <Animated.View entering={FadeInDown.delay(230).duration(280)} style={[
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
+          softShadow(0.03, 4, 1),
+        ]}>
+          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>
+            Comments
+          </Text>
+
+          {comments.length === 0 && (
+            <Text style={{ color: COLORS.bark, fontSize: 14, fontStyle: 'italic', marginBottom: 14 }}>
+              No comments yet.
+            </Text>
+          )}
+
+          {comments.map((c) => (
+            <View
+              key={c.id}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                gap: 10,
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: COLORS.sand,
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: COLORS.bark, fontSize: 11, marginBottom: 3 }}>
+                  {new Date(c.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                </Text>
+                <Text style={{ color: COLORS.ink, fontSize: 14, lineHeight: 20 }}>{c.text}</Text>
+              </View>
+              <Pressable
+                onPress={() => handleDeleteComment(c.id)}
+                accessibilityLabel="Delete comment"
+                accessibilityRole="button"
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Ionicons name="close-circle-outline" size={18} color={COLORS.bark} />
+              </Pressable>
+            </View>
+          ))}
+
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 10, marginTop: 14 }}>
+            <TextInput
+              value={commentDraft}
+              onChangeText={setCommentDraft}
+              placeholder="Add a comment…"
+              placeholderTextColor={COLORS.bark}
+              multiline
+              maxLength={300}
+              style={{
+                flex: 1,
+                color: COLORS.ink,
+                fontSize: 14,
+                lineHeight: 20,
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+                borderRadius: 12,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                minHeight: 40,
+              }}
+              accessibilityLabel="Comment text"
+            />
+            <Pressable
+              onPress={handleAddComment}
+              disabled={!commentDraft.trim() || postingComment}
+              accessibilityLabel="Post comment"
+              accessibilityRole="button"
+              style={{
+                backgroundColor: commentDraft.trim() ? COLORS.clay : COLORS.sand,
+                borderRadius: 20,
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+              }}
+            >
+              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>Post</Text>
+            </Pressable>
+          </View>
         </Animated.View>
 
         {/* Data quality flags */}

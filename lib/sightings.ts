@@ -37,6 +37,7 @@ export type Sighting = {
   phenology?: Phenology; // plants only
   dataQualityFlags?: DataQualityFlags;
   isPrivate?: boolean; // excluded from exports and species photo gallery
+  comments?: SightingComment[];
 };
 
 // Species whose GPS location is automatically obscured to a ~0.2° grid (~22 km)
@@ -69,6 +70,12 @@ export function obscureLocation(loc: { lat: number; lng: number }): { lat: numbe
 export function isSensitiveSpecies(speciesId: string): boolean {
   return SENSITIVE_SPECIES.has(speciesId);
 }
+
+export type SightingComment = {
+  id: string;
+  text: string;
+  createdAt: string; // ISO 8601
+};
 
 export type DataQualityFlags = {
   evidencePresent?: boolean;   // photo/sound clearly shows the organism
@@ -147,11 +154,43 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags' | 'isPrivate'>>,
+  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags' | 'isPrivate' | 'comments'>>,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(
     KEY(userId),
     JSON.stringify(all.map((s) => (s.id === sightingId ? { ...s, ...patch } : s))),
+  );
+}
+
+export async function addComment(userId: string, sightingId: string, text: string): Promise<SightingComment> {
+  const all = await getSightings(userId);
+  const comment: SightingComment = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    text: text.trim(),
+    createdAt: new Date().toISOString(),
+  };
+  await AsyncStorage.setItem(
+    KEY(userId),
+    JSON.stringify(
+      all.map((s) =>
+        s.id === sightingId ? { ...s, comments: [...(s.comments ?? []), comment] } : s,
+      ),
+    ),
+  );
+  return comment;
+}
+
+export async function deleteComment(userId: string, sightingId: string, commentId: string): Promise<void> {
+  const all = await getSightings(userId);
+  await AsyncStorage.setItem(
+    KEY(userId),
+    JSON.stringify(
+      all.map((s) =>
+        s.id === sightingId
+          ? { ...s, comments: (s.comments ?? []).filter((c) => c.id !== commentId) }
+          : s,
+      ),
+    ),
   );
 }

@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 
 import { CATALOG } from '@/constants/catalog';
+import { getSightings } from '@/lib/sightings';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -21,18 +22,28 @@ export async function requestNotificationPermission(): Promise<boolean> {
   return status === 'granted';
 }
 
-export async function scheduleStreakReminder(): Promise<void> {
-  // Cancel any existing reminder before rescheduling
+export async function scheduleStreakReminder(userId: string, streakCount: number): Promise<void> {
   await Notifications.cancelScheduledNotificationAsync(STREAK_REMINDER_ID).catch(() => {});
 
   const { status } = await Notifications.getPermissionsAsync();
   if (status !== 'granted') return;
 
+  // If the user already has a sighting today, skip the reminder
+  const today = new Date().toISOString().slice(0, 10);
+  const sightings = await getSightings(userId);
+  const hasSightingToday = sightings.some((s) => s.capturedAt.slice(0, 10) === today);
+  if (hasSightingToday) return;
+
+  const body =
+    streakCount > 1
+      ? `Your ${streakCount}-day streak ends at midnight — log a sighting to keep it alive!`
+      : "Log a sighting today to start your streak!";
+
   await Notifications.scheduleNotificationAsync({
     identifier: STREAK_REMINDER_ID,
     content: {
       title: "Don't break your streak 🌵",
-      body: "You haven't logged a sighting today. Head outside before midnight!",
+      body,
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,

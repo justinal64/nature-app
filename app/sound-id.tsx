@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
+import { cancelStreakReminder } from '@/lib/notifications';
 import { addSighting } from '@/lib/sightings';
 import {
   identifyBirdSound,
@@ -135,6 +136,7 @@ export default function SoundIdScreen() {
         kind: 'bird',
         capturedAt: new Date().toISOString(),
       });
+      cancelStreakReminder().catch(() => {});
       Alert.alert('Saved!', `${result.species.commonName} added to your journal.`, [
         { text: 'OK', onPress: () => router.replace('/(tabs)/journal') },
       ]);

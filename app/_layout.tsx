@@ -24,8 +24,9 @@ function RootLayoutNav() {
 
   useEffect(() => {
     if (user?.emailVerified) {
-      updateStreak(user.uid).catch(() => {});
-      scheduleStreakReminder().catch(() => {});
+      updateStreak(user.uid)
+        .then((count) => scheduleStreakReminder(user.uid, count))
+        .catch(() => {});
       scheduleSpeciesOfTheDay().catch(() => {});
     }
   }, [user?.uid, user?.emailVerified]);

@@ -389,7 +389,7 @@ export default function ProfileScreen() {
               } else {
                 const granted = await requestNotificationPermission();
                 if (granted) {
-                  await scheduleStreakReminder();
+                  await scheduleStreakReminder(user!.uid, streak);
                   setNotificationsOn(true);
                 } else {
                   Alert.alert(

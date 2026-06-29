@@ -27,6 +27,7 @@ import type { Species } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
+import { cancelStreakReminder } from '@/lib/notifications';
 import { addSighting } from '@/lib/sightings';
 import { maybeRequestReview } from '@/lib/review';
 
@@ -127,6 +128,7 @@ export default function ResultScreen() {
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      cancelStreakReminder().catch(() => {});
       maybeRequestReview(user.uid).catch(() => {});
       router.replace('/(tabs)');
     } catch {

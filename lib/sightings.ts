@@ -11,6 +11,11 @@ export type ObservationType =
   | 'sound'       // heard but not seen
   | 'other';
 
+export type Sex = 'male' | 'female';
+export type LifeStage = 'egg' | 'larva' | 'juvenile' | 'adult';
+export type Activity = 'feeding' | 'perching' | 'flying' | 'nesting' | 'basking' | 'calling';
+export type Phenology = 'vegetative' | 'flowering' | 'fruiting' | 'senescent';
+
 export type Sighting = {
   id: string;
   userId: string;
@@ -23,6 +28,11 @@ export type Sighting = {
   observationType?: ObservationType;
   notes?: string;
   location?: { lat: number; lng: number };
+  // iNaturalist-style annotations
+  sex?: Sex;
+  lifeStage?: LifeStage;
+  activity?: Activity;   // animals only
+  phenology?: Phenology; // plants only
 };
 
 const KEY = (uid: string) => `sightings:${uid}`;
@@ -76,7 +86,7 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes'>>,
+  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology'>>,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(

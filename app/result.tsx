@@ -29,7 +29,7 @@ import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
 import { cancelStreakReminder } from '@/lib/notifications';
-import { addSighting, findDuplicateSighting, type ObservationType } from '@/lib/sightings';
+import { addSighting, findDuplicateSighting, type Activity, type LifeStage, type ObservationType, type Phenology, type Sex } from '@/lib/sightings';
 import { maybeRequestReview } from '@/lib/review';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
@@ -79,6 +79,10 @@ export default function ResultScreen() {
   const [capturedAt, setCapturedAt] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [observationType, setObservationType] = useState<ObservationType>('organism');
+  const [sex, setSex] = useState<Sex | undefined>(undefined);
+  const [lifeStage, setLifeStage] = useState<LifeStage | undefined>(undefined);
+  const [activity, setActivity] = useState<Activity | undefined>(undefined);
+  const [phenology, setPhenology] = useState<Phenology | undefined>(undefined);
   const locationRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
@@ -130,6 +134,10 @@ export default function ResultScreen() {
         notes: note.trim() || undefined,
         capturedAt: capturedAt.toISOString(),
         observationType,
+        sex,
+        lifeStage,
+        activity: topResult.kind !== 'cactus' ? activity : undefined,
+        phenology: topResult.kind === 'cactus' ? phenology : undefined,
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -592,6 +600,123 @@ export default function ResultScreen() {
                   ))}
                 </View>
               </View>
+
+              {/* Annotations */}
+              {topResult && (
+                <>
+                  {/* Sex */}
+                  <View style={{ gap: 6 }}>
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      Sex
+                    </Text>
+                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                      {(['male', 'female'] as Sex[]).map((s) => (
+                        <Pressable
+                          key={s}
+                          onPress={() => setSex(sex === s ? undefined : s)}
+                          style={{
+                            paddingHorizontal: 14,
+                            paddingVertical: 7,
+                            borderRadius: 20,
+                            borderWidth: 1.5,
+                            borderColor: sex === s ? COLORS.dusk : COLORS.sand,
+                            backgroundColor: sex === s ? COLORS.dusk : COLORS.surface,
+                          }}
+                        >
+                          <Text style={{ color: sex === s ? COLORS.cream : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                            {s}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* Life Stage */}
+                  <View style={{ gap: 6 }}>
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      Life Stage
+                    </Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                      {(['egg', 'larva', 'juvenile', 'adult'] as LifeStage[]).map((ls) => (
+                        <Pressable
+                          key={ls}
+                          onPress={() => setLifeStage(lifeStage === ls ? undefined : ls)}
+                          style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 7,
+                            borderRadius: 20,
+                            borderWidth: 1.5,
+                            borderColor: lifeStage === ls ? COLORS.gold : COLORS.sand,
+                            backgroundColor: lifeStage === ls ? COLORS.gold : COLORS.surface,
+                          }}
+                        >
+                          <Text style={{ color: lifeStage === ls ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                            {ls}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* Activity (animals only) */}
+                  {topResult.kind !== 'cactus' && (
+                    <View style={{ gap: 6 }}>
+                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                        Activity
+                      </Text>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                        {(['feeding', 'perching', 'flying', 'nesting', 'basking', 'calling'] as Activity[]).map((act) => (
+                          <Pressable
+                            key={act}
+                            onPress={() => setActivity(activity === act ? undefined : act)}
+                            style={{
+                              paddingHorizontal: 12,
+                              paddingVertical: 7,
+                              borderRadius: 20,
+                              borderWidth: 1.5,
+                              borderColor: activity === act ? COLORS.sage : COLORS.sand,
+                              backgroundColor: activity === act ? COLORS.sage : COLORS.surface,
+                            }}
+                          >
+                            <Text style={{ color: activity === act ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                              {act}
+                            </Text>
+                          </Pressable>
+                        ))}
+                      </View>
+                    </View>
+                  )}
+
+                  {/* Phenology (plants only) */}
+                  {topResult.kind === 'cactus' && (
+                    <View style={{ gap: 6 }}>
+                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                        Phenology
+                      </Text>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                        {(['vegetative', 'flowering', 'fruiting', 'senescent'] as Phenology[]).map((ph) => (
+                          <Pressable
+                            key={ph}
+                            onPress={() => setPhenology(phenology === ph ? undefined : ph)}
+                            style={{
+                              paddingHorizontal: 12,
+                              paddingVertical: 7,
+                              borderRadius: 20,
+                              borderWidth: 1.5,
+                              borderColor: phenology === ph ? COLORS.sage : COLORS.sand,
+                              backgroundColor: phenology === ph ? COLORS.sage : COLORS.surface,
+                            }}
+                          >
+                            <Text style={{ color: phenology === ph ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                              {ph}
+                            </Text>
+                          </Pressable>
+                        ))}
+                      </View>
+                    </View>
+                  )}
+                </>
+              )}
 
               {/* Note input */}
               <View

@@ -11,6 +11,7 @@ import '../global.css';
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { DisplayPrefsProvider } from '@/context/DisplayPrefsContext';
+import { ModelInitProvider } from '@/context/ModelInitContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OfflineBar } from '@/components/OfflineBar';
 import { ONBOARDING_KEY } from './onboarding';
@@ -122,7 +123,9 @@ export default function RootLayout() {
     <ErrorBoundary>
       <DisplayPrefsProvider>
         <AuthProvider>
-          <RootLayoutNav />
+          <ModelInitProvider>
+            <RootLayoutNav />
+          </ModelInitProvider>
         </AuthProvider>
       </DisplayPrefsProvider>
     </ErrorBoundary>

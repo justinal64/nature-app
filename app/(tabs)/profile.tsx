@@ -24,6 +24,7 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
+import { useModelInit } from '@/context/ModelInitContext';
 import { getEarnedBadges } from '@/lib/badges';
 import {
   cancelSpeciesOfTheDay,
@@ -56,6 +57,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { user, signOut, deleteAccount, refreshUser } = useAuth();
   const { preferScientific, toggleNameDisplay } = useDisplayPrefs();
+  const { modelStatus, modelProgress } = useModelInit();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
 
@@ -587,6 +589,55 @@ export default function ProfileScreen() {
             </View>
           </Pressable>
         </Animated.View>
+
+        {modelStatus !== 'idle' && (
+          <Animated.View entering={FadeInDown.delay(447).duration(400)}>
+            <View
+              style={{
+                marginTop: 10,
+                marginHorizontal: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.surface,
+                borderRadius: 16,
+                padding: 16,
+                borderWidth: 1,
+                borderColor: COLORS.sand,
+                gap: 12,
+              }}
+            >
+              <Ionicons
+                name={
+                  modelStatus === 'ready'
+                    ? 'checkmark-circle'
+                    : modelStatus === 'error'
+                      ? 'warning-outline'
+                      : 'cloud-download-outline'
+                }
+                size={20}
+                color={
+                  modelStatus === 'ready'
+                    ? COLORS.sage
+                    : modelStatus === 'error'
+                      ? COLORS.clay
+                      : COLORS.ink
+                }
+              />
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                  Offline ID model
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                  {modelStatus === 'ready'
+                    ? 'Downloaded — works without internet'
+                    : modelStatus === 'downloading'
+                      ? `Downloading… ${Math.round(modelProgress * 100)}%`
+                      : 'Download failed — check your connection'}
+                </Text>
+              </View>
+            </View>
+          </Animated.View>
+        )}
 
         <Animated.View entering={FadeInDown.delay(455).duration(400)}>
           <Pressable

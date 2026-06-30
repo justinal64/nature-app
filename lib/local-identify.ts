@@ -21,6 +21,7 @@ export const TAXONOMY_DOWNLOAD_URL =
 
 let cachedModel: TfliteModel | null = null;
 let loadAttempted = false;
+let downloadInProgress = false;
 let taxonomy: string[] = [];
 
 const LOCAL_FALLBACK: IdentifyResult[] = (
@@ -45,23 +46,29 @@ export async function isModelDownloaded(): Promise<boolean> {
 export async function downloadModel(
   onProgress?: (fraction: number) => void,
 ): Promise<void> {
-  const dirInfo = await FileSystem.getInfoAsync(MODELS_DIR);
-  if (!dirInfo.exists) {
-    await FileSystem.makeDirectoryAsync(MODELS_DIR, { intermediates: true });
+  if (downloadInProgress) return;
+  downloadInProgress = true;
+  try {
+    const dirInfo = await FileSystem.getInfoAsync(MODELS_DIR);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(MODELS_DIR, { intermediates: true });
+    }
+
+    const dl = FileSystem.createDownloadResumable(
+      MODEL_DOWNLOAD_URL,
+      MODEL_FILE,
+      {},
+      (prog) => onProgress?.(prog.totalBytesWritten / prog.totalBytesExpectedToWrite),
+    );
+    await dl.downloadAsync();
+    await FileSystem.downloadAsync(TAXONOMY_DOWNLOAD_URL, TAXONOMY_FILE);
+
+    // Force reload on next inference call
+    cachedModel = null;
+    loadAttempted = false;
+  } finally {
+    downloadInProgress = false;
   }
-
-  const dl = FileSystem.createDownloadResumable(
-    MODEL_DOWNLOAD_URL,
-    MODEL_FILE,
-    {},
-    (prog) => onProgress?.(prog.totalBytesWritten / prog.totalBytesExpectedToWrite),
-  );
-  await dl.downloadAsync();
-  await FileSystem.downloadAsync(TAXONOMY_DOWNLOAD_URL, TAXONOMY_FILE);
-
-  // Force reload on next inference call
-  cachedModel = null;
-  loadAttempted = false;
 }
 
 async function loadModel(): Promise<void> {

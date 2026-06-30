@@ -2288,6 +2288,67 @@ export const CATALOG: Species[] = [
     idTips: ['Large, dark, lobster-like body 2–3 in; long whip tail, no stinger', 'Pincer-like "pedipalps" (not true claws) at front', 'Sprays vinegar-smelling acid when threatened — harmless to skin', 'Found under rocks, logs, and debris in dry washes'],
     stats: [{ label: 'Length', value: '2–3 in body' }, { label: 'Venom', value: 'None' }, { label: 'Spray', value: '85% acetic acid' }, { label: 'Active', value: 'Nocturnal' }],
   },
+  // ── Fish (Riparian / Desert Springs) ────────────────────────────────────────
+  {
+    id: 'desert-pupfish',
+    commonName: 'Desert Pupfish',
+    latin: 'Cyprinodon macularius',
+    family: 'Cyprinodontidae',
+    kind: 'fish',
+    region: 'SONORAN',
+    description: 'One of the most thermally tolerant fish on Earth, the desert pupfish survives in springs, irrigation canals, and remnant pools of the Sonoran Desert where water temperatures can exceed 40°C (104°F) and salinity can be twice that of seawater. Listed as Endangered under the ESA, its wild populations cling to a handful of springs in Arizona and California. Males are brilliant iridescent blue during breeding season.',
+    didYouKnow: 'Desert pupfish can tolerate water that is twice as salty as the ocean and hot enough to cook an egg — an extreme tolerance matched by almost no other vertebrate on Earth.',
+    idTips: ['Very small (1–2.5 in), chunky silver-olive body', 'Breeding males turn brilliant iridescent blue with orange edges on tail fin', 'Found only in desert springs, stock ponds, and irrigation canals', 'Highly active, darting near the surface in shallow warm water'],
+    stats: [{ label: 'Length', value: '1–2.5 in' }, { label: 'Status', value: 'Endangered (ESA)' }, { label: 'Habitat', value: 'Desert springs, canals' }, { label: 'Tolerance', value: '44°C / 2× seawater salinity' }],
+  },
+  {
+    id: 'gila-trout',
+    commonName: 'Gila Trout',
+    latin: 'Oncorhynchus gilae',
+    family: 'Salmonidae',
+    kind: 'fish',
+    region: 'CHIHUAHUAN',
+    description: 'A native trout of the Gila River headwater streams in the mountains of New Mexico and Arizona, found in cool, clear, fast-moving mountain creeks above 6,000 feet where the desert gives way to ponderosa pine. A federally Threatened species recovering from near-extinction; its wild range was reduced to a single stream before active recovery programs expanded it to dozens of streams through hatchery supplementation.',
+    didYouKnow: 'The Gila trout is genetically distinct from all other trout species — it evolved in isolation in the Mogollon Plateau for millions of years and is found nowhere else on Earth.',
+    idTips: ['Yellow-gold body with fine black spots concentrated above lateral line', 'Greenish-yellow belly and sides; orange-tinted fins', 'Found only in cold mountain streams above 6,000 ft in Gila Wilderness area', 'Smaller than rainbow trout: typically 8–14 in'],
+    stats: [{ label: 'Length', value: '8–14 in' }, { label: 'Status', value: 'Threatened (ESA)' }, { label: 'Habitat', value: 'Mountain streams, >6,000 ft' }, { label: 'Range', value: 'Gila River headwaters only' }],
+  },
+  {
+    id: 'longfin-dace',
+    commonName: 'Longfin Dace',
+    latin: 'Agosia chrysogaster',
+    family: 'Leuciscidae',
+    kind: 'fish',
+    region: 'SONORAN',
+    description: 'A small, remarkably resilient minnow found throughout streams and rivers of the Sonoran Desert, including intermittent desert streams that dry to disconnected pools in summer. It persists in conditions that would kill most fish — low dissolved oxygen, high temperatures, and nearly zero flow. A native species of special concern in Arizona, it is a key indicator of desert stream health.',
+    didYouKnow: 'Longfin dace can survive in pools that are oxygen-depleted to near-zero levels by gulping air at the surface — a behavior called aquatic surface respiration.',
+    idTips: ['Small minnow, 2–3 in, with long rounded fins relative to body size', 'Olive to brown on back, silvery white below; faint lateral stripe', 'Common in riffles and rocky runs of desert streams', 'Often seen in large schools near the surface'],
+    stats: [{ label: 'Length', value: '2–3 in' }, { label: 'Status', value: 'Species of concern (AZ)' }, { label: 'Habitat', value: 'Desert streams, riffle zones' }, { label: 'Tolerance', value: 'Very low O₂, high heat' }],
+  },
+  {
+    id: 'speckled-dace',
+    commonName: 'Speckled Dace',
+    latin: 'Rhinichthys osculus',
+    family: 'Leuciscidae',
+    kind: 'fish',
+    region: 'GREAT_BASIN',
+    description: 'The most widespread native minnow in western North America, occurring in desert spring systems, Great Basin streams, and mountain creeks from Canada to Mexico. Highly variable in appearance across its range due to long isolation in different desert drainages — some populations are so distinct they may represent separate species. A critical food fish for larger predators including herons and kingfishers in desert riparian corridors.',
+    didYouKnow: 'Speckled dace populations in isolated Great Basin springs have been separated for tens of thousands of years — since the last Ice Age lakes dried up — and show dramatic physical differences despite being the same species.',
+    idTips: ['Small minnow, 1.5–3 in; heavily speckled with dark spots on olive body', 'Pointed snout; small subterminal mouth angled slightly downward', 'Found in cold clear streams and springs throughout the Great Basin', 'Often shelters under rocks in fast-moving riffles'],
+    stats: [{ label: 'Length', value: '1.5–3 in' }, { label: 'Habitat', value: 'Springs and clear streams' }, { label: 'Range', value: 'Western North America' }, { label: 'Diet', value: 'Aquatic insects, algae' }],
+  },
+  {
+    id: 'razorback-sucker',
+    commonName: 'Razorback Sucker',
+    latin: 'Xyrauchen texanus',
+    family: 'Catostomidae',
+    kind: 'fish',
+    region: 'SONORAN',
+    description: 'A large prehistoric-looking fish of the Colorado River system, named for its sharp keeled hump behind the head. Once common throughout the Colorado and its tributaries, it is now critically endangered and rarely seen — dams, invasive species, and habitat alteration reduced wild populations to near zero before active recovery efforts. Surviving fish are often decades old; the species rarely reproduces successfully in the wild anymore.',
+    didYouKnow: 'Razorback suckers that are caught today are sometimes 30–40 years old — old enough to predate the construction of Glen Canyon Dam. The species no longer reproduces successfully in wild populations.',
+    idTips: ['Large, 20–36 in, with distinctive sharp bony keel (hump) behind the head', 'Olive to dark brown back; yellow-orange belly', 'Fleshy sucking mouth on underside of head', 'Found only in the main Colorado River and its larger tributaries'],
+    stats: [{ label: 'Length', value: '20–36 in' }, { label: 'Status', value: 'Endangered (ESA)' }, { label: 'Habitat', value: 'Large desert rivers' }, { label: 'Lifespan', value: 'To 40+ years' }],
+  },
   // ── Fungi & Lichens ─────────────────────────────────────────────────────────
   {
     id: 'desert-inky-cap',
@@ -2560,6 +2621,12 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'western-black-widow':        ALL,
   'giant-desert-hairy-scorpion': [4, 5, 6, 7, 8, 9, 10],
   'vinegaroon':                 [7, 8, 9, 10],   // monsoon season emergence
+  // Fish — present year-round in their permanent water habitats
+  'desert-pupfish':             ALL,
+  'gila-trout':                 ALL,
+  'longfin-dace':               ALL,
+  'speckled-dace':              ALL,
+  'razorback-sucker':           ALL,
   // Fungi & lichens
   'desert-inky-cap':            [7, 8, 9],       // monsoon fruiting only
   'desert-puffball':            [7, 8, 9, 10],   // post-monsoon grassland flush
@@ -2762,6 +2829,12 @@ const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
   'mohave-ground-squirrel': { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Rodentia',     family:'Sciuridae',      genus:'Xerospermophilus',species:'mohavensis'   },
   'pygmy-rabbit':           { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Lagomorpha',   family:'Leporidae',      genus:'Brachylagus',   species:'idahoensis'    },
   'badger':                 { kingdom:'Animalia', phylum:'Chordata', class:'Mammalia', order:'Carnivora',    family:'Mustelidae',     genus:'Taxidea',       species:'taxus'         },
+  // ── Fish ────────────────────────────────────────────────────────────────────
+  'desert-pupfish':         { kingdom:'Animalia', phylum:'Chordata', class:'Actinopterygii', order:'Cyprinodontiformes', family:'Cyprinodontidae', genus:'Cyprinodon',    species:'macularius'  },
+  'gila-trout':             { kingdom:'Animalia', phylum:'Chordata', class:'Actinopterygii', order:'Salmoniformes',      family:'Salmonidae',       genus:'Oncorhynchus',  species:'gilae'       },
+  'longfin-dace':           { kingdom:'Animalia', phylum:'Chordata', class:'Actinopterygii', order:'Cypriniformes',      family:'Leuciscidae',      genus:'Agosia',        species:'chrysogaster'},
+  'speckled-dace':          { kingdom:'Animalia', phylum:'Chordata', class:'Actinopterygii', order:'Cypriniformes',      family:'Leuciscidae',      genus:'Rhinichthys',   species:'osculus'     },
+  'razorback-sucker':       { kingdom:'Animalia', phylum:'Chordata', class:'Actinopterygii', order:'Cypriniformes',      family:'Catostomidae',     genus:'Xyrauchen',     species:'texanus'     },
   // ── Fungi & Lichens ─────────────────────────────────────────────────────────
   'desert-inky-cap':        { kingdom:'Fungi', phylum:'Basidiomycota', class:'Agaricomycetes', order:'Agaricales',    family:'Psathyrellaceae', genus:'Coprinellus',  species:'micaceus'      },
   'desert-puffball':        { kingdom:'Fungi', phylum:'Basidiomycota', class:'Agaricomycetes', order:'Agaricales',    family:'Agaricaceae',     genus:'Calvatia',     species:'booniana'      },
@@ -2927,6 +3000,12 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'gambel-quail':               'native',
   // ── Introduced ─────────────────────────────────────────────────────────────
   'western-honey-bee':          'introduced', // Apis mellifera — European origin
+  // ── Fish ────────────────────────────────────────────────────────────────────
+  'desert-pupfish':             'native',
+  'gila-trout':                 'endemic', // endemic to Gila River headwaters
+  'longfin-dace':               'native',
+  'speckled-dace':              'native',
+  'razorback-sucker':           'native',
   // ── Fungi & Lichens ─────────────────────────────────────────────────────────
   'desert-inky-cap':            'native',
   'desert-puffball':            'native',

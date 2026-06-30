@@ -32,6 +32,7 @@ const KIND_COLOR: Record<string, string> = {
   amphibian: COLORS.sage,
   arachnid: COLORS.ink,
   fungus: COLORS.gold,
+  fish: COLORS.dusk,
 };
 
 function formatFullDate(iso: string): string {

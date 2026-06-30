@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid' | 'fungus';
+export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid' | 'fungus' | 'fish';
 
 export type ObservationType =
   | 'organism'    // saw the animal/plant directly

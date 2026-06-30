@@ -19,6 +19,7 @@ const KIND_LABELS: Record<string, string> = {
   amphibian: 'Amphibians',
   arachnid: 'Arachnids',
   fungus: 'Fungi',
+  fish: 'Fish',
 };
 
 const KIND_COLOR: Record<string, string> = {
@@ -31,6 +32,7 @@ const KIND_COLOR: Record<string, string> = {
   amphibian: COLORS.sage,
   arachnid: COLORS.ink,
   fungus: COLORS.gold,
+  fish: COLORS.dusk,
 };
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -45,7 +47,7 @@ export default function JournalStatsScreen() {
   const uniqueSpecies = new Set(sightings.map((s) => s.speciesId)).size;
 
   // Sightings by kind
-  const byKind = ['cactus', 'bird', 'mammal', 'snake', 'lizard', 'insect', 'arachnid', 'amphibian', 'fungus'].map((kind) => ({
+  const byKind = ['cactus', 'bird', 'mammal', 'snake', 'lizard', 'insect', 'arachnid', 'amphibian', 'fungus', 'fish'].map((kind) => ({
     kind,
     count: sightings.filter((s) => s.kind === kind).length,
   }));

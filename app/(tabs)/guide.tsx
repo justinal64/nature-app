@@ -26,6 +26,7 @@ const CATS = [
   { name: 'Insects', kind: 'insect' as SpeciesKind },
   { name: 'Arachnids', kind: 'arachnid' as SpeciesKind },
   { name: 'Fungi', kind: 'fungus' as SpeciesKind },
+  { name: 'Fish', kind: 'fish' as SpeciesKind },
 ];
 
 export default function GuideScreen() {

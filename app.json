@@ -107,6 +107,13 @@
         {
           "microphonePermission": "WildLens uses your microphone to record bird calls for identification."
         }
+      ],
+      [
+        "react-native-fast-tflite",
+        {
+          "enableCoreMLDelegate": true,
+          "enableAndroidGpuLibraries": true
+        }
       ]
     ],
     "experiments": {

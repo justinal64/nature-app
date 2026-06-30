@@ -1,5 +1,6 @@
 import { CATALOG } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
+import { identifyFromPhoto } from '@/lib/local-identify';
 
 export type IdentifyResult = {
   speciesId: string | null;
@@ -93,8 +94,8 @@ export async function identifySpecies(imageUri: string): Promise<IdentifyResult[
       };
     });
 
-    return mapped.length > 0 ? mapped : OFFLINE_FALLBACK;
+    return mapped.length > 0 ? mapped : identifyFromPhoto(imageUri);
   } catch {
-    return OFFLINE_FALLBACK;
+    return identifyFromPhoto(imageUri);
   }
 }

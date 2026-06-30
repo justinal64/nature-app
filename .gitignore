@@ -34,6 +34,9 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# ML model binaries — too large for git; see assets/models/README.md
+*.tflite
+
 # generated native folders
 /ios
 /android

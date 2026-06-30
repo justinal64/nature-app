@@ -28,6 +28,8 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getDangerInfo, getEdibilityInfo, getEcosystemRole, getEstablishmentStatus, getIUCNStatus, getJuniorFact, getRelatedSpecies, getSpeciesById, getSpeciesUses, getTaxonomy } from '@/constants/catalog';
 import { getEncounterProtocol, type EncounterProtocol } from '@/constants/encounter-protocols';
+import { getInvasiveInfo, IMPACT_LEVEL_CONFIG, type InvasiveInfo } from '@/constants/invasive-info';
+import { getForagingLegality, LAND_TYPE_LABELS, RULE_CONFIG, type ForagingLegalityInfo } from '@/constants/foraging-legality';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
@@ -474,6 +476,13 @@ export default function SpeciesDetailScreen() {
               );
             })()}
 
+            {/* Invasive species action card */}
+            {speciesId && (() => {
+              const invasive = getInvasiveInfo(speciesId);
+              if (!invasive) return null;
+              return <InvasiveCard info={invasive} />;
+            })()}
+
             {/* Encounter protocol */}
             {speciesId && (() => {
               const protocol = getEncounterProtocol(speciesId);
@@ -481,6 +490,13 @@ export default function SpeciesDetailScreen() {
               return (
                 <EncounterProtocolCard protocol={protocol} />
               );
+            })()}
+
+            {/* Foraging legality */}
+            {speciesId && (() => {
+              const forage = getForagingLegality(speciesId);
+              if (!forage) return null;
+              return <ForagingLegalityCard info={forage} />;
             })()}
 
             {/* Ecosystem role */}
@@ -1065,6 +1081,287 @@ export default function SpeciesDetailScreen() {
         </View>
       </Animated.View>
     </View>
+  );
+}
+
+// ─── Invasive Species Card ────────────────────────────────────────────────────
+
+function InvasiveCard({ info }: { info: InvasiveInfo }) {
+  const [expanded, setExpanded] = useState(false);
+  const cfg = IMPACT_LEVEL_CONFIG[info.impactLevel];
+
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(65).duration(280)}
+      style={[
+        {
+          marginHorizontal: 16,
+          marginTop: 14,
+          borderRadius: 18,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: cfg.color + '55',
+          backgroundColor: cfg.color + '12',
+        },
+        softShadow(0.06, 6, 2),
+      ]}
+    >
+      <Pressable
+        onPress={() => setExpanded((v) => !v)}
+        accessibilityRole="button"
+        accessibilityLabel="Invasive species — expand for action steps"
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 }}
+      >
+        <View
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 10,
+            backgroundColor: cfg.color,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="warning-outline" size={17} color={COLORS.cream} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              color: cfg.color,
+              fontSize: 10,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+              marginBottom: 1,
+            }}
+          >
+            Invasive Species · {cfg.label}
+          </Text>
+          <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 17 }} numberOfLines={expanded ? undefined : 2}>
+            {info.impactSummary}
+          </Text>
+        </View>
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+      </Pressable>
+
+      {expanded && (
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: cfg.color + '33',
+            padding: 14,
+            gap: 12,
+          }}
+        >
+          <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+            <Ionicons name="git-network-outline" size={14} color={COLORS.bark} style={{ marginTop: 1 }} />
+            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17, flex: 1, fontStyle: 'italic' }}>
+              Spreads by: {info.spreadMechanism}
+            </Text>
+          </View>
+
+          <View style={{ gap: 6 }}>
+            <Text style={{ color: COLORS.ink, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+              What to do
+            </Text>
+            {info.whatToDo.map((item, i) => (
+              <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+                <Ionicons name="checkmark" size={13} color={COLORS.sage} style={{ marginTop: 2 }} />
+                <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
+              </View>
+            ))}
+          </View>
+
+          {info.whatNotToDo && (
+            <View style={{ gap: 6 }}>
+              <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+                What not to do
+              </Text>
+              {info.whatNotToDo.map((item, i) => (
+                <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+                  <Ionicons name="close" size={13} color={COLORS.clay} style={{ marginTop: 2 }} />
+                  <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {info.removalNote && (
+            <View
+              style={{
+                backgroundColor: COLORS.surface,
+                borderRadius: 10,
+                padding: 10,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+              }}
+            >
+              <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', marginBottom: 3 }}>Removal guidance</Text>
+              <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>{info.removalNote}</Text>
+            </View>
+          )}
+
+          {info.reportTo && (
+            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>
+              <Text style={{ fontWeight: '700' }}>Report to: </Text>{info.reportTo}
+            </Text>
+          )}
+        </View>
+      )}
+    </Animated.View>
+  );
+}
+
+// ─── Foraging Legality Card ───────────────────────────────────────────────────
+
+function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
+  const [expanded, setExpanded] = useState(false);
+  const landTypes = Object.entries(info.byLandType) as [keyof typeof LAND_TYPE_LABELS, typeof info.byLandType[keyof typeof info.byLandType]][];
+
+  // Show a summary status for the collapsed header
+  const hasProhibited = landTypes.some(([, r]) => r === 'prohibited');
+  const hasAllowed = landTypes.some(([, r]) => r === 'allowed' || r === 'limited');
+  const headerColor = hasProhibited && !hasAllowed ? COLORS.clay : hasAllowed ? COLORS.sage : COLORS.gold;
+  const headerLabel = hasProhibited && !hasAllowed ? 'Prohibited on most public land' : hasAllowed ? 'Permitted with restrictions' : 'Check local regulations';
+
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(185).duration(280)}
+      style={[
+        {
+          marginHorizontal: 16,
+          marginTop: 16,
+          borderRadius: 18,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: COLORS.sand,
+          backgroundColor: COLORS.surface,
+        },
+        softShadow(0.05, 6, 2),
+      ]}
+    >
+      <Pressable
+        onPress={() => setExpanded((v) => !v)}
+        accessibilityRole="button"
+        accessibilityLabel="Foraging legality — expand for land-type rules"
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 }}
+      >
+        <View
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 10,
+            backgroundColor: headerColor + '22',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="basket-outline" size={17} color={headerColor} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              color: COLORS.bark,
+              fontSize: 10,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+              marginBottom: 1,
+            }}
+          >
+            Foraging Legality
+          </Text>
+          <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 17 }}>
+            {headerLabel}
+          </Text>
+        </View>
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+      </Pressable>
+
+      {expanded && (
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: COLORS.border,
+            padding: 14,
+            gap: 12,
+          }}
+        >
+          {info.specialProtection && (
+            <View
+              style={{
+                backgroundColor: '#C0392B11',
+                borderRadius: 10,
+                padding: 10,
+                borderWidth: 1,
+                borderColor: '#C0392B33',
+              }}
+            >
+              <Text style={{ color: '#C0392B', fontSize: 12, fontWeight: '700', marginBottom: 3 }}>Special Protection</Text>
+              <Text style={{ color: COLORS.ink, fontSize: 12, lineHeight: 17 }}>{info.specialProtection}</Text>
+            </View>
+          )}
+
+          <View style={{ gap: 6 }}>
+            <Text style={{ color: COLORS.ink, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+              By land type
+            </Text>
+            {landTypes.map(([landType, rule]) => {
+              if (!rule) return null;
+              const cfg = RULE_CONFIG[rule];
+              return (
+                <View
+                  key={landType}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 8,
+                    paddingVertical: 4,
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.border,
+                  }}
+                >
+                  <Ionicons name={cfg.icon as never} size={14} color={cfg.color} />
+                  <Text style={{ color: COLORS.ink, fontSize: 13, flex: 1 }}>
+                    {LAND_TYPE_LABELS[landType]}
+                  </Text>
+                  <Text style={{ color: cfg.color, fontSize: 12, fontWeight: '700' }}>{cfg.label}</Text>
+                </View>
+              );
+            })}
+          </View>
+
+          {info.personalUseLimit && (
+            <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+              <Ionicons name="scale-outline" size={14} color={COLORS.bark} style={{ marginTop: 1 }} />
+              <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17, flex: 1 }}>{info.personalUseLimit}</Text>
+            </View>
+          )}
+
+          <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>{info.notes}</Text>
+
+          {info.foragerTip && (
+            <View
+              style={{
+                backgroundColor: COLORS.sage + '22',
+                borderRadius: 10,
+                padding: 10,
+                borderLeftWidth: 3,
+                borderLeftColor: COLORS.sage,
+              }}
+            >
+              <Text style={{ color: COLORS.ink, fontSize: 12, lineHeight: 17 }}>
+                <Text style={{ fontWeight: '700' }}>Tip: </Text>{info.foragerTip}
+              </Text>
+            </View>
+          )}
+
+          <Text style={{ color: COLORS.bark, fontSize: 11, lineHeight: 15, fontStyle: 'italic', marginTop: 2 }}>
+            Regulations change. Always verify with the managing agency before foraging.
+          </Text>
+        </View>
+      )}
+    </Animated.View>
   );
 }
 

@@ -2558,6 +2558,110 @@ export const CATALOG: Species[] = [
     idTips: ['Bright chartreuse or yellow-green patches embedded in granite', 'Black borders between adjacent thalli create map-like pattern', 'Crustose — cannot be peeled off without damaging the rock', 'Grows at higher elevations on northeast-facing rock faces'],
     stats: [{ label: 'Color', value: 'Chartreuse-yellow' }, { label: 'Growth', value: 'Crustose (embedded)' }, { label: 'Lifespan', value: 'Thousands of years' }, { label: 'Scientific use', value: 'Lichenometry dating' }],
   },
+
+  // ─── Invasive Species ─────────────────────────────────────────────────────────
+  {
+    id: 'buffelgrass',
+    commonName: 'Buffelgrass',
+    latin: 'Pennisetum ciliare',
+    family: 'Grasses · Poaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'The single greatest threat to the Sonoran Desert ecosystem. Introduced from Africa as erosion control and livestock forage in the 1930s–70s, buffelgrass has escaped into natural desert and now coats hillsides across Arizona and Sonora. It creates continuous fuel loads that generate fast-moving crown fires — fires that saguaros, palo verdes, and ironwoods did not evolve to survive.',
+    didYouKnow: 'The 2020 Bighorn Fire near Tucson burned over 119,000 acres, driven largely by buffelgrass fuel. Areas once covered in saguaros now grow buffelgrass monocultures.',
+    idTips: [
+      'Dense clumps of grass 1–3 ft tall on rocky desert hillsides',
+      'Purple-tinged seed heads late summer; tan straw color when dry',
+      'Clumping growth habit; bright green after rain, forming solid carpets',
+      'Thrives on rocky slopes where native plants leave bare soil — look for it on roadsides and disturbed ground',
+    ],
+    stats: [{ label: 'Origin', value: 'Africa / India' }, { label: 'Height', value: '1–3 ft' }, { label: 'Fire risk', value: 'Extreme' }, { label: 'Spread', value: 'Expanding rapidly' }],
+  },
+  {
+    id: 'tamarisk',
+    commonName: 'Tamarisk (Salt Cedar)',
+    latin: 'Tamarix ramosissima',
+    family: 'Tamaricaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'A shrub to small tree from Central Asia and the Middle East that has colonized every major riparian corridor in the Southwest. Tamarisk transpires 200+ gallons of water per day, lowering water tables and salinizing soil with salt secreted through its leaves. It has choked out native cottonwood-willow galleries along thousands of miles of desert rivers and streams.',
+    didYouKnow: 'A large tamarisk can transpire up to 200 gallons of water per day — drawing down water tables and outcompeting native willows and cottonwoods that wildlife depend on.',
+    idTips: [
+      'Feathery, scale-like leaves and pink to white plume-like flowers',
+      'Grey-green to reddish bark on older stems',
+      'Dense thickets along desert rivers, dry washes, and reservoir edges',
+      'Sheds salt through leaf glands — bare soil around plants may taste salty',
+    ],
+    stats: [{ label: 'Origin', value: 'Eurasia / Middle East' }, { label: 'Height', value: '5–25 ft' }, { label: 'Water use', value: '200 gal/day' }, { label: 'Range', value: 'All SW rivers' }],
+  },
+  {
+    id: 'cheatgrass',
+    commonName: 'Cheatgrass',
+    latin: 'Bromus tectorum',
+    family: 'Grasses · Poaceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description: 'Arrived from Eurasia in contaminated crop seed in the late 1800s and has now replaced native bunchgrass communities across 100 million acres of the Great Basin. Cheatgrass germinates in fall, grows through winter, dries out by late spring, and creates an annual flash-fuel cycle that has doubled or tripled Great Basin fire frequency. Sagebrush ecosystems that took centuries to develop can be replaced by cheatgrass monoculture in a single fire.',
+    didYouKnow: 'Before cheatgrass, Great Basin wildfires were rare — return intervals of 60–110 years. With cheatgrass, fires return every 3–5 years, preventing sagebrush recovery and accelerating its own spread.',
+    idTips: [
+      'Annual grass 8–24 in tall with drooping, purplish-to-tawny seed heads in spring',
+      'Sharp awns on seeds catch on clothing and socks — "cheat" refers to cheating farmers out of their crops',
+      'Germinates in fall; entire hillsides bright green in winter, gone by June',
+      'Leaves have soft hairs on both surfaces (use a hand lens)',
+    ],
+    stats: [{ label: 'Origin', value: 'Eurasia' }, { label: 'Height', value: '8–24 in' }, { label: 'Season', value: 'Winter–spring annual' }, { label: 'Impact', value: '100M+ acres' }],
+  },
+  {
+    id: 'sahara-mustard',
+    commonName: 'Sahara Mustard',
+    latin: 'Brassica tournefortii',
+    family: 'Mustards · Brassicaceae',
+    kind: 'cactus',
+    region: 'MOJAVE',
+    description: 'A North African mustard now carpeting the Mojave and Sonoran Deserts with dense stands in early spring. In good rain years it can dominate wildflower flats so completely that native annuals like desert gold and phacelia cannot germinate. Each plant produces thousands of seeds; a single Sahara mustard plant can release over 9,000 seeds. Particularly devastating for the spring superbloom years that draw tourists to Anza-Borrego and Joshua Tree.',
+    didYouKnow: 'A single Sahara mustard plant can produce up to 9,000 seeds — and when it dries, it acts as a tumbleweed, broadcasting seeds as it rolls across the desert.',
+    idTips: [
+      'Rosette of large, deeply lobed, hairy leaves in winter (resembles dandelion)',
+      'Tall branching stalks 1–3 ft in spring with small yellow 4-petaled flowers',
+      'Narrow seed pods ("siliques") on long stalks; distinctive mustard family cross-shaped flowers',
+      'Turns tan and papery by April–May; rolls as a tumbleweed when dry',
+    ],
+    stats: [{ label: 'Origin', value: 'North Africa' }, { label: 'Height', value: '1–3 ft' }, { label: 'Seeds/plant', value: 'Up to 9,000' }, { label: 'Bloom', value: 'Feb–April' }],
+  },
+  {
+    id: 'russian-thistle',
+    commonName: 'Tumbleweed (Russian Thistle)',
+    latin: 'Salsola tragus',
+    family: 'Amaranthaceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description: 'The iconic tumbleweed of Western movies arrived in contaminated flaxseed from Ukraine in 1873 and spread across the continent within decades. Now one of the most common plants in arid North America, it exploits disturbed soils along roadsides, in fallow fields, and on overgrazed range. Each dried plant carries 250,000 seeds. Despite its deep symbolic roots in American West imagery, it is entirely non-native.',
+    didYouKnow: 'The tumbleweed is one of the most successful biological invaders in history — arriving in 1873, it had spread to 16 western states within just 14 years.',
+    idTips: [
+      'Rounded, many-branched plant 1–4 ft across; stiff and spiny when dry',
+      'Fleshy, succulent needle-like leaves when young; green to reddish as it matures',
+      'Tiny pinkish flowers in leaf axils summer–fall',
+      'Breaks at the base when mature and rolls with the wind, spreading seeds',
+    ],
+    stats: [{ label: 'Origin', value: 'Eastern Europe / Asia' }, { label: 'Seeds', value: '250,000 per plant' }, { label: 'Spread', value: 'Wind dispersal' }, { label: 'Arrived', value: '1873 (USA)' }],
+  },
+  {
+    id: 'african-rue',
+    commonName: 'African Rue',
+    latin: 'Peganum harmala',
+    family: 'Nitrariaceae',
+    kind: 'cactus',
+    region: 'CHIHUAHUAN',
+    description: 'A toxic shrub from the Mediterranean and Central Asia that has invaded 500,000+ acres of Chihuahuan Desert grassland and is spreading rapidly through the Southwest. African rue displaces native grasses with dense monocultures and is toxic to livestock, wildlife, and humans. All parts contain harmine and harmaline — psychoactive alkaloids — and are poisonous if consumed.',
+    didYouKnow: 'African rue seeds contain harmine and harmaline, potent psychoactive alkaloids used historically in Middle Eastern ritual. All parts are toxic to livestock and can be lethal to sheep.',
+    idTips: [
+      'Low, bushy shrub 1–3 ft tall; deeply divided, fleshy blue-green leaves',
+      'White 5-petaled flowers 0.5–1 in across, blooming spring through fall',
+      'Round seed capsules that persist on the plant long after seeds disperse',
+      'Forms dense impenetrable mats on disturbed, heavily grazed soils',
+    ],
+    stats: [{ label: 'Origin', value: 'Mediterranean / Central Asia' }, { label: 'Height', value: '1–3 ft' }, { label: 'Toxicity', value: 'Highly toxic to livestock' }, { label: 'Range', value: 'Chihuahuan, spreading' }],
+  },
 ];
 
 // Month numbers (1=Jan … 12=Dec) when each species is most likely to be encountered.
@@ -3023,11 +3127,12 @@ export function getTaxonomy(speciesId: string): Taxonomy | undefined {
 
 // ─── Taxon Establishment Status ──────────────────────────────────────────────
 
-export type EstablishmentStatus = 'native' | 'introduced' | 'endemic';
+export type EstablishmentStatus = 'native' | 'introduced' | 'invasive' | 'endemic';
 
 export const ESTABLISHMENT_LABEL: Record<EstablishmentStatus, string> = {
   native: 'Native',
   introduced: 'Introduced',
+  invasive: 'Invasive Species',
   endemic: 'Endemic',
 };
 
@@ -3187,6 +3292,13 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'antelope-bitterbrush':       'native',
   // ── Introduced ─────────────────────────────────────────────────────────────
   'western-honey-bee':          'introduced', // Apis mellifera — European origin
+  // ── Invasive ───────────────────────────────────────────────────────────────
+  buffelgrass:                  'invasive',
+  tamarisk:                     'invasive',
+  cheatgrass:                   'invasive',
+  'sahara-mustard':             'invasive',
+  'russian-thistle':            'invasive',
+  'african-rue':                'invasive',
   // ── Fish ────────────────────────────────────────────────────────────────────
   'desert-pupfish':             'native',
   'gila-trout':                 'endemic', // endemic to Gila River headwaters

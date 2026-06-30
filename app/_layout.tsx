@@ -111,6 +111,7 @@ function RootLayoutNav() {
         <Stack.Screen name="compare" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="journal-stats" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sighting/[id]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="phenology" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <OfflineBar />
       <StatusBar style="dark" />

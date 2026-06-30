@@ -14,6 +14,7 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { getCategoryCount, getSpeciesById } from '@/constants/catalog';
+import { getCurrentMonth, getPhenologyForMonth, MONTH_NAMES_FULL } from '@/constants/phenology';
 import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 import { useStreak } from '@/hooks/useStreak';
@@ -342,6 +343,8 @@ export default function HomeScreen() {
         </PressableScale>
       </Reveal>
 
+      <PhenologyCard />
+
       <Reveal delay={170}>
         <View
           style={{
@@ -520,5 +523,82 @@ export default function HomeScreen() {
         ))}
       </View>
     </ScrollView>
+  );
+}
+
+function PhenologyCard() {
+  const router = useRouter();
+  const month = getCurrentMonth();
+  const events = getPhenologyForMonth(month);
+  const preview = events.slice(0, 3);
+
+  return (
+    <Reveal delay={155}>
+      <PressableScale
+        onPress={() => router.push('/phenology' as never)}
+        accessibilityLabel="Open phenology calendar"
+        accessibilityRole="button"
+        style={[
+          {
+            marginHorizontal: 20,
+            marginTop: 12,
+            borderRadius: 16,
+            backgroundColor: COLORS.ink,
+            overflow: 'hidden',
+          },
+          softShadow(0.12, 10, 3),
+        ]}
+      >
+        <View style={{ padding: 14 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+            <Ionicons name="leaf-outline" size={15} color={COLORS.sage} />
+            <Text style={{ color: COLORS.sage, fontSize: 11, fontWeight: '700', marginLeft: 5, letterSpacing: 0.5 }}>
+              PHENOLOGY
+            </Text>
+            <View style={{ flex: 1 }} />
+            <Text style={{ color: COLORS.bark, fontSize: 11 }}>
+              {events.length} events in {MONTH_NAMES_FULL[month]}
+            </Text>
+            <Ionicons name="chevron-forward" size={13} color={COLORS.bark} style={{ marginLeft: 2 }} />
+          </View>
+
+          <Text style={{ color: COLORS.cream, fontSize: 15, fontWeight: '700', marginBottom: 10 }}>
+            What&apos;s Happening Now
+          </Text>
+
+          {preview.map((e, i) => (
+            <View
+              key={e.id}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+                marginBottom: i < preview.length - 1 ? 6 : 0,
+              }}
+            >
+              <View
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 3,
+                  backgroundColor: COLORS.sage,
+                  marginLeft: 2,
+                }}
+              />
+              <Text style={{ color: COLORS.sand, fontSize: 13, flex: 1 }} numberOfLines={1}>
+                {e.commonName}
+                <Text style={{ color: COLORS.bark, fontSize: 12 }}> — {e.eventType}</Text>
+              </Text>
+            </View>
+          ))}
+
+          {events.length > 3 && (
+            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 6 }}>
+              + {events.length - 3} more →
+            </Text>
+          )}
+        </View>
+      </PressableScale>
+    </Reveal>
   );
 }

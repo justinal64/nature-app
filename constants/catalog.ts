@@ -2101,6 +2101,154 @@ export const CATALOG: Species[] = [
     idTips: ['Tall, slender trunk (up to 15 ft) topped with fountain of leaves', 'Long, narrow, pale green leaves with fine threads on margins', 'Large white bell-shaped flowers on tall panicle', 'Dry grassland and desert plains at 2,500–5,500 ft'],
     stats: [{ label: 'Height', value: '6–15 ft' }, { label: 'Bloom', value: 'Apr–Jun' }, { label: 'Pollinator', value: 'Yucca moth only' }, { label: 'Status', value: 'Native' }],
   },
+  // ─── Expanded Plants — Sonoran ────────────────────────────────────────────────
+  {
+    id: 'globe-mallow',
+    commonName: 'Apricot Globe Mallow',
+    latin: 'Sphaeralcea ambigua',
+    family: 'Mallow · Malvaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'One of the most common and cheerful wildflowers of the Sonoran Desert, covering roadsides and open flats in dense mats of vivid apricot-orange from February through October. Drought-deciduous but extremely hardy — it regrows quickly after rain and can bloom in nearly any month given moisture. The fuzzy leaves and stems are covered in star-shaped hairs that help reflect intense sunlight.',
+    didYouKnow: 'Globe mallow flowers range from deep red to lavender to white across individuals. The orange color is most common in the Sonoran Desert, while white-flowered plants are more frequent at higher elevations.',
+    idTips: ['Dense clusters of vivid apricot-orange cup-shaped flowers, 3⁄4–1 in across', 'Gray-green leaves covered in fine star-shaped hairs — feel rough and fuzzy', 'Shrubby, 1–5 ft tall; branches from the base', 'Ubiquitous on roadsides, bajadas, and disturbed desert soil'],
+    stats: [{ label: 'Height', value: '1–5 ft' }, { label: 'Bloom', value: 'Feb–Oct' }, { label: 'Color', value: 'Apricot-orange (rarely white/red)' }, { label: 'Habitat', value: 'Desert flats, roadsides' }],
+  },
+  {
+    id: 'sacred-datura',
+    commonName: 'Sacred Datura',
+    latin: 'Datura wrightii',
+    family: 'Nightshade · Solanaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'A dramatic desert plant with enormous white trumpet flowers up to 8 inches long that open at dusk and close by midday, releasing a powerful sweet fragrance that attracts hawkmoths. Every part of this plant — leaves, seeds, roots — is highly toxic and hallucinogenic, containing tropane alkaloids (scopolamine, atropine). Sacred in Tohono O\'odham and Navajo traditions, used carefully by medicine people in controlled ritual contexts.',
+    didYouKnow: 'Sacred datura flowers are exclusively pollinated by the White-lined Sphinx Moth (a hawkmoth) which has a proboscis long enough to reach the nectar at the base of the 8-inch trumpet — no other common pollinator can reach it.',
+    idTips: ['Enormous white trumpet-shaped flowers, 6–8 in long, often with purple tint at throat', 'Flowers open at dusk, close and wilt by midday', 'Large, gray-green, velvety leaves with unpleasant smell when crushed', 'Spiny egg-shaped seed pods, 1.5 in; entire plant is TOXIC — do not handle then touch eyes'],
+    stats: [{ label: 'Flower', value: '6–8 in, white trumpet' }, { label: 'Bloom', value: 'May–Oct, dusk-opening' }, { label: 'Toxicity', value: 'All parts highly toxic' }, { label: 'Pollinator', value: 'White-lined Sphinx Moth' }],
+  },
+  {
+    id: 'jojoba',
+    commonName: 'Jojoba',
+    latin: 'Simmondsia chinensis',
+    family: 'Jojoba · Simmondsiaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'A dense, evergreen desert shrub that dominates rocky hillsides and bajadas of the Sonoran Desert. Jojoba produces a liquid wax in its seeds — the only plant known to store energy as a wax rather than oil — which has identical properties to sperm whale oil. After the international sperm whale hunting ban in the 1970s, jojoba became a critical commercial substitute; it is now in every major cosmetics and lubricant brand worldwide.',
+    didYouKnow: 'Jojoba is dioecious — there are separate male and female plants. The female produces the wax-filled seeds but must be within wind-pollination distance of a male. Dense stands often include both sexes intermingled.',
+    idTips: ['Dense, round evergreen shrub, 3–6 ft; leathery oval blue-green leaves', 'Inconspicuous yellow-green flowers; female plants produce brown acorn-like seeds', 'Found on rocky slopes and bajadas, rarely on flat desert floors', 'Browsed heavily by deer and javelina; seeds eaten by birds and rodents'],
+    stats: [{ label: 'Height', value: '3–6 ft' }, { label: 'Leaf', value: 'Leathery, evergreen oval' }, { label: 'Seed oil', value: 'Liquid wax (unique)' }, { label: 'Habitat', value: 'Rocky slopes, bajadas' }],
+  },
+  {
+    id: 'desert-lavender',
+    commonName: 'Desert Lavender',
+    latin: 'Hyptis emoryi',
+    family: 'Mint · Lamiaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'A silvery-gray aromatic shrub of desert washes and rocky canyon slopes, beloved by native bees, hummingbirds, and butterflies. The small pale-violet flowers smell unmistakably like true lavender — minty and sweet — and the whole plant is powerfully fragrant in the heat. A keystone plant for desert pollinators: its long bloom season provides nectar when few other plants flower.',
+    didYouKnow: 'Desert lavender is not closely related to culinary lavender (a Mediterranean plant) — the similar fragrance is convergent evolution, with both plants producing aromatic compounds that deter herbivory in hot, dry climates.',
+    idTips: ['Dense silvery-gray shrub, 3–10 ft, in desert washes and canyon walls', 'Small pale violet to white tubular flowers on long wand-like stems', 'Powerfully fragrant — crush a leaf to confirm', 'Attracts constant hummingbird and bee traffic when blooming'],
+    stats: [{ label: 'Height', value: '3–10 ft' }, { label: 'Bloom', value: 'Feb–May, Sep–Nov' }, { label: 'Fragrance', value: 'Lavender-like' }, { label: 'Habitat', value: 'Desert washes, rocky slopes' }],
+  },
+  {
+    id: 'arizona-sycamore',
+    commonName: 'Arizona Sycamore',
+    latin: 'Platanus wrightii',
+    family: 'Sycamore · Platanaceae',
+    kind: 'cactus',
+    region: 'SONORAN',
+    description: 'A large, strikingly beautiful tree that marks every desert canyon stream in Arizona and New Mexico, its brilliant white and cream patchwork bark unmistakable from a distance. Grows only where its roots can reach permanent water — riparian canyons and perennial streams — forming shady groves that are critical habitat for dozens of Sonoran Desert bird species. The large lobed leaves turn gold in fall.',
+    didYouKnow: 'Arizona sycamores are one of the few trees that can be identified from aircraft — their dazzling white trunks visible from miles away trace the hidden network of permanent desert streams.',
+    idTips: ['Large tree (to 80 ft) with brilliant white-and-cream patchwork bark', 'Huge maple-like leaves, 6–10 in across, 3–5 lobes, bright green', 'Grows only along permanent streams in desert canyons', 'Tan ball-shaped seed clusters hang on threads through winter'],
+    stats: [{ label: 'Height', value: 'To 80 ft' }, { label: 'Bark', value: 'White/cream patchwork — unmistakable' }, { label: 'Habitat', value: 'Permanent canyon streams only' }, { label: 'Leaves', value: 'Fall gold' }],
+  },
+  // ─── Expanded Plants — Mojave ─────────────────────────────────────────────────
+  {
+    id: 'desert-trumpet',
+    commonName: 'Desert Trumpet',
+    latin: 'Eriogonum inflatum',
+    family: 'Buckwheat · Polygonaceae',
+    kind: 'cactus',
+    region: 'MOJAVE',
+    description: 'One of the most distinctive wildflowers of the Mojave Desert, instantly recognizable by its hollow inflated stem just below the branching point — the "trumpet" that gives it its name. The stem is photosynthetic, allowing the plant to function as a leafless cactus for much of the year. Tiny yellow flowers appear at branch tips in spring and summer. Indigenous peoples used the hollow stems as pipes and straws.',
+    didYouKnow: 'The inflated portion of the stem is filled with CO₂ — it is not hollow air but a gas-filled bladder that may help buffer the stem against temperature extremes in the blazing Mojave sun.',
+    idTips: ['Yellow-green inflated bladder on stem just below main branching — unmistakable', 'Leafless upper stems; basal leaves low to the ground', 'Tiny yellow to red flowers at stem tips', 'Found on rocky flats and washes throughout the Mojave'],
+    stats: [{ label: 'Height', value: '1–3 ft' }, { label: 'Bloom', value: 'Mar–Sep' }, { label: 'Stem', value: 'Inflated CO₂-filled bladder' }, { label: 'Habitat', value: 'Rocky desert flats, washes' }],
+  },
+  {
+    id: 'fremont-cottonwood',
+    commonName: 'Fremont Cottonwood',
+    latin: 'Populus fremontii',
+    family: 'Willow · Salicaceae',
+    kind: 'cactus',
+    region: 'MOJAVE',
+    description: 'The dominant riparian tree of the Desert Southwest, forming lush gallery forests along desert rivers and streams that are visually and ecologically jarring in the surrounding arid landscape. One of the most productive wildlife habitats in the West — a single large cottonwood can shelter more bird species than entire square miles of surrounding desert. The fluffy white seed cotton that drifts from female trees in May gives the species its name.',
+    didYouKnow: 'Cottonwood groves along the Colorado River were once so vast that early explorers navigated by them. The near-complete loss of natural flooding due to dams has prevented regeneration — most surviving old-growth cottonwood forests will not naturally replace themselves when they die.',
+    idTips: ['Large tree (to 100 ft) with deeply furrowed gray bark on old trunks', 'Triangular to diamond-shaped bright green leaves that flutter constantly in any breeze', 'Grows only on riverbanks, springs, and permanent desert streams', 'Brilliant yellow fall color; female trees release massive amounts of white cottony seed in spring'],
+    stats: [{ label: 'Height', value: 'To 100 ft' }, { label: 'Habitat', value: 'Desert rivers, springs, permanent streams' }, { label: 'Fall color', value: 'Brilliant yellow' }, { label: 'Wildlife', value: 'Critical nesting habitat' }],
+  },
+  // ─── Expanded Plants — Chihuahuan ─────────────────────────────────────────────
+  {
+    id: 'texas-ranger',
+    commonName: 'Texas Ranger',
+    latin: 'Leucophyllum frutescens',
+    family: 'Plantain · Plantaginaceae',
+    kind: 'cactus',
+    region: 'CHIHUAHUAN',
+    description: 'Also called the Barometer Bush or Rain Sage, Texas Ranger is one of the most useful indicators of incoming rain in the Chihuahuan Desert — it bursts into a stunning display of vivid purple-magenta flowers within hours of detecting high humidity, often before any rain actually falls. A popular landscape plant throughout the Sun Belt for its extreme drought tolerance, attractive silver-gray foliage, and spectacular monsoon bloom.',
+    didYouKnow: 'Texas Ranger is so reliably triggered by humidity that ranchers use it as a weather indicator — when the shrub blooms, rain is typically within 24 hours. It can bloom multiple times per year in response to each monsoon surge.',
+    idTips: ['Dense silver-gray shrub, 5–8 ft, with small oval fuzzy leaves', 'Vivid purple-magenta tubular flowers cover the whole shrub after summer rain', 'Blooms seemingly overnight following humidity spikes', 'Common in Chihuahuan Desert washes and limestone slopes'],
+    stats: [{ label: 'Height', value: '5–8 ft' }, { label: 'Bloom', value: 'After rain — anytime May–Oct' }, { label: 'Trigger', value: 'Humidity (before rain falls)' }, { label: 'Common name', value: 'Barometer Bush, Rain Sage' }],
+  },
+  {
+    id: 'four-wing-saltbush',
+    commonName: 'Four-wing Saltbush',
+    latin: 'Atriplex canescens',
+    family: 'Amaranth · Amaranthaceae',
+    kind: 'cactus',
+    region: 'CHIHUAHUAN',
+    description: 'The most widespread shrub in North American deserts, covering millions of acres from the Chihuahuan Desert to the Great Basin. Recognized by its distinctive four-winged papery seed clusters — masses of tan papery bracts arranged in four vertical wings — which persist on the plant through winter and rattle in the wind. Extremely salt- and drought-tolerant, it colonizes alkaline soils that few other plants can survive.',
+    didYouKnow: 'Four-wing saltbush was a critical food source for dozens of indigenous peoples across the Southwest — the seeds were ground into flour, the leaves eaten as greens (they are very salty, like miso), and the plant used medicinally for nearly everything.',
+    idTips: ['Silver-gray, densely branched shrub, 2–6 ft, with small elongated leaves', 'Distinctive four-winged tan seed clusters, 0.5–1 in, papery and persistent', 'Often found on alkaline or saline soils where little else grows', 'One of the most common shrubs across the entire Southwest'],
+    stats: [{ label: 'Height', value: '2–6 ft' }, { label: 'Seeds', value: 'Four-winged papery bracts — ID key' }, { label: 'Soil', value: 'Alkaline, saline tolerant' }, { label: 'Range', value: 'Most widespread desert shrub' }],
+  },
+  {
+    id: 'desert-zinnia',
+    commonName: 'Desert Zinnia',
+    latin: 'Zinnia grandiflora',
+    family: 'Aster · Asteraceae',
+    kind: 'cactus',
+    region: 'CHIHUAHUAN',
+    description: 'A low, densely mounding wildflower that carpets rocky desert hillsides and limestone flats with bright yellow flowers from late spring through fall. One of the most cheerful and persistent wildflowers of the Chihuahuan Desert — the papery yellow ray flowers dry and persist on the plant for weeks, remaining vivid. Extensively browsed by deer but regrows readily. Widely used in xeriscape landscaping.',
+    didYouKnow: 'Desert zinnia flowers persist in their yellow color even after they dry on the plant — the dried ray petals maintain color for weeks or months, unlike most wildflowers that fade quickly. This is why single plants look perpetually in bloom.',
+    idTips: ['Low mounding plant, 6–12 in tall, forming dense mats on rocky ground', 'Bright yellow flowers with 3–6 broad ray petals, papery when dried', 'Very narrow needle-like leaves, opposite on the stem', 'Rocky limestone soils and desert grassland edges'],
+    stats: [{ label: 'Height', value: '6–12 in' }, { label: 'Bloom', value: 'May–Oct' }, { label: 'Flowers', value: 'Papery — persist dried on plant' }, { label: 'Habitat', value: 'Rocky limestone flats' }],
+  },
+  // ─── Expanded Plants — Great Basin ────────────────────────────────────────────
+  {
+    id: 'mormon-tea',
+    commonName: 'Mormon Tea',
+    latin: 'Ephedra viridis',
+    family: 'Ephedra · Ephedraceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description: 'A jointed, leafless photosynthetic shrub that looks more like a horse-tail fern or bundle of green drinking straws than a typical desert plant. The green stem joints do all the photosynthesis; the leaves are reduced to tiny scales at the joints. Contains ephedrine alkaloids — early settlers and Mormon pioneers made a stimulating tea from the stems (hence the name), and it has been used medicinally by indigenous peoples across the Great Basin for thousands of years.',
+    didYouKnow: 'Ephedra is an ancient gymnosperm lineage with no close living relatives among common plants — it is more closely related to conifers than to flowering shrubs. Mormon tea plants growing today may be genetically similar to plants that existed when dinosaurs roamed the Colorado Plateau.',
+    idTips: ['Bundle of jointed green photosynthetic stems, no true leaves', 'Whorled or opposite tiny scale-like bracts at each joint', 'Small papery seed cones at branch tips in spring', 'Found on dry rocky slopes and plains throughout the Great Basin'],
+    stats: [{ label: 'Height', value: '1–4 ft' }, { label: 'Appearance', value: 'Jointed green leafless stems' }, { label: 'Contains', value: 'Ephedrine alkaloids' }, { label: 'Lineage', value: 'Gymnosperm — not a flowering plant' }],
+  },
+  {
+    id: 'antelope-bitterbrush',
+    commonName: 'Antelope Bitterbrush',
+    latin: 'Purshia tridentata',
+    family: 'Rose · Rosaceae',
+    kind: 'cactus',
+    region: 'GREAT_BASIN',
+    description: 'The single most important browse shrub in the Great Basin, providing critical winter forage for mule deer, pronghorn, and bighorn sheep. A medium to large shrub with small three-lobed leaves and masses of small yellow flowers in spring. Its nitrogen-fixing root nodules improve soil quality in poor desert soils. Named for the pronghorn antelope that depend on it heavily during harsh Great Basin winters.',
+    didYouKnow: 'Mule deer in the Great Basin can survive on antelope bitterbrush alone during winter when snow covers grass and forbs. A single deer can consume 3–4 lbs of bitterbrush browse per day — stands that are over-browsed may take decades to recover.',
+    idTips: ['Dense twiggy shrub, 3–8 ft, with small three-toothed wedge-shaped leaves', 'Small cream to pale yellow flowers, 5-petaled, in early spring', 'Often grows with big sagebrush at the same elevations', 'Extremely important deer and pronghorn browse — grazed to ground level in some areas'],
+    stats: [{ label: 'Height', value: '3–8 ft' }, { label: 'Bloom', value: 'Apr–Jun' }, { label: 'Browse value', value: 'Critical — #1 winter deer food' }, { label: 'Habitat', value: 'Sagebrush steppe, pinyon-juniper' }],
+  },
   // ─── Great Basin Birds (round 2) ─────────────────────────────────────────────
   {
     id: 'black-billed-magpie',
@@ -2621,6 +2769,19 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'western-black-widow':        ALL,
   'giant-desert-hairy-scorpion': [4, 5, 6, 7, 8, 9, 10],
   'vinegaroon':                 [7, 8, 9, 10],   // monsoon season emergence
+  // Expanded plants
+  'globe-mallow':         [2, 3, 4, 5, 6, 7, 8, 9, 10],  // nearly year-round given any rain
+  'sacred-datura':        [5, 6, 7, 8, 9, 10],            // dusk-blooming spring–fall
+  'jojoba':               ALL,                              // evergreen
+  'desert-lavender':      [2, 3, 4, 5, 9, 10, 11],        // spring and fall bloom flushes
+  'arizona-sycamore':     ALL,                              // riparian, year-round presence
+  'desert-trumpet':       [3, 4, 5, 6, 7, 8, 9],          // spring through late summer
+  'fremont-cottonwood':   ALL,                              // riparian, year-round
+  'texas-ranger':         [5, 6, 7, 8, 9, 10],            // blooms after monsoon humidity
+  'four-wing-saltbush':   ALL,                              // persistent year-round
+  'desert-zinnia':        [5, 6, 7, 8, 9, 10],            // late spring through fall
+  'mormon-tea':           ALL,                              // photosynthetic stems visible year-round
+  'antelope-bitterbrush': ALL,                              // critical winter browse — year-round
   // Fish — present year-round in their permanent water habitats
   'desert-pupfish':             ALL,
   'gila-trout':                 ALL,
@@ -2782,7 +2943,20 @@ const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
   'big-sagebrush':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Asterales',      family:'Asteraceae',       genus:'Artemisia',     species:'tridentata'  },
   'prickly-pear':    { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Opuntia',       species:'engelmannii' },
   'blue-palo-verde': { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Parkinsonia',   species:'florida'     },
-  'lechuguilla':     { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Agave',         species:'lechuguilla' },
+  'lechuguilla':          { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Agave',         species:'lechuguilla'   },
+  // ── Expanded plants ──────────────────────────────────────────────────────────
+  'globe-mallow':         { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Malvales',       family:'Malvaceae',        genus:'Sphaeralcea',   species:'ambigua'       },
+  'sacred-datura':        { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Solanales',      family:'Solanaceae',       genus:'Datura',        species:'wrightii'      },
+  'jojoba':               { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Simmondsiaceae',   genus:'Simmondsia',    species:'chinensis'     },
+  'desert-lavender':      { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Lamiales',       family:'Lamiaceae',        genus:'Hyptis',        species:'emoryi'        },
+  'arizona-sycamore':     { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Proteales',      family:'Platanaceae',      genus:'Platanus',      species:'wrightii'      },
+  'desert-trumpet':       { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Polygonaceae',     genus:'Eriogonum',     species:'inflatum'      },
+  'fremont-cottonwood':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Malpighiales',   family:'Salicaceae',       genus:'Populus',       species:'fremontii'     },
+  'texas-ranger':         { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Lamiales',       family:'Plantaginaceae',   genus:'Leucophyllum',  species:'frutescens'    },
+  'four-wing-saltbush':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Amaranthaceae',    genus:'Atriplex',      species:'canescens'     },
+  'desert-zinnia':        { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Asterales',      family:'Asteraceae',       genus:'Zinnia',        species:'grandiflora'   },
+  'mormon-tea':           { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Gnetopsida',    order:'Ephedrales',     family:'Ephedraceae',      genus:'Ephedra',       species:'viridis'       },
+  'antelope-bitterbrush': { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Rosales',        family:'Rosaceae',         genus:'Purshia',       species:'tridentata'    },
   // ── Birds ───────────────────────────────────────────────────────────────────
   'gambels-quail':          { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Galliformes',    family:'Odontophoridae',  genus:'Callipepla',     species:'gambelii'      },
   'roadrunner':             { kingdom:'Animalia', phylum:'Chordata', class:'Aves', order:'Cuculiformes',   family:'Cuculidae',       genus:'Geococcyx',      species:'californianus' },
@@ -2998,6 +3172,19 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   shadscale:                    'native',
   greasewood:                   'native',
   'gambel-quail':               'native',
+  // ── Expanded plants ──────────────────────────────────────────────────────────
+  'globe-mallow':               'native',
+  'sacred-datura':              'native',
+  'jojoba':                     'native',
+  'desert-lavender':            'native',
+  'arizona-sycamore':           'native',
+  'desert-trumpet':             'native',
+  'fremont-cottonwood':         'native',
+  'texas-ranger':               'native',
+  'four-wing-saltbush':         'native',
+  'desert-zinnia':              'native',
+  'mormon-tea':                 'native',
+  'antelope-bitterbrush':       'native',
   // ── Introduced ─────────────────────────────────────────────────────────────
   'western-honey-bee':          'introduced', // Apis mellifera — European origin
   // ── Fish ────────────────────────────────────────────────────────────────────

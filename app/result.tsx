@@ -423,14 +423,17 @@ export default function ResultScreen() {
                   {topResult.speciesId && (() => {
                     const danger = getDangerInfo(topResult.speciesId!);
                     if (!danger) return null;
-                    const bgColor = danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
-                    const textColor = danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+                    const isHarmless = danger.level === 'harmless';
+                    const bgColor = isHarmless ? COLORS.sage : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
+                    const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+                    const label = isHarmless ? 'Non-venomous' : danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution';
+                    const iconName = isHarmless ? 'checkmark-circle' : danger.level === 'caution' ? 'alert-circle' : 'warning';
                     return (
                       <Animated.View entering={FadeInDown.delay(200).duration(280)} style={{ marginTop: 14, backgroundColor: bgColor, borderRadius: 12, padding: 12, gap: 4 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                          <Ionicons name={danger.level === 'caution' ? 'alert-circle' : 'warning'} size={16} color={textColor} />
+                          <Ionicons name={iconName} size={16} color={textColor} />
                           <Text style={{ color: textColor, fontWeight: '800', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>
-                            {danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution'}
+                            {label}
                           </Text>
                         </View>
                         <Text style={{ color: textColor, fontSize: 12, lineHeight: 17, opacity: 0.92 }}>

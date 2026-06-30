@@ -255,20 +255,22 @@ export default function SpeciesDetailScreen() {
           </View>
         </Reveal>
 
-        {/* Danger banner */}
+        {/* Danger / safety banner */}
         {speciesId && (() => {
           const danger = getDangerInfo(speciesId);
           if (!danger) return null;
-          const bgColor = danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
-          const iconName = danger.level === 'highly-venomous' || danger.level === 'venomous' ? 'warning' : 'alert-circle';
-          const textColor = danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+          const isHarmless = danger.level === 'harmless';
+          const bgColor = isHarmless ? COLORS.sage : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
+          const iconName: React.ComponentProps<typeof Ionicons>['name'] = isHarmless ? 'checkmark-circle' : danger.level === 'highly-venomous' || danger.level === 'venomous' ? 'warning' : 'alert-circle';
+          const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+          const label = isHarmless ? 'Non-venomous' : danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution';
           return (
             <Animated.View entering={FadeInDown.delay(60).duration(280)} style={{ marginHorizontal: 16, marginTop: 14 }}>
               <View style={{ backgroundColor: bgColor, borderRadius: 16, padding: 14, gap: 6 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <Ionicons name={iconName} size={18} color={textColor} />
                   <Text style={{ color: textColor, fontWeight: '800', fontSize: 13, letterSpacing: 0.3, textTransform: 'uppercase' }}>
-                    {danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution'}
+                    {label}
                   </Text>
                 </View>
                 <Text style={{ color: textColor, fontSize: 13, lineHeight: 19, opacity: 0.92 }}>

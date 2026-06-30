@@ -3207,7 +3207,7 @@ export function getEstablishmentStatus(speciesId: string): EstablishmentStatus |
 
 // ─── Danger info ──────────────────────────────────────────────────────────────
 
-export type DangerLevel = 'caution' | 'venomous' | 'highly-venomous';
+export type DangerLevel = 'harmless' | 'caution' | 'venomous' | 'highly-venomous';
 
 export type DangerInfo = {
   level: DangerLevel;
@@ -3309,6 +3309,43 @@ const DANGER_INFO: Partial<Record<string, DangerInfo>> = {
   'badger': {
     level: 'caution',
     summary: 'Notoriously aggressive when cornered. Can bite through thick leather gloves. Never block their exit.',
+  },
+  // ── Non-venomous snakes ──────────────────────────────────────────────────────
+  'gopher-snake': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. When threatened it hisses loudly, flattens its head, and vibrates its tail to mimic a rattlesnake — but it has no venom.',
+  },
+  'coachwhip': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. Fast and alert — one of the quickest snakes in North America. May bite defensively if handled, but poses no venom risk.',
+  },
+  'kingsnake': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. Actually beneficial — kingsnakes are immune to rattlesnake venom and actively hunt and eat venomous snakes.',
+  },
+  'desert-nightsnake': {
+    level: 'harmless',
+    summary: 'Rear-fanged with very mild venom used to subdue small lizards — completely harmless to humans. Shy and nocturnal; rarely seen.',
+  },
+  'checkered-whipsnake': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. Extremely fast and alert; rarely stays still long enough to be approached.',
+  },
+  'long-nosed-snake': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. Nocturnal and secretive; often mistaken for a coral snake due to its red, black, and white banding.',
+  },
+  'great-basin-gopher-snake': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. Like its Sonoran relative, it mimics a rattlesnake when threatened but carries no venom.',
+  },
+  'checkered-garter-snake': {
+    level: 'harmless',
+    summary: 'Mildly rear-fanged but completely harmless to humans. Common near water sources; feeds on frogs, fish, and small invertebrates.',
+  },
+  'sonoran-coachwhip': {
+    level: 'harmless',
+    summary: 'Non-venomous and harmless to humans. The desert Southwest variant of the coachwhip — fast, diurnal, and often seen hunting lizards in open terrain.',
   },
 };
 

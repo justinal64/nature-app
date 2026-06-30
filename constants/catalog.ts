@@ -3445,6 +3445,86 @@ export function getSpeciesUses(speciesId: string): SpeciesUse[] | undefined {
   return SPECIES_USES[speciesId];
 }
 
+// ─── Edibility map ────────────────────────────────────────────────────────────
+
+export type EdibilityStatus = 'edible' | 'parts-edible' | 'caution' | 'not-edible' | 'toxic';
+export type EdibilityInfo = {
+  status: EdibilityStatus;
+  note: string;
+};
+
+const EDIBILITY_MAP: Partial<Record<string, EdibilityInfo>> = {
+  // ── Cacti ──
+  'saguaro': { status: 'edible', note: 'Ripe red fruit (bahidaj) eaten fresh, dried into cakes, or fermented into ceremonial wine. Harvest July with a long pole.' },
+  'prickly-pear': { status: 'edible', note: 'Pads (nopales) grilled after removing glochids are a classic ingredient. Magenta fruits (tunas) eaten raw, juiced, or made into candy.' },
+  'organ-pipe': { status: 'edible', note: 'Sweet, pitaya-like fruit ripens in late summer. Eaten fresh or dried — a prized food for the Tohono O\'odham and Seri peoples.' },
+  'cholla': { status: 'parts-edible', note: 'Flower buds are edible after roasting to remove glochids — extremely high in calcium. The ripe fruit is also edible. All other parts inedible.' },
+  'silver-cholla': { status: 'parts-edible', note: 'Flower buds can be roasted like those of other chollas. Avoid all other parts — spines cause serious injury.' },
+  'beavertail-cactus': { status: 'parts-edible', note: 'Pads and sweet fruits are edible like prickly pear. Remove all tiny glochids (fine spines) carefully before handling or eating.' },
+  'barrel-cactus': { status: 'caution', note: 'Ripe yellow fruits are edible raw or cooked. Do NOT drink the raw pulp as a water source — the high oxalic acid content causes nausea and kidney stress.' },
+
+  // ── Trees ──
+  'mesquite': { status: 'edible', note: 'Ripe bean pods dried and ground into sweet, high-protein flour (pinole). Raw pods are also chewed for their sweetness. A desert staple for 4,000+ years.' },
+  'palo-verde': { status: 'parts-edible', note: 'Young green seeds edible raw or cooked. Dried seeds ground into flour. Do not eat large quantities of mature dried pods directly.' },
+  'blue-palo-verde': { status: 'parts-edible', note: 'Seeds edible when young and green. Ground into flour when dried, like blue palo verde\'s close relative.' },
+  'ironwood': { status: 'parts-edible', note: 'Seeds (tiny beans inside the pods) edible roasted or ground into flour. A traditional protein source for the Seri people of Sonora.' },
+  'joshua-tree': { status: 'parts-edible', note: 'Flowers and flower buds roasted or eaten raw historically. Fleshy fruit edible when ripe. Not a primary food source.' },
+  'utah-juniper': { status: 'parts-edible', note: 'Blue-gray berries used as a spice or steeped for tea. Not eaten in quantity — bitter resins can cause nausea if over-consumed.' },
+  'single-leaf-pinyon': { status: 'edible', note: 'Pine nuts are rich, buttery, and highly nutritious — harvested from cones in fall. One of the most prized wild foods of the Great Basin.' },
+  'desert-willow': { status: 'not-edible', note: 'Flowers are fragrant and attractive but no edible parts. All parts have mild antifungal compounds — not food.' },
+  'fremont-cottonwood': { status: 'not-edible', note: 'Inner bark was historically used as famine food, but it is not nutritious or practical. Not a food plant.' },
+  'arizona-sycamore': { status: 'not-edible', note: 'No edible parts. A significant riparian tree for wildlife habitat, not human food.' },
+
+  // ── Succulents / Agaves ──
+  'sotol': { status: 'parts-edible', note: 'The heart (piña) is edible after roasting 1–3 days in a rock-lined earth oven. The raw plant and leaves are not edible. Distilled into Sotol spirit.' },
+  'lechuguilla': { status: 'caution', note: 'Heart is edible after extensive pit-roasting. The raw plant contains saponins toxic to livestock and humans. Never eat raw. A famine food; the plant is slow-growing and now protected.' },
+  'mojave-yucca': { status: 'parts-edible', note: 'White flower petals edible raw or cooked. Young seed pods edible when green. The fruit is edible. Seeds and mature leaves are not edible.' },
+  'yucca-chihuahuan': { status: 'parts-edible', note: 'Flowers edible raw or cooked. Ripe fruit edible. A traditional food for many Southwestern peoples. Stems and leaves are not edible.' },
+  'ocotillo': { status: 'parts-edible', note: 'Bright red flowers edible raw or soaked in water to make a refreshing drink. Seeds can be ground into flour. Stems and leaves are not eaten.' },
+
+  // ── Shrubs ──
+  'creosote-bush': { status: 'not-edible', note: 'Strong medicinal and aromatic compounds make the plant unpalatable and mildly toxic if ingested in quantity. Topical medicinal use only.' },
+  'creosote-chihuahuan': { status: 'not-edible', note: 'Same as Sonoran creosote. Strong NDGA resins are not safe to eat. Medicinal topical use only.' },
+  'big-sagebrush': { status: 'not-edible', note: 'Strongly bitter essential oils (thujone, camphor) are toxic in quantity. Used for medicinal steam and smudging, not food.' },
+  'rabbitbrush': { status: 'not-edible', note: 'No edible parts. Contains rubber compounds and resins. Not palatable or safe to eat.' },
+  'desert-holly': { status: 'not-edible', note: 'Ornamental desert shrub with no edible parts. Not related to edible hollies.' },
+  'desert-broom': { status: 'not-edible', note: 'No edible parts. Pollen is a significant allergen in fall.' },
+  'candelilla': { status: 'not-edible', note: 'Harvested commercially for its wax (used in lip balms and candles). No edible parts — the wax is indigestible.' },
+  'shadscale': { status: 'not-edible', note: 'Forage plant for pronghorn and jackrabbits. Not edible for humans.' },
+  'greasewood': { status: 'not-edible', note: 'Contains high levels of sodium and potassium oxalates — toxic to livestock and humans in any significant amount. Do not eat.' },
+  'winterfat': { status: 'not-edible', note: 'Important forage for pronghorn and sheep, but not edible for humans. High protein content is for grazing animals.' },
+  'four-wing-saltbush': { status: 'parts-edible', note: 'Seeds ground into a protein-rich meal by Navajo and Hopi peoples. Leaves used as a salt substitute in cooking. A significant traditional food plant.' },
+  'texas-ranger': { status: 'not-edible', note: 'Ornamental desert shrub with lavender flowers. No edible parts.' },
+  'antelope-bitterbrush': { status: 'not-edible', note: 'Critical browse for mule deer and pronghorn but not edible for humans — bitter tannins and cyanogenic compounds.' },
+  'desert-lavender': { status: 'not-edible', note: 'Aromatic shrub pollinated by native bees. No documented edible use. Not the culinary lavender (Lavandula).' },
+  'jojoba': { status: 'caution', note: 'Seeds are high in protein but the liquid wax (simmodsin) is indigestible and acts as a strong laxative in any significant quantity. Not a practical food.' },
+
+  // ── Flowers ──
+  'desert-marigold': { status: 'not-edible', note: 'Not related to culinary marigold. Contains sesquiterpene lactones that cause skin irritation and are toxic if ingested.' },
+  'brittlebush': { status: 'not-edible', note: 'Resin from stems was used as incense by indigenous peoples, not as food. Ingesting the resin is not safe.' },
+  'desert-poppy': { status: 'not-edible', note: 'Contains isoquinoline alkaloids similar to opium poppy relatives. Mildly narcotic; not safe to eat.' },
+  'mexican-golden-poppy': { status: 'not-edible', note: 'Contains alkaloids (eschscholtzine, californidine). Sedative and mildly toxic if ingested. Not a food plant.' },
+  'globe-mallow': { status: 'not-edible', note: 'Tiny stellate hairs covering the plant cause significant eye and mucous membrane irritation. Not a food plant.' },
+  'sacred-datura': { status: 'toxic', note: 'EXTREMELY TOXIC — all parts (flowers, seeds, leaves, roots) contain tropane alkaloids (scopolamine, atropine). Even skin contact with eyes can cause pupil dilation. Ingestion can be fatal.' },
+  'desert-five-spot': { status: 'not-edible', note: 'A spring wildflower with no documented edible use. Not toxic, just not a food plant.' },
+  'desert-trumpet': { status: 'not-edible', note: 'A buckwheat-family wildflower. No documented edible use. Related species (Eriogonum) have edible seeds but desert-trumpet is not commonly used as food.' },
+  'desert-zinnia': { status: 'not-edible', note: 'Not the cultivated garden zinnia. No edible parts; resinous stems are unpalatable.' },
+
+  // ── Other plants ──
+  'mormon-tea': { status: 'caution', note: 'Stems steeped as tea yield a mild stimulant (ephedrine/pseudoephedrine). Safe as occasional tea but not as food — overconsumption causes elevated heart rate and blood pressure.' },
+
+  // ── Fungi & Lichens ──
+  'desert-inky-cap': { status: 'caution', note: 'Edible when young and white-gilled, before dissolving into black ink. TOXIC if consumed with alcohol (contains coprine, which blocks alcohol metabolism). Confirm ID carefully.' },
+  'desert-puffball': { status: 'parts-edible', note: 'Edible when the interior is solid and pure white throughout. Slice in half to verify — any hint of color or gills inside means do not eat. Excellent sautéed.' },
+  'turkey-tail-fungus': { status: 'not-edible', note: 'Leathery and tough — not edible as food. Used medicinally (PSK/PSP extracts show immune-boosting properties in studies).' },
+  'sunburst-lichen': { status: 'not-edible', note: 'Lichen not used as food. The orange pigment (parietin) has antifungal properties but is not safe to consume.' },
+  'map-lichen': { status: 'not-edible', note: 'Crustose lichen that grows into rock. Inedible.' },
+};
+
+export function getEdibilityInfo(speciesId: string): EdibilityInfo | undefined {
+  return EDIBILITY_MAP[speciesId];
+}
+
 // ─── Junior naturalist facts ──────────────────────────────────────────────────
 
 const JUNIOR_FACTS: Partial<Record<string, string>> = {

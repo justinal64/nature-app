@@ -26,7 +26,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getDangerInfo, getEcosystemRole, getEstablishmentStatus, getIUCNStatus, getJuniorFact, getRelatedSpecies, getSpeciesById, getSpeciesUses, getTaxonomy } from '@/constants/catalog';
+import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getDangerInfo, getEdibilityInfo, getEcosystemRole, getEstablishmentStatus, getIUCNStatus, getJuniorFact, getRelatedSpecies, getSpeciesById, getSpeciesUses, getTaxonomy } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
@@ -446,6 +446,32 @@ export default function SpeciesDetailScreen() {
                 </View>
               </View>
             ) : null}
+
+            {/* Edibility badge */}
+            {speciesId && getEdibilityInfo(speciesId) && (() => {
+              const edibility = getEdibilityInfo(speciesId)!;
+              const statusConfig: Record<string, { bg: string; icon: React.ComponentProps<typeof Ionicons>['name']; label: string; textColor: string }> = {
+                'edible':       { bg: COLORS.sage,    icon: 'checkmark-circle', label: 'Edible',         textColor: COLORS.ink },
+                'parts-edible': { bg: '#A8C97B',      icon: 'leaf',             label: 'Parts Edible',   textColor: COLORS.ink },
+                'caution':      { bg: COLORS.gold,    icon: 'alert-circle',     label: 'Edible — Caution', textColor: COLORS.ink },
+                'not-edible':   { bg: COLORS.surface, icon: 'close-circle',     label: 'Not Edible',     textColor: COLORS.bark },
+                'toxic':        { bg: '#C0392B',      icon: 'skull',            label: 'TOXIC — Do Not Eat', textColor: COLORS.cream },
+              };
+              const cfg = statusConfig[edibility.status];
+              return (
+                <Animated.View entering={FadeInDown.delay(160).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, borderRadius: 18, padding: 16, borderWidth: 1, borderColor: edibility.status === 'not-edible' ? COLORS.sand : 'transparent', backgroundColor: cfg.bg }, edibility.status !== 'not-edible' ? softShadow(0.1, 6, 2) : {}]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <Ionicons name={cfg.icon} size={18} color={cfg.textColor} />
+                    <Text style={{ color: cfg.textColor, fontWeight: '800', fontSize: 13, letterSpacing: 0.3, textTransform: 'uppercase' }}>
+                      {cfg.label}
+                    </Text>
+                  </View>
+                  <Text style={{ color: cfg.textColor, fontSize: 13, lineHeight: 19, opacity: edibility.status === 'not-edible' ? 0.75 : 0.9 }}>
+                    {edibility.note}
+                  </Text>
+                </Animated.View>
+              );
+            })()}
 
             {/* Ecosystem role */}
             {speciesId && getEcosystemRole(speciesId) && (

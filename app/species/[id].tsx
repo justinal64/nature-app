@@ -27,6 +27,7 @@ import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getDangerInfo, getEdibilityInfo, getEcosystemRole, getEstablishmentStatus, getIUCNStatus, getJuniorFact, getRelatedSpecies, getSpeciesById, getSpeciesUses, getTaxonomy } from '@/constants/catalog';
+import { getEncounterProtocol, type EncounterProtocol } from '@/constants/encounter-protocols';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
@@ -470,6 +471,15 @@ export default function SpeciesDetailScreen() {
                     {edibility.note}
                   </Text>
                 </Animated.View>
+              );
+            })()}
+
+            {/* Encounter protocol */}
+            {speciesId && (() => {
+              const protocol = getEncounterProtocol(speciesId);
+              if (!protocol) return null;
+              return (
+                <EncounterProtocolCard protocol={protocol} />
               );
             })()}
 
@@ -1055,5 +1065,136 @@ export default function SpeciesDetailScreen() {
         </View>
       </Animated.View>
     </View>
+  );
+}
+
+// ─── Encounter Protocol Card ──────────────────────────────────────────────────
+
+function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(175).duration(280)}
+      style={[
+        {
+          marginHorizontal: 16,
+          marginTop: 16,
+          borderRadius: 18,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: '#B85C3A44',
+          backgroundColor: '#FDF0EA',
+        },
+        softShadow(0.06, 6, 2),
+      ]}
+    >
+      {/* Header row — always visible */}
+      <Pressable
+        onPress={() => setExpanded((v) => !v)}
+        accessibilityRole="button"
+        accessibilityLabel="Encounter protocol — expand for safety guidance"
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 }}
+      >
+        <View
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 10,
+            backgroundColor: COLORS.clay,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="shield-half-outline" size={17} color={COLORS.cream} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              color: COLORS.bark,
+              fontSize: 10,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+              marginBottom: 1,
+            }}
+          >
+            Encounter Protocol
+          </Text>
+          <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 17 }} numberOfLines={expanded ? undefined : 2}>
+            {protocol.immediateAction}
+          </Text>
+        </View>
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+      </Pressable>
+
+      {expanded && (
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: '#B85C3A22',
+            padding: 14,
+            gap: 14,
+          }}
+        >
+          {protocol.distanceRecommendation && (
+            <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+              <Ionicons name="locate-outline" size={15} color={COLORS.clay} style={{ marginTop: 1 }} />
+              <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>
+                {protocol.distanceRecommendation}
+              </Text>
+            </View>
+          )}
+
+          <View style={{ gap: 6 }}>
+            <Text style={{ color: COLORS.sage, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+              Do
+            </Text>
+            {protocol.do.map((item, i) => (
+              <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+                <Ionicons name="checkmark" size={14} color={COLORS.sage} style={{ marginTop: 2 }} />
+                <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={{ gap: 6 }}>
+            <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+              Don&apos;t
+            </Text>
+            {protocol.dont.map((item, i) => (
+              <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+                <Ionicons name="close" size={14} color={COLORS.clay} style={{ marginTop: 2 }} />
+                <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
+              </View>
+            ))}
+          </View>
+
+          {(protocol.ifBitten ?? protocol.ifStung) && (
+            <View
+              style={{
+                backgroundColor: '#C0392B',
+                borderRadius: 12,
+                padding: 12,
+                gap: 6,
+              }}
+            >
+              <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '800', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+                {protocol.ifBitten ? 'If bitten' : 'If stung'}
+              </Text>
+              <Text style={{ color: COLORS.cream, fontSize: 13, lineHeight: 18, opacity: 0.95 }}>
+                {protocol.ifBitten ?? protocol.ifStung}
+              </Text>
+            </View>
+          )}
+
+          {protocol.emergencyNote && (
+            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>
+              {protocol.emergencyNote}
+            </Text>
+          )}
+        </View>
+      )}
+    </Animated.View>
   );
 }

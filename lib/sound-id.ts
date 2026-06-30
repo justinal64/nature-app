@@ -1,4 +1,5 @@
-import { Audio } from 'expo-av';
+import { AudioModule, RecordingPresets, requestRecordingPermissionsAsync, setAudioModeAsync } from 'expo-audio';
+import type { AudioRecorder } from 'expo-audio';
 
 import { CATALOG } from '@/constants/catalog';
 import { isActiveNow } from '@/constants/catalog';
@@ -10,27 +11,26 @@ export type SoundIdResult = {
   isOffline: boolean;
 };
 
-let recording: Audio.Recording | null = null;
+let recorder: AudioRecorder | null = null;
 
 export async function requestMicrophonePermission(): Promise<boolean> {
-  const { status } = await Audio.requestPermissionsAsync();
-  return status === 'granted';
+  const { granted } = await requestRecordingPermissionsAsync();
+  return granted;
 }
 
 export async function startRecording(): Promise<void> {
-  await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
-  const { recording: rec } = await Audio.Recording.createAsync(
-    Audio.RecordingOptionsPresets.HIGH_QUALITY,
-  );
-  recording = rec;
+  await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
+  recorder = new AudioModule.AudioRecorder(RecordingPresets.HIGH_QUALITY);
+  await recorder.prepareToRecordAsync();
+  recorder.record();
 }
 
 export async function stopRecording(): Promise<string | null> {
-  if (!recording) return null;
-  await recording.stopAndUnloadAsync();
-  const uri = recording.getURI();
-  recording = null;
-  await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
+  if (!recorder) return null;
+  await recorder.stop();
+  const uri = recorder.uri;
+  recorder = null;
+  await setAudioModeAsync({ allowsRecording: false });
   return uri ?? null;
 }
 

@@ -3204,3 +3204,243 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
 export function getEstablishmentStatus(speciesId: string): EstablishmentStatus | undefined {
   return ESTABLISHMENT_MAP[speciesId];
 }
+
+// ─── Danger info ──────────────────────────────────────────────────────────────
+
+export type DangerLevel = 'caution' | 'venomous' | 'highly-venomous';
+
+export type DangerInfo = {
+  level: DangerLevel;
+  summary: string;
+  firstAid?: string;
+};
+
+const DANGER_INFO: Partial<Record<string, DangerInfo>> = {
+  'arizona-bark-scorpion': {
+    level: 'highly-venomous',
+    summary: 'Most venomous scorpion in North America. Sting causes intense pain and numbness; life-threatening in children, elderly, or immunocompromised individuals.',
+    firstAid: 'Do not ice the sting. Call Poison Control (1-800-222-1222) immediately. Go to the ER if symptoms spread beyond the sting site or the victim is a child.',
+  },
+  'western-diamondback': {
+    level: 'highly-venomous',
+    summary: 'Hemotoxic venom destroys tissue and disrupts blood clotting. Responsible for more bites in the US than any other rattlesnake.',
+    firstAid: 'Stay calm, immobilize the limb below heart level, and remove rings or watches. Do NOT apply ice or tourniquets. Get to an ER within 2–4 hours.',
+  },
+  'mojave-rattlesnake': {
+    level: 'highly-venomous',
+    summary: 'The most dangerous rattlesnake in North America — carries both hemotoxic and neurotoxic venom. Symptoms may be delayed by hours.',
+    firstAid: 'Treat as a life-threatening emergency even if symptoms appear mild. Call 911 immediately. Do not cut, suck, or ice the wound.',
+  },
+  'sonoran-coral-snake': {
+    level: 'venomous',
+    summary: 'Neurotoxic venom disrupts nerve signals. Bites are rare — the snake must chew to inject. All coral snake bites are medical emergencies.',
+    firstAid: 'Wash the wound with soap and water. Immobilize the limb and seek emergency care — neurotoxic envenomation can cause respiratory failure.',
+  },
+  'sidewinder': {
+    level: 'venomous',
+    summary: 'Hemotoxic venom causes pain, swelling, and tissue damage. Smaller than other rattlesnakes but equally dangerous.',
+    firstAid: 'Stay calm, immobilize the bitten limb, and seek emergency medical care. Do not apply ice or tourniquets.',
+  },
+  'mojave-sidewinder': {
+    level: 'venomous',
+    summary: 'Hemotoxic venom. A smaller desert rattlesnake with a distinctive sidewinding locomotion.',
+    firstAid: 'Immobilize the bitten limb and go directly to an emergency room.',
+  },
+  'tiger-rattlesnake': {
+    level: 'venomous',
+    summary: 'Small and secretive but carries potent venom. Rarely encountered outside of rocky mountain terrain.',
+    firstAid: 'Immobilize the limb and get to an ER immediately. Do not try to capture the snake.',
+  },
+  'black-tailed-rattlesnake': {
+    level: 'venomous',
+    summary: 'Calmer temperament than most rattlesnakes, but hemotoxic venom. Often found near canyon water sources.',
+    firstAid: 'Treat any bite as a medical emergency. Keep the limb still and below heart level. Seek immediate emergency care.',
+  },
+  'great-basin-rattlesnake': {
+    level: 'venomous',
+    summary: 'Hemotoxic venom. The most common rattlesnake across the Great Basin.',
+    firstAid: 'Immobilize the bitten limb and seek emergency care. Call Poison Control (1-800-222-1222).',
+  },
+  'western-rattlesnake': {
+    level: 'venomous',
+    summary: 'Hemotoxic venom with potency that varies by population and elevation.',
+    firstAid: 'Any bite is a medical emergency. Immobilize the limb and go directly to an emergency room.',
+  },
+  'black-widow': {
+    level: 'venomous',
+    summary: 'Neurotoxic venom 15× stronger than a rattlesnake\'s by weight. Bite causes muscle cramps, abdominal pain, and elevated blood pressure.',
+    firstAid: 'Clean the wound. Most healthy adults recover without antivenom. Seek medical evaluation — antivenom is available for severe cases.',
+  },
+  'western-black-widow': {
+    level: 'venomous',
+    summary: 'Same neurotoxic venom as the Eastern Black Widow. Only females are dangerous — males are tiny and harmless.',
+    firstAid: 'Seek medical evaluation, especially for children or elderly. Antivenom is available for severe cases.',
+  },
+  'giant-desert-centipede': {
+    level: 'caution',
+    summary: 'Painful bite causes burning, swelling, and local inflammation. Rarely dangerous to healthy adults, but avoid all handling.',
+    firstAid: 'Wash with soap and water and apply ice to reduce swelling. Seek medical care if swelling spreads or you have allergy history.',
+  },
+  'velvet-ant': {
+    level: 'caution',
+    summary: 'Actually a wingless wasp. The sting is ranked #3 on the Schmidt Pain Index — excruciating, though not medically dangerous to most people.',
+    firstAid: 'Apply ice for pain relief. Seek care immediately if you develop signs of an allergic reaction.',
+  },
+  'tarantula-hawk': {
+    level: 'caution',
+    summary: 'Sting ranked #4 on the Schmidt Pain Index — the most painful of any insect. Blinding pain lasting ~3 minutes. Not typically medically dangerous.',
+    firstAid: 'Sit down to avoid injuring yourself during the brief pain episode. Apply ice. Seek care only if you have a known wasp allergy.',
+  },
+  'pepsis-wasp': {
+    level: 'caution',
+    summary: 'A spider hawk wasp closely related to the Tarantula Hawk with a similarly intense sting.',
+    firstAid: 'Sit down and apply ice. Not typically medically dangerous unless you have a known wasp allergy.',
+  },
+  'colorado-river-toad': {
+    level: 'caution',
+    summary: 'Skin secretions contain 5-MeO-DMT and bufotenin — powerful toxins that are dangerous and sometimes fatal to dogs that mouth them.',
+    firstAid: 'If your dog mouths a toad, rinse their mouth with water and call an emergency vet immediately. For human skin contact, wash thoroughly with soap and water.',
+  },
+  'sacred-datura': {
+    level: 'caution',
+    summary: 'All parts — seeds, flowers, and leaves — are highly toxic. Tropane alkaloids cause hallucinations, seizures, and can be fatal.',
+    firstAid: 'If any part is ingested, call Poison Control (1-800-222-1222) immediately or go to the ER. Do not induce vomiting.',
+  },
+  'badger': {
+    level: 'caution',
+    summary: 'Notoriously aggressive when cornered. Can bite through thick leather gloves. Never block their exit.',
+  },
+};
+
+export function getDangerInfo(speciesId: string): DangerInfo | undefined {
+  return DANGER_INFO[speciesId];
+}
+
+// ─── Ecosystem roles ──────────────────────────────────────────────────────────
+
+const ECOSYSTEM_ROLES: Partial<Record<string, string>> = {
+  'saguaro': 'The keystone of the Sonoran Desert. Gila Woodpeckers excavate nest cavities that Elf Owls and Purple Martins move into the following year. White-winged Doves depend on the June fruit for pre-migration fat reserves. Harris\'s Hawks use the arms as hunting perches. Over 100 species use the Saguaro in some form — it is the living infrastructure of this ecosystem.',
+  'palo-verde': 'The Sonoran Desert\'s chief nurse plant. Nearly all Saguaro seedlings germinate under the Palo Verde canopy, sheltered from killing frost and lethal summer sun. Its root bacteria also fix atmospheric nitrogen, slowly enriching surrounding soil.',
+  'blue-palo-verde': 'One of the first desert trees to flower each spring, providing a critical nectar bridge for queen bees and hummingbirds emerging from winter dormancy before other plants bloom.',
+  'ironwood': 'The supreme nurse plant and wildlife anchor of the Sonoran Desert. Its canopy shelters 230+ wildlife species. An Ironwood takes 800+ years to reach full size — and its fallen trunk persists 10,000 years without rotting, providing habitat long after the tree itself is gone.',
+  'ocotillo': 'A hummingbird migration highway. Its red tubular flowers are timed precisely for Costa\'s and Black-chinned Hummingbirds tracking north through the Sonoran Desert, providing a critical refueling stop. Without it, hummingbird migration through this region would be far more perilous.',
+  'mesquite': 'One of the desert\'s most ecologically generous trees. Nitrogen-fixing root bacteria enrich surrounding soil. The bean pods sustain coyotes, javelinas, doves, and many birds through the brutal summer months. Its canopy creates the distinctive "mesquite bosque" — the richest riparian habitat in the lowland Sonoran Desert.',
+  'creosote-bush': 'The most chemically dominant plant in North American deserts. Roots release allelopathic compounds that prevent competitors from growing nearby — creating the distinctive evenly-spaced ring pattern visible from the air. The oldest known specimen (King Clone, Mojave Desert) is an 11,700-year-old clonal ring covering 67 square feet.',
+  'joshua-tree': 'Locked in a mutualism so tight that if one partner vanishes, the other follows. The Yucca Moth is the Joshua Tree\'s sole pollinator; in exchange, the moth lays its eggs in the flower and larvae feed on seeds. As temperatures rise and winter frost becomes rarer, Joshua Trees can\'t reproduce at lower elevations — their range is contracting.',
+  'barrel-cactus': 'An important winter food cache. Its seeds ripen in fall and persist on the plant through winter, providing critical calories for birds and rodents when little else is available. Old specimens with rot cavities become nesting sites for small birds.',
+  'cholla': 'The cholla\'s detachable stem segments — famous for "jumping" onto clothing — are an ingenious long-distance seed dispersal strategy. Segments hitch rides on passing animals and can travel miles before dropping to root, spreading the colony far beyond where wind or gravity could reach.',
+  'big-sagebrush': 'The foundational plant of the Great Basin ecosystem. Over 170 wildlife species depend on it for food or cover, including Pronghorn, Greater Sage-Grouse, Pygmy Rabbit, and Sagebrush Sparrow. Loss of sagebrush through wildfire and development is the leading conservation concern for the entire region.',
+  'desert-tortoise': 'A keystone engineer. Its burrows — up to 30 feet long — provide critical heat refuge for dozens of other species during extreme summer heat, including kit foxes, burrowing owls, and Gila monsters. Tortoise burrows are registered as critical microhabitat under the Endangered Species Act.',
+  'creosote-chihuahuan': 'As with its Sonoran relative, it shapes the landscape through root-released allelopathy, creating the evenly-spaced plant rings characteristic of flat desert terrain. The distinctive "rain smell" (petrichor) released when desert rain hits dry creosote resin is one of the most evocative sensory signatures of desert ecology.',
+};
+
+export function getEcosystemRole(speciesId: string): string | undefined {
+  return ECOSYSTEM_ROLES[speciesId];
+}
+
+// ─── Species uses ─────────────────────────────────────────────────────────────
+
+export type SpeciesUseCategory = 'edible' | 'medicinal' | 'survival' | 'cultural';
+
+export type SpeciesUse = {
+  category: SpeciesUseCategory;
+  description: string;
+};
+
+const SPECIES_USES: Partial<Record<string, SpeciesUse[]>> = {
+  'saguaro': [
+    { category: 'edible', description: 'Fruit (bahidaj) harvested in July with a long pole made from dead ribs. Eaten fresh, dried into cakes, or made into jam. Rich in fat and protein.' },
+    { category: 'cultural', description: 'The Tohono O\'odham new year begins with the saguaro harvest. Fermented wine (nawait) made from the juice is central to the rain-calling ceremony (Wi:gita) believed to summon the monsoon.' },
+  ],
+  'prickly-pear': [
+    { category: 'edible', description: 'Pads (nopales) sliced and grilled after removing glochids with tongs — a staple of Mexican cooking for centuries. Magenta fruits (tunas) are sweet eaten raw, as juice, or as candy (colonche).' },
+    { category: 'medicinal', description: 'Studies show prickly pear extract may help regulate blood sugar and reduce LDL cholesterol in type 2 diabetes.' },
+  ],
+  'mesquite': [
+    { category: 'edible', description: 'Dried bean pods ground into a sweet, high-protein flour. Used for bread, porridge, and fermented drinks. A staple food for desert peoples across the Americas for 4,000+ years.' },
+    { category: 'cultural', description: 'The "mesquite moon" (June harvest) was a major calendar event. Beans were dried and stored as a famine-proof year-round reserve — the protein safety net of the desert.' },
+  ],
+  'cholla': [
+    { category: 'edible', description: 'Flower buds roasted to remove glochids (spines) are remarkably high in calcium — rivaling milk per gram. A traditional O\'odham spring delicacy.' },
+    { category: 'cultural', description: 'Barbed spines were historically used as fishhooks. Straight dried ribs used as tool handles and decorative basketry elements.' },
+  ],
+  'barrel-cactus': [
+    { category: 'survival', description: 'In a genuine emergency: cut the top, mash the pulp, squeeze moisture through cloth. Do NOT drink raw juice — oxalic acid causes nausea. Water content varies widely; this is a last resort.' },
+  ],
+  'ocotillo': [
+    { category: 'cultural', description: 'Live ocotillo stems pushed directly into the ground will take root — used for centuries to build living fences (living walls) around desert homesteads.' },
+    { category: 'medicinal', description: 'Bark tea used by the Tohono O\'odham and Seri for lymphatic swelling and poor circulation. The waxy stem coating was used as a waterproofing sealant.' },
+  ],
+  'jojoba': [
+    { category: 'medicinal', description: 'Seeds produce a liquid wax (jojoba oil) prized as a skin and hair conditioner. Became a commercial crop in the 1970s as a sustainable replacement for sperm whale oil.' },
+    { category: 'survival', description: 'Seeds are high in protein but the wax is indigestible in large quantities and acts as a laxative. Use sparingly and only in true survival situations.' },
+  ],
+  'creosote-bush': [
+    { category: 'medicinal', description: 'Leaf tea used as a broad-spectrum antiseptic wash for wounds. Contains NDGA (nordihydroguaiaretic acid), under study for antifungal and anticancer properties.' },
+    { category: 'survival', description: 'Resin from leaves can waterproof leather and seal water vessels. Used by indigenous peoples as an adhesive and waterproofing compound for centuries.' },
+  ],
+  'big-sagebrush': [
+    { category: 'medicinal', description: 'Steam from boiling leaves inhaled for colds and sinus congestion. Crushed leaves applied topically as an antiseptic for minor wounds and skin irritation.' },
+    { category: 'cultural', description: 'One of the most spiritually significant plants in Great Basin and Plains cultures — burned in smudging bundles for purification and used in sweat lodge ceremonies across dozens of tribes.' },
+  ],
+  'sotol': [
+    { category: 'edible', description: 'The heart (piña) roasted 1–3 days in a rock-lined earth oven is sweet and fibrous, similar to agave. A distilled spirit called Sotol (Chihuahua\'s answer to tequila) is made from the cooked heart.' },
+    { category: 'cultural', description: 'A primary caloric staple of the Mescalero Apache for centuries. Leaf fibers among the strongest natural fibers used for rope, sandals, and fine basketry.' },
+  ],
+  'lechuguilla': [
+    { category: 'cultural', description: 'The razor-sharp terminal spine was used as a needle, with the naturally attached leaf fiber as thread — a complete sewing kit. Leaves yield strong cordage for rope and sandal soles.' },
+    { category: 'edible', description: 'Heart pit-roasted like agave — edible but labor-intensive. Primarily a famine food of last resort due to the plant\'s slow growth and protected status today.' },
+  ],
+  'desert-willow': [
+    { category: 'medicinal', description: 'Flowers and bark preparations used in traditional Southwestern medicine as an antifungal treatment, particularly for thrush and persistent skin infections.' },
+    { category: 'cultural', description: 'Flexible branches used for basket weaving and bowmaking by Apache and other Southwestern tribes.' },
+  ],
+  'mormon-tea': [
+    { category: 'medicinal', description: 'Stem tea is a mild stimulant and decongestant — contains ephedrine, the compound in modern cold medicines. Used by Paiute and other Great Basin peoples for centuries.' },
+    { category: 'survival', description: 'One of the few drinkable plant teas in the Great Basin. Provides a mild energy boost and may reduce congestion during respiratory illness.' },
+  ],
+  'ironwood': [
+    { category: 'cultural', description: 'The hardest wood in North America — too hard for most axes. Carved by the Seri people into detailed animal figures and tools. Also used as firewood that burns at extreme temperature.' },
+  ],
+};
+
+export function getSpeciesUses(speciesId: string): SpeciesUse[] | undefined {
+  return SPECIES_USES[speciesId];
+}
+
+// ─── Junior naturalist facts ──────────────────────────────────────────────────
+
+const JUNIOR_FACTS: Partial<Record<string, string>> = {
+  'saguaro': 'A Saguaro can soak up 200 gallons of water after one big rainstorm — that\'s heavier than a small car!',
+  'joshua-tree': 'A Joshua Tree can live over 500 years. It was already ancient when Columbus sailed to America!',
+  'barrel-cactus': 'Barrel cacti always lean toward the south to get more sunlight. They\'re nature\'s built-in compasses!',
+  'prickly-pear': 'Prickly pear juice turns a brilliant dark red color and has been used to make candy and drinks for hundreds of years!',
+  'cholla': 'Cholla spines hook backward like tiny fish hooks. They seem to "jump" onto you — but it\'s really just physics!',
+  'gambels-quail': 'Baby Gambel\'s Quail can run on their own just hours after hatching. The whole family parades together like a tiny feathery army!',
+  'roadrunner': 'Roadrunners sprint at 20 mph and actually eat rattlesnakes — they grab them by the tail and slam their heads against a rock!',
+  'gila-woodpecker': 'Gila Woodpeckers drill holes in Saguaro cacti for nests. When they move out, Elf Owls — the world\'s smallest owl — move right in!',
+  'cactus-wren': 'The Cactus Wren builds its nest inside spiny cholla so predators can\'t reach the eggs. It\'s like a thorn fortress!',
+  'great-horned-owl': 'Great Horned Owls can carry prey heavier than themselves — including skunks and porcupines — and can turn their head 270 degrees!',
+  'elf-owl': 'The Elf Owl is the world\'s smallest owl, about the size of a sparrow! It lives in abandoned Gila Woodpecker holes inside cacti.',
+  'western-diamondback': 'A rattlesnake\'s rattle is made of the same material as your fingernails. They add a new segment every time they shed their skin!',
+  'gopher-snake': 'When a Gopher Snake is scared, it flattens its head, hisses loudly, and shakes its tail — all to pretend to be a rattlesnake. It\'s completely harmless!',
+  'arizona-bark-scorpion': 'Bark Scorpions glow bright blue-green under ultraviolet (black) light. Scientists still aren\'t totally sure why!',
+  'desert-tarantula': 'Tarantulas have retractable claws like cats! They also flick tiny irritating hairs off their abdomen at predators.',
+  'desert-tortoise': 'A Desert Tortoise can live 80 years and stores water in its own built-in bladder during droughts — like carrying a personal water bottle!',
+  'turkey-vulture': 'Turkey Vultures find food by smell — nearly unique among birds. They can sniff out a carcass from over a mile away!',
+  'coyote': 'Coyotes can hear a mouse moving under a foot of snow. They do a flying nose-first pounce into the snow to catch it!',
+  'javelina': 'Javelinas have a musk gland on their back! They rub it on rocks and trees to leave messages for the rest of their herd.',
+  'mule-deer': 'Mule Deer can jump 8 feet straight up in the air — that\'s taller than most basketball hoops!',
+  'black-widow': 'Only the female Black Widow has dangerous venom. Male black widows are tiny and completely harmless!',
+  'tarantula-hawk': 'The Tarantula Hawk has the most painful insect sting in the world — but it only stings if you grab it. Otherwise it ignores you!',
+  'phainopepla': 'The Phainopepla eats 1,000 mistletoe berries a day! It digests them so fast that it plants new mistletoe trees every time it poops.',
+  'kit-fox': 'Kit Foxes have enormous ears that act like built-in air conditioners — they release body heat to stay cool in the scorching desert!',
+  'pronghorn': 'The Pronghorn is North America\'s fastest land animal — it can run at 55 mph and keep up 40 mph for miles and miles!',
+  'monarch-butterfly': 'Monarch Butterflies migrate up to 3,000 miles and somehow find the same tree in Mexico that their great-grandparents came from!',
+  'painted-lady': 'The Painted Lady butterfly completes the longest migration of any insect on Earth — from West Africa all the way to the Arctic, 9,000 miles!',
+  'costas-hummingbird': 'The Costa\'s Hummingbird beats its wings 75 times per second and its heart beats 1,260 times per minute during flight!',
+};
+
+export function getJuniorFact(speciesId: string): string | undefined {
+  return JUNIOR_FACTS[speciesId];
+}

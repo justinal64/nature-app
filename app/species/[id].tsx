@@ -26,7 +26,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getEstablishmentStatus, getIUCNStatus, getRelatedSpecies, getSpeciesById, getTaxonomy } from '@/constants/catalog';
+import { ESTABLISHMENT_LABEL, IUCN_LABEL, getActiveMonths, getDangerInfo, getEcosystemRole, getEstablishmentStatus, getIUCNStatus, getJuniorFact, getRelatedSpecies, getSpeciesById, getSpeciesUses, getTaxonomy } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
@@ -47,7 +47,7 @@ export default function SpeciesDetailScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
-  const { preferScientific } = useDisplayPrefs();
+  const { preferScientific, juniorMode } = useDisplayPrefs();
   const { sightings } = useSightings(user?.uid);
   const speciesSightings = sightings.filter((s) => s.speciesId === speciesId);
   const [tab, setTab] = useState<TabName>('Overview');
@@ -255,6 +255,36 @@ export default function SpeciesDetailScreen() {
           </View>
         </Reveal>
 
+        {/* Danger banner */}
+        {speciesId && (() => {
+          const danger = getDangerInfo(speciesId);
+          if (!danger) return null;
+          const bgColor = danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
+          const iconName = danger.level === 'highly-venomous' || danger.level === 'venomous' ? 'warning' : 'alert-circle';
+          const textColor = danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+          return (
+            <Animated.View entering={FadeInDown.delay(60).duration(280)} style={{ marginHorizontal: 16, marginTop: 14 }}>
+              <View style={{ backgroundColor: bgColor, borderRadius: 16, padding: 14, gap: 6 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Ionicons name={iconName} size={18} color={textColor} />
+                  <Text style={{ color: textColor, fontWeight: '800', fontSize: 13, letterSpacing: 0.3, textTransform: 'uppercase' }}>
+                    {danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution'}
+                  </Text>
+                </View>
+                <Text style={{ color: textColor, fontSize: 13, lineHeight: 19, opacity: 0.92 }}>
+                  {danger.summary}
+                </Text>
+                {danger.firstAid && (
+                  <View style={{ marginTop: 4, borderTopWidth: 1, borderTopColor: `${textColor}33`, paddingTop: 8 }}>
+                    <Text style={{ color: textColor, fontSize: 12, fontWeight: '700', marginBottom: 3 }}>First aid</Text>
+                    <Text style={{ color: textColor, fontSize: 12, lineHeight: 18, opacity: 0.9 }}>{danger.firstAid}</Text>
+                  </View>
+                )}
+              </View>
+            </Animated.View>
+          );
+        })()}
+
         <Reveal delay={70}>
           <View
             style={{
@@ -414,6 +444,105 @@ export default function SpeciesDetailScreen() {
                 </View>
               </View>
             ) : null}
+
+            {/* Ecosystem role */}
+            {speciesId && getEcosystemRole(speciesId) && (
+              <Animated.View entering={FadeInDown.delay(180).duration(280)} style={[{ marginHorizontal: 16, marginTop: 22, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                  <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="leaf-outline" size={17} color={COLORS.ink} />
+                  </View>
+                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    Ecosystem Role
+                  </Text>
+                </View>
+                <Text style={{ color: COLORS.ink, fontSize: 14, lineHeight: 21 }}>
+                  {getEcosystemRole(speciesId)}
+                </Text>
+              </Animated.View>
+            )}
+
+            {/* Human uses */}
+            {speciesId && getSpeciesUses(speciesId) && (() => {
+              const uses = getSpeciesUses(speciesId)!;
+              const categoryColors: Record<string, string> = {
+                edible: COLORS.sage,
+                medicinal: COLORS.dusk,
+                survival: COLORS.clay,
+                cultural: COLORS.gold,
+              };
+              const categoryIcons: Record<string, string> = {
+                edible: 'restaurant-outline',
+                medicinal: 'medkit-outline',
+                survival: 'compass-outline',
+                cultural: 'people-outline',
+              };
+              return (
+                <Animated.View entering={FadeInDown.delay(220).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                    <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.gold, alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons name="book-outline" size={17} color={COLORS.ink} />
+                    </View>
+                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      Field Uses
+                    </Text>
+                  </View>
+                  <View style={{ gap: 12 }}>
+                    {uses.map((use, i) => (
+                      <View key={i} style={{ flexDirection: 'row', gap: 10 }}>
+                        <View style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: categoryColors[use.category] ?? COLORS.sand, alignItems: 'center', justifyContent: 'center', marginTop: 1, flexShrink: 0 }}>
+                          <Ionicons name={categoryIcons[use.category] as 'restaurant-outline'} size={14} color={COLORS.cream} />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text style={{ color: COLORS.clay, fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 2 }}>
+                            {use.category}
+                          </Text>
+                          <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 19 }}>
+                            {use.description}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </Animated.View>
+              );
+            })()}
+
+            {/* Junior naturalist fact */}
+            {juniorMode && speciesId && getJuniorFact(speciesId) && (
+              <Animated.View entering={FadeInDown.delay(240).duration(280)}>
+                <View style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.gold, borderRadius: 18, padding: 18, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }, glow(COLORS.gold, 10)]}>
+                  <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: COLORS.ink, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: COLORS.gold, fontWeight: '900', fontSize: 18 }}>★</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: COLORS.ink, fontSize: 11, fontWeight: '800', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 4 }}>
+                      Fun Fact!
+                    </Text>
+                    <Text style={{ color: COLORS.ink, fontSize: 15, lineHeight: 22 }}>
+                      {getJuniorFact(speciesId)}
+                    </Text>
+                  </View>
+                </View>
+              </Animated.View>
+            )}
+
+            {/* Ask Field Guide inline button */}
+            <Animated.View entering={FadeInDown.delay(260).duration(280)}>
+              <Pressable
+                onPress={() => router.push(`/ask?speciesId=${speciesId}` as never)}
+                style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.clay, borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }, glow(COLORS.clay, 8)]}
+              >
+                <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="chatbubble-ellipses-outline" size={18} color={COLORS.cream} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>Ask the Field Guide</Text>
+                  <Text style={{ color: COLORS.cream, fontSize: 12, opacity: 0.8, marginTop: 1 }}>On-device AI · No internet needed</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color={COLORS.cream} />
+              </Pressable>
+            </Animated.View>
 
             {/* Taxonomy lineage */}
             {speciesId && getTaxonomy(speciesId) && (() => {

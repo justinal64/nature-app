@@ -1,7 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { initLlama, releaseAllLlama, type LlamaContext, type RNLlamaOAICompatibleMessage } from 'llama.rn';
 
-import { CATALOG } from '@/constants/catalog';
+import { CATALOG, getDangerInfo, getEcosystemRole, getSpeciesUses } from '@/constants/catalog';
 
 // Llama 3.2 3B Instruct, Q4_K_M quantized — ~2 GB download, ~2.4 GB RAM on device.
 // Swap MODEL_URL for the 1B variant (~770 MB) if you need lower memory usage:
@@ -60,13 +60,41 @@ export async function unloadModel(): Promise<void> {
 
 function buildSystemPrompt(speciesId?: string): string {
   const species = speciesId ? CATALOG.find((s) => s.id === speciesId) : null;
-  const catalogContext = species
-    ? `\n\nCurrent species context:\n- Common name: ${species.commonName}\n- Latin: ${species.latin}\n- Family: ${species.family}\n- Region: ${species.region}\n- Description: ${species.description}\n- Did you know: ${species.didYouKnow}\n- ID tips: ${species.idTips.join('; ')}`
+
+  let catalogContext = '';
+  if (species) {
+    const danger = getDangerInfo(species.id);
+    const ecosystem = getEcosystemRole(species.id);
+    const uses = getSpeciesUses(species.id);
+
+    catalogContext = `\n\nCurrent species context:
+- Common name: ${species.commonName}
+- Latin: ${species.latin}
+- Family: ${species.family}
+- Region: ${species.region}
+- Description: ${species.description}
+- Did you know: ${species.didYouKnow}
+- ID tips: ${species.idTips.join('; ')}`;
+
+    if (danger) {
+      catalogContext += `\n- DANGER LEVEL: ${danger.level.toUpperCase()} — ${danger.summary}`;
+      if (danger.firstAid) catalogContext += `\n- First aid: ${danger.firstAid}`;
+    }
+    if (ecosystem) {
+      catalogContext += `\n- Ecosystem role: ${ecosystem}`;
+    }
+    if (uses?.length) {
+      catalogContext += `\n- Human uses: ${uses.map((u) => `[${u.category}] ${u.description}`).join(' | ')}`;
+    }
+  }
+
+  const safetyNote = speciesId && getDangerInfo(speciesId)
+    ? ' This species is dangerous — always lead your answer with the safety information when the user asks if it is safe or what to do if encountered.'
     : '';
 
   return `You are a knowledgeable desert nature guide for the WildLens app. You help users identify and learn about desert plants and animals in the Sonoran, Mojave, Chihuahuan, and Great Basin deserts.
 
-Answer questions concisely and accurately. Focus on identification, behavior, ecology, and safety. If asked about a dangerous species (venomous snake, scorpion), include safety advice. Keep responses to 2-4 sentences unless more detail is genuinely needed.${catalogContext}`;
+Answer questions concisely and accurately. Focus on identification, behavior, ecology, and safety. Keep responses to 2–4 sentences unless more detail is genuinely needed.${safetyNote}${catalogContext}`;
 }
 
 export type ChatMessage = { role: 'user' | 'assistant'; content: string };

@@ -56,7 +56,7 @@ export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { user, signOut, deleteAccount, refreshUser } = useAuth();
-  const { preferScientific, toggleNameDisplay } = useDisplayPrefs();
+  const { preferScientific, toggleNameDisplay, juniorMode, toggleJuniorMode } = useDisplayPrefs();
   const { modelStatus, modelProgress } = useModelInit();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
@@ -584,6 +584,59 @@ export default function ProfileScreen() {
                   borderRadius: 11,
                   backgroundColor: COLORS.cream,
                   alignSelf: preferScientific ? 'flex-end' : 'flex-start',
+                }}
+              />
+            </View>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(447).duration(400)}>
+          <Pressable
+            onPress={toggleJuniorMode}
+            accessibilityRole="switch"
+            accessibilityLabel="Junior naturalist mode"
+            accessibilityState={{ checked: juniorMode }}
+            style={{
+              marginTop: 10,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: juniorMode ? '#FFF8E1' : COLORS.surface,
+              borderRadius: 16,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: juniorMode ? COLORS.gold : COLORS.sand,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Ionicons name="star-outline" size={20} color={juniorMode ? COLORS.gold : COLORS.ink} />
+              <View>
+                <Text style={{ color: juniorMode ? COLORS.ink : COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                  Junior Naturalist
+                </Text>
+                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                  Fun facts and kid-friendly species info
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: 44,
+                height: 26,
+                borderRadius: 13,
+                backgroundColor: juniorMode ? COLORS.gold : COLORS.sand,
+                justifyContent: 'center',
+                paddingHorizontal: 2,
+              }}
+            >
+              <View
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: 11,
+                  backgroundColor: COLORS.cream,
+                  alignSelf: juniorMode ? 'flex-end' : 'flex-start',
                 }}
               />
             </View>

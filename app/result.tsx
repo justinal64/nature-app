@@ -25,7 +25,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { getSpeciesById } from '@/constants/catalog';
+import { getDangerInfo, getSpeciesById } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
@@ -419,6 +419,26 @@ export default function ResultScreen() {
                   >
                     {topResult.latin}
                   </Text>
+
+                  {topResult.speciesId && (() => {
+                    const danger = getDangerInfo(topResult.speciesId!);
+                    if (!danger) return null;
+                    const bgColor = danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
+                    const textColor = danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+                    return (
+                      <Animated.View entering={FadeInDown.delay(200).duration(280)} style={{ marginTop: 14, backgroundColor: bgColor, borderRadius: 12, padding: 12, gap: 4 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                          <Ionicons name={danger.level === 'caution' ? 'alert-circle' : 'warning'} size={16} color={textColor} />
+                          <Text style={{ color: textColor, fontWeight: '800', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                            {danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution'}
+                          </Text>
+                        </View>
+                        <Text style={{ color: textColor, fontSize: 12, lineHeight: 17, opacity: 0.92 }}>
+                          {danger.summary}
+                        </Text>
+                      </Animated.View>
+                    );
+                  })()}
 
                   {stats.length > 0 && (
                     <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>

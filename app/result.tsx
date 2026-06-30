@@ -25,8 +25,8 @@ import { PressableScale } from '@/components/PressableScale';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { getDangerInfo, getSpeciesById } from '@/constants/catalog';
-import type { Species } from '@/constants/catalog';
+import { getDangerInfo, getEdibilityInfo, getSpeciesById } from '@/constants/catalog';
+import type { EdibilityStatus, Species } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { OFFLINE_FALLBACK, identifySpecies } from '@/lib/identify';
 import type { IdentifyResult } from '@/lib/identify';
@@ -443,6 +443,40 @@ export default function ResultScreen() {
                     );
                   })()}
 
+                  {/* Edibility — shown for plants and fungi */}
+                  {topResult.speciesId && (topResult.kind === 'cactus' || topResult.kind === 'fungus') && (() => {
+                    const ed = getEdibilityInfo(topResult.speciesId!);
+                    if (!ed) return null;
+                    const cfg: Record<EdibilityStatus, { bg: string; text: string; icon: React.ComponentProps<typeof Ionicons>['name']; label: string }> = {
+                      edible:         { bg: '#2E6B2A', text: '#FFFFFF', icon: 'checkmark-circle', label: 'Edible'              },
+                      'parts-edible': { bg: '#4A7A35', text: '#FFFFFF', icon: 'leaf',             label: 'Parts Edible'        },
+                      caution:        { bg: '#8B6A00', text: '#FFFFFF', icon: 'alert-circle',     label: 'Edible — Use Caution'},
+                      'not-edible':   { bg: '#3A3A3A', text: '#FFFFFF', icon: 'close-circle',     label: 'Not Edible'          },
+                      toxic:          { bg: '#7A0000', text: '#FFFFFF', icon: 'skull',            label: 'TOXIC — Do Not Eat'  },
+                    };
+                    const c = cfg[ed.status];
+                    return (
+                      <Animated.View entering={FadeInDown.delay(220).duration(280)} style={{ marginTop: 12, backgroundColor: c.bg, borderRadius: 14, overflow: 'hidden' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingTop: 12, paddingBottom: 6 }}>
+                          <Ionicons name={c.icon} size={20} color={c.text} />
+                          <Text style={{ color: c.text, fontWeight: '800', fontSize: 14, textTransform: 'uppercase', letterSpacing: 0.4, flex: 1 }}>
+                            {c.label}
+                          </Text>
+                        </View>
+                        <Text style={{ color: c.text, fontSize: 13, lineHeight: 18, opacity: 0.9, paddingHorizontal: 14, paddingBottom: 12 }}>
+                          {ed.note}
+                        </Text>
+                        {(ed.status === 'caution' || ed.status === 'toxic') && (
+                          <View style={{ backgroundColor: 'rgba(0,0,0,0.25)', paddingHorizontal: 14, paddingVertical: 8 }}>
+                            <Text style={{ color: c.text, fontSize: 11, opacity: 0.85 }}>
+                              Poison Control: 1-800-222-1222
+                            </Text>
+                          </View>
+                        )}
+                      </Animated.View>
+                    );
+                  })()}
+
                   {stats.length > 0 && (
                     <View style={{ flexDirection: 'row', marginTop: 18, gap: 10 }}>
                       {stats.slice(0, 3).map((stat, i) => (
@@ -539,10 +573,21 @@ export default function ResultScreen() {
                     >
                       <SpeciesIcon kind={alt.kind} size={22} color={COLORS.cream} />
                     </View>
-                    <View style={{ flex: 1, marginRight: 12 }}>
+                    <View style={{ flex: 1, marginRight: 8 }}>
                       <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                         {alt.commonName}
                       </Text>
+                      {(alt.kind === 'cactus' || alt.kind === 'fungus') && alt.speciesId && (() => {
+                        const ed = getEdibilityInfo(alt.speciesId!);
+                        if (!ed) return null;
+                        const edColor = ed.status === 'edible' ? '#2E6B2A' : ed.status === 'parts-edible' ? '#4A7A35' : ed.status === 'caution' ? '#8B6A00' : ed.status === 'toxic' ? '#7A0000' : '#3A3A3A';
+                        const edLabel = ed.status === 'edible' ? 'Edible' : ed.status === 'parts-edible' ? 'Parts edible' : ed.status === 'caution' ? 'Caution' : ed.status === 'toxic' ? 'TOXIC' : 'Not edible';
+                        return (
+                          <View style={{ backgroundColor: edColor, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, alignSelf: 'flex-start', marginTop: 4 }}>
+                            <Text style={{ color: '#FFF', fontSize: 10, fontWeight: '700' }}>{edLabel}</Text>
+                          </View>
+                        );
+                      })()}
                       {!isOffline && (
                         <MatchBar pct={alt.confidence} delay={500 + i * 120} />
                       )}

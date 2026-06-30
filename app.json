@@ -107,7 +107,7 @@
         }
       ],
       [
-        "expo-av",
+        "expo-audio",
         {
           "microphonePermission": "WildLens uses your microphone to record bird calls for identification."
         }

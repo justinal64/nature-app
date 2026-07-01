@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
@@ -109,11 +109,12 @@ export default function LoginScreen() {
           </Text>
         </Pressable>
 
-        <Pressable
+        <TouchableOpacity
           onPress={signInWithEmail}
           disabled={loading}
+          activeOpacity={0.8}
           testID="sign-in-button"
-          style={({ pressed }) => [
+          style={[
             {
               marginTop: 6,
               backgroundColor: COLORS.clay,
@@ -121,7 +122,6 @@ export default function LoginScreen() {
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
             },
             glow(COLORS.clay, 10),
           ]}
@@ -136,7 +136,7 @@ export default function LoginScreen() {
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
 
         <Link href="/register" asChild>
           <Pressable style={{ marginTop: 22, alignItems: 'center' }}>

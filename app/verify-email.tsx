@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { sendEmailVerification } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
@@ -113,10 +113,11 @@ export default function VerifyEmailScreen() {
           You&apos;ll need to verify your email before exploring the guide.
         </Text>
 
-        <Pressable
+        <TouchableOpacity
           onPress={checkVerification}
           disabled={loading}
-          style={({ pressed }) => [
+          activeOpacity={0.8}
+          style={[
             {
               marginTop: 36,
               width: '100%',
@@ -125,7 +126,6 @@ export default function VerifyEmailScreen() {
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
             },
             glow(COLORS.clay, 10),
           ]}
@@ -133,27 +133,25 @@ export default function VerifyEmailScreen() {
           <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
             {loading ? 'Checking…' : "I've verified it"}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           onPress={resendEmail}
           disabled={loading}
-          style={({ pressed }) => [
-            {
-              marginTop: 12,
-              width: '100%',
-              borderRadius: 24,
-              paddingVertical: 16,
-              alignItems: 'center',
-              borderWidth: 1.5,
-              borderColor: COLORS.bark,
-              opacity: loading ? 0.6 : 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
-            },
-          ]}
+          activeOpacity={0.8}
+          style={{
+            marginTop: 12,
+            width: '100%',
+            borderRadius: 24,
+            paddingVertical: 16,
+            alignItems: 'center',
+            borderWidth: 1.5,
+            borderColor: COLORS.bark,
+            opacity: loading ? 0.6 : 1,
+          }}
         >
           <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>Resend email</Text>
-        </Pressable>
+        </TouchableOpacity>
 
         <Pressable onPress={signOut} style={{ marginTop: 24, padding: 8 }}>
           <Text

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
@@ -113,17 +113,17 @@ export default function ForgotPasswordScreen() {
               </Text>
             ) : null}
 
-            <Pressable
+            <TouchableOpacity
               onPress={sendReset}
               disabled={loading}
-              style={({ pressed }) => [
+              activeOpacity={0.8}
+              style={[
                 {
                   backgroundColor: COLORS.clay,
                   borderRadius: 24,
                   paddingVertical: 16,
                   alignItems: 'center',
                   opacity: loading ? 0.6 : 1,
-                  transform: [{ scale: pressed ? 0.98 : 1 }],
                 },
                 glow(COLORS.clay, 10),
               ]}
@@ -131,7 +131,7 @@ export default function ForgotPasswordScreen() {
               <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
                 {loading ? 'Sending…' : 'Send reset link'}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
 
             <Pressable onPress={() => router.back()} style={{ marginTop: 22, alignItems: 'center' }}>
               <Text style={{ color: COLORS.bark, fontSize: 14 }}>

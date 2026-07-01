@@ -6,7 +6,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LandscapeHeader } from '@/components/LandscapeHeader';
@@ -142,10 +142,11 @@ export default function RegisterScreen() {
           error={errors.password}
         />
 
-        <Pressable
+        <TouchableOpacity
           onPress={signUp}
           disabled={loading}
-          style={({ pressed }) => [
+          activeOpacity={0.8}
+          style={[
             {
               marginTop: 6,
               backgroundColor: COLORS.clay,
@@ -153,7 +154,6 @@ export default function RegisterScreen() {
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
             },
             glow(COLORS.clay, 10),
           ]}
@@ -168,7 +168,7 @@ export default function RegisterScreen() {
           >
             {loading ? 'Creating account…' : 'Create account'}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
 
         <Link href="/login" asChild>
           <Pressable style={{ marginTop: 22, alignItems: 'center' }}>

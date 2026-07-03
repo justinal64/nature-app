@@ -1,3 +1,4 @@
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import * as Network from 'expo-network';
 
 import { CATALOG } from '@/constants/catalog';
@@ -24,7 +25,10 @@ const INAT_API_TOKEN = process.env.EXPO_PUBLIC_INATURALIST_API_TOKEN ?? '';
 async function hasNetwork(): Promise<boolean> {
   try {
     const state = await Network.getNetworkStateAsync();
-    return Boolean(state.isConnected && state.isInternetReachable !== false);
+    // Only treat as offline when we are *sure* there's no link. On the iOS
+    // simulator `isInternetReachable` is frequently false/undefined even when
+    // online, so don't let it alone force the offline path.
+    return state.isConnected !== false;
   } catch {
     return true; // if we can't tell, let the request attempt and fail fast
   }
@@ -91,10 +95,20 @@ export async function identifySpecies(
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
+    // Normalize to a real, moderately-sized JPEG before upload. The picker can
+    // hand back HEIC (iOS default) or a multi-MB full-res image; iNat's
+    // score_image 500s on those. Re-encoding guarantees valid JPEG bytes that
+    // match the declared content type.
+    const prepared = await manipulateAsync(
+      imageUri,
+      [{ resize: { width: 640 } }],
+      { compress: 0.85, format: SaveFormat.JPEG },
+    );
+
     const body = new FormData();
     // iNat expects the file under the `image` field, not `file`.
     body.append('image', {
-      uri: imageUri,
+      uri: prepared.uri,
       name: 'photo.jpg',
       type: 'image/jpeg',
     } as unknown as Blob);

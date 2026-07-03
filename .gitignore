@@ -42,3 +42,6 @@ yarn-error.*
 /android
 
 .env
+
+# iNat training dataset pulled by scripts/pull_inat_dataset.py (large, not for git)
+inat_dataset/

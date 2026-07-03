@@ -14,6 +14,7 @@ What it produces:
 Usage:
   pip install requests
   python scripts/pull_inat_dataset.py --counts-only            # availability check, no downloads
+  python scripts/pull_inat_dataset.py --min-available 200      # only species with >=200 imgs (needs a prior --counts-only)
   python scripts/pull_inat_dataset.py --kinds bird,snake       # only some groups
   python scripts/pull_inat_dataset.py --species saguaro,coyote # explicit subset
   python scripts/pull_inat_dataset.py --per-species 500        # full pull with a cap
@@ -215,6 +216,10 @@ def parse_args(argv=None):
     ap.add_argument("--per-obs", type=int, default=1, help="photos per observation (1 = most diverse)")
     ap.add_argument("--species", default="", help="comma-separated catalog ids to include (default: all)")
     ap.add_argument("--kinds", default="", help="comma-separated kinds to include, e.g. bird,snake")
+    ap.add_argument("--min-available", type=int, default=0,
+                    help="only pull species with >= N images in the counts report (0 = off)")
+    ap.add_argument("--report", default=None,
+                    help="path to the counts report for --min-available (default: <output>/report_counts.csv)")
     ap.add_argument("--place-id", type=int, default=None, help="iNat place_id instead of the default bbox")
     ap.add_argument("--no-geo", action="store_true", help="disable the geographic filter (global pull)")
     ap.add_argument("--counts-only", action="store_true", help="report availability, download nothing")
@@ -236,6 +241,28 @@ def select_species(all_species, args) -> list[dict]:
         kinds = {k.strip() for k in args.kinds.split(",") if k.strip()}
         picked = [s for s in picked if s["kind"] in kinds]
     return picked
+
+
+def filter_by_report(species: list[dict], report_path: Path, min_available: int) -> list[dict]:
+    """Keep only species with >= min_available images per a prior counts report."""
+    if not report_path.exists():
+        sys.exit(f"--min-available needs a counts report at {report_path}. "
+                 f"Run `--counts-only` first.")
+    counts: dict[str, int] = {}
+    with report_path.open(encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            try:
+                counts[row["species_id"]] = int(row["found"])
+            except (KeyError, ValueError):
+                continue
+    kept, dropped = [], []
+    for sp in species:
+        if counts.get(sp["id"], -1) >= min_available:
+            kept.append(sp)
+        else:
+            dropped.append(f"{sp['id']} ({counts.get(sp['id'], 'not in report')})")
+    print(f"--min-available {min_available}: kept {len(kept)}, dropped {len(dropped)} below threshold\n")
+    return kept
 
 
 def dedupe_by_latin(species: list[dict]) -> list[dict]:
@@ -274,6 +301,9 @@ def main(argv=None):
     session = make_session()
 
     species = dedupe_by_latin(select_species(load_species_from_catalog(), args))
+    if args.min_available > 0:
+        report_path = Path(args.report) if args.report else (out_root / "report_counts.csv")
+        species = filter_by_report(species, report_path, args.min_available)
     print(f"Selected {len(species)} species "
           f"(geo={'off' if args.no_geo else (f'place {args.place_id}' if args.place_id else 'Sonoran bbox')}, "
           f"cap={args.per_species}/species, counts_only={args.counts_only})")

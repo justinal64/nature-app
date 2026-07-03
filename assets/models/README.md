@@ -1,45 +1,53 @@
 # On-Device Species ID Model
 
-The app uses a TFLite model for offline species identification. The model files are not
-checked into git (too large). Follow these steps to set them up before running a build.
+The app identifies species offline with a TFLite classifier. The model is **not
+bundled and not checked into git** — it is **downloaded once at runtime** and
+cached on-device, so the app binary stays small.
 
-## Quickstart
+## How delivery works (no manual setup)
 
-Download the public iNaturalist 500-taxa model from their GitHub releases:
+`context/ModelInitContext.tsx` (`ModelInitProvider`, mounted in
+`app/_layout.tsx`) runs after email verification — while the user still has the
+connectivity they used to sign in — and calls `downloadModel()` from
+`lib/local-identify.ts`. It fetches:
 
-```
-https://github.com/inaturalist/model-files/releases
-```
+- `INatVision_Small_2_fact256_8bit.tflite` → saved as `species_id.tflite`
+- `taxonomy.json`
 
-You need two files:
-- `small_inception_tf1.tflite` → rename to `species_id.tflite`, place here
-- `taxonomy.json` — place here as-is
+into `FileSystem.documentDirectory/wildlens-models/`. After that first
+download the model works fully offline on every launch. Progress/status is
+surfaced in the Profile screen via `useModelInit()`. If the download hasn't
+happened yet, `identifyFromPhoto()` falls back to the 5-species list.
 
-Expected taxonomy format: a JSON array of scientific names, index-aligned with model outputs:
-```json
-["Plantae", "Animalia", "Carnegiea gigantea", ...]
-```
+This directory only holds this README (and `.gitkeep`) — nothing needs to be
+placed here by hand.
 
-If the iNat taxonomy.json uses a different format (e.g. `{ "labels": [...] }`), the
-`loadModel()` function in `lib/local-identify.ts` handles both.
+## Model source
 
-## Without the model files
+iNaturalist's public model, release **v25.01.15**:
+<https://github.com/inaturalist/model-files/releases>
 
-The app works without these files — it gracefully falls back to the 5-species hardcoded
-list when the model is unavailable. Users can also trigger a download at runtime via
-`downloadModel()` from `lib/local-identify.ts`.
+- Vision model output is a **507-class** vector indexed by `leaf_class_id`.
+- `taxonomy.json` is a **JSON array of taxon objects**
+  (`{ taxon_id, leaf_class_id, rank_level, name, ... }`); only leaf taxa carry a
+  `leaf_class_id`. `lib/local-identify.ts` builds a `leaf_class_id → scientific
+  name` map from it, then matches those names against `constants/catalog.ts`.
 
 ## Changing the model
 
-To use a different TFLite model (e.g. a fine-tuned version for WildLens's 163 species):
-1. Replace `species_id.tflite` with your model
-2. Update `taxonomy.json` to match your model's output class ordering
-3. If your model uses a different input size (not 224×224), update `local-identify.ts`
+To swap in a different classifier (e.g. a WildLens-specific fine-tune):
+
+1. Update `MODEL_DOWNLOAD_URL` / `TAXONOMY_DOWNLOAD_URL` in
+   `lib/local-identify.ts`.
+2. Make sure the taxonomy maps the model's output indices to scientific names
+   present in the catalog. `local-identify.ts` derives input size and dtype
+   from the model's own input tensor, so a different input size needs no code
+   change.
 
 ## GPU acceleration
 
-The app bundles CoreML (iOS) and GPU (Android) delegates via the `react-native-fast-tflite`
-config plugin. By default the code uses CPU-only inference (`delegates: []`) for broadest
-model compatibility. To enable CoreML delegate, change `loadTensorflowModel({ url }, [])`
-to `loadTensorflowModel({ url }, ['core-ml'])` in `lib/local-identify.ts` — then test
-on a physical device to confirm your model is CoreML-compatible.
+The `react-native-fast-tflite` config plugin bundles CoreML (iOS) and GPU
+(Android) delegates. The code uses CPU-only inference (`delegates: []`) for
+broad model compatibility. To try CoreML, change `loadTensorflowModel({ url },
+[])` to `loadTensorflowModel({ url }, ['core-ml'])` and test on a physical
+device.

@@ -56,11 +56,13 @@ ALLOWED_LICENSES = ("cc0", "cc-by", "cc-by-sa")
 # Mexico. Override with --no-geo to pull globally for data-starved species.
 DEFAULT_BBOX = (28.0, -117.5, 37.5, -108.0)
 
-# Politeness: iNat asks for <=60 req/min and a real User-Agent. One API request
-# per ~1.1s keeps us well under that. Image GETs hit the static store, not the
-# API, so those run in a small thread pool.
-API_DELAY_S = 1.1
-DOWNLOAD_WORKERS = 8
+# Politeness (all overridable via CLI flags). iNat asks for <=60 req/min and a
+# real User-Agent. One API request per ~1.1s keeps us well under that. Image
+# GETs hit the static Open Data store (S3), not the API, but we still throttle
+# them: a small worker pool plus a per-image delay in each worker.
+API_DELAY_S = 1.1        # seconds between iNat API requests (~1/sec)
+DOWNLOAD_WORKERS = 4     # concurrent image downloads
+DOWNLOAD_DELAY_S = 0.25  # seconds each worker waits after every image GET
 PER_PAGE = 200  # API max
 
 # ---------------------------------------------------------------------------
@@ -192,6 +194,7 @@ def download_one(session: requests.Session, rec: dict, dest_dir: Path) -> bool:
         return True  # resume: already have it
     try:
         r = session.get(rec["source_url"], timeout=60)
+        time.sleep(DOWNLOAD_DELAY_S)  # throttle the photo store politely
         if r.status_code != 200 or not r.content:
             return False
         path.write_bytes(r.content)
@@ -215,6 +218,12 @@ def parse_args(argv=None):
     ap.add_argument("--place-id", type=int, default=None, help="iNat place_id instead of the default bbox")
     ap.add_argument("--no-geo", action="store_true", help="disable the geographic filter (global pull)")
     ap.add_argument("--counts-only", action="store_true", help="report availability, download nothing")
+    ap.add_argument("--api-delay", type=float, default=API_DELAY_S,
+                    help=f"seconds between iNat API requests (default {API_DELAY_S})")
+    ap.add_argument("--workers", type=int, default=DOWNLOAD_WORKERS,
+                    help=f"concurrent image downloads (default {DOWNLOAD_WORKERS})")
+    ap.add_argument("--download-delay", type=float, default=DOWNLOAD_DELAY_S,
+                    help=f"seconds each worker waits per image (default {DOWNLOAD_DELAY_S})")
     return ap.parse_args(argv)
 
 
@@ -255,6 +264,11 @@ def dedupe_by_latin(species: list[dict]) -> list[dict]:
 
 def main(argv=None):
     args = parse_args(argv)
+    global API_DELAY_S, DOWNLOAD_WORKERS, DOWNLOAD_DELAY_S
+    API_DELAY_S = args.api_delay
+    DOWNLOAD_WORKERS = args.workers
+    DOWNLOAD_DELAY_S = args.download_delay
+
     bbox = None if args.no_geo else DEFAULT_BBOX
     out_root = Path(args.output)
     session = make_session()
@@ -262,7 +276,9 @@ def main(argv=None):
     species = dedupe_by_latin(select_species(load_species_from_catalog(), args))
     print(f"Selected {len(species)} species "
           f"(geo={'off' if args.no_geo else (f'place {args.place_id}' if args.place_id else 'Sonoran bbox')}, "
-          f"cap={args.per_species}/species, counts_only={args.counts_only})\n")
+          f"cap={args.per_species}/species, counts_only={args.counts_only})")
+    print(f"Pacing: {API_DELAY_S:.2f}s/API request, "
+          f"{DOWNLOAD_WORKERS} download workers x {DOWNLOAD_DELAY_S:.2f}s/image\n")
 
     if not args.counts_only:
         out_root.mkdir(parents=True, exist_ok=True)

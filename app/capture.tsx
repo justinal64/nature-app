@@ -3,7 +3,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Line } from 'react-native-svg';
 
@@ -263,10 +263,13 @@ export default function CaptureScreen() {
           <Ionicons name="images-outline" size={24} color={COLORS.cream} />
         </Pressable>
 
-        <Pressable
+        <TouchableOpacity
           onPress={takePicture}
           disabled={capturing}
-          style={({ pressed }) => [
+          activeOpacity={0.8}
+          accessibilityLabel="Take picture"
+          accessibilityRole="button"
+          style={[
             {
               width: 78,
               height: 78,
@@ -276,7 +279,6 @@ export default function CaptureScreen() {
               backgroundColor: 'rgba(244, 236, 218, 0.2)',
               alignItems: 'center',
               justifyContent: 'center',
-              transform: [{ scale: pressed ? 0.94 : 1 }],
               opacity: capturing ? 0.6 : 1,
             },
             glow(COLORS.cream, 12),
@@ -294,7 +296,7 @@ export default function CaptureScreen() {
               }}
             />
           )}
-        </Pressable>
+        </TouchableOpacity>
 
         <Pressable
           onPress={() => router.push('/sound-id' as never)}

@@ -234,15 +234,6 @@ export const PHENOLOGY_EVENTS: PhenologyEvent[] = [
     note: 'Silky yellow, pink, or orange flowers April–May. Bees and beetles visit heavily.',
   },
   {
-    id: 'blue-palo-verde-bloom',
-    speciesId: 'blue-palo-verde',
-    commonName: 'Blue Palo Verde',
-    eventType: 'bloom',
-    category: 'Plants',
-    startWeek: 15, peakWeek: 16, endWeek: 19,
-    note: 'Explodes in a cloud of yellow flowers April–May. One of the most dramatic desert blooms.',
-  },
-  {
     id: 'palo-verde-bloom',
     speciesId: 'palo-verde',
     commonName: 'Palo Verde',
@@ -762,15 +753,6 @@ export const PHENOLOGY_EVENTS: PhenologyEvent[] = [
     category: 'Insects & Arachnids',
     startWeek: 36, peakWeek: 39, endWeek: 42,
     note: 'Males wander at dusk Sep–Oct searching for females. A tarantula crossing a desert road in fall is almost always a male on his mating walk.',
-  },
-  {
-    id: 'pepsis-wasp-active',
-    speciesId: 'pepsis-wasp',
-    commonName: 'Pepsis Wasp (Tarantula Hawk)',
-    eventType: 'active',
-    category: 'Insects & Arachnids',
-    startWeek: 26, peakWeek: 31, endWeek: 40,
-    note: 'Hunts and paralyzes tarantulas as a living larder for larvae. Most visible July–October when monsoon insects peak.',
   },
 
   // ── MAMMALS ──────────────────────────────────────────────────────────────

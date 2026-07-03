@@ -110,23 +110,6 @@ const PROTOCOLS: Partial<Record<string, EncounterProtocol>> = {
     emergencyNote: 'Arizona Poison Control: 1-800-222-1222',
   },
 
-  'western-rattlesnake': {
-    immediateAction: 'Stop, locate the snake, and back away slowly without turning your back on it.',
-    distanceRecommendation: 'At least 6 ft. Common on hiking trails in California, Nevada, and southern Oregon.',
-    do: [
-      'Listen for the rattle — it sounds like a distant lawn sprinkler or cicada',
-      'Watch your step near rocky sunny outcrops in the morning when snakes bask',
-      'Carry a snakebite action card or have the Poison Control number saved offline',
-    ],
-    dont: [
-      'Throw rocks or sticks to make it move — this provokes defensive strikes',
-      'Block trail for other hikers — go around, then warn those behind you',
-    ],
-    ifBitten:
-      'Call 911. Immobilize and go to an ER. Do not apply ice or alcohol.',
-    emergencyNote: 'California Poison Control: 1-800-222-1222',
-  },
-
   'sonoran-coral-snake': {
     immediateAction: 'Back away. Do not handle. Its small mouth requires direct contact to envenomated.',
     distanceRecommendation: 'Do not approach. The "red touches yellow, kill a fellow" rhyme applies here.',
@@ -166,7 +149,7 @@ const PROTOCOLS: Partial<Record<string, EncounterProtocol>> = {
     emergencyNote: 'Arizona Poison Control: 1-800-222-1222. Anascorp antivenom is available at most AZ ERs.',
   },
 
-  'tarantula': {
+  'desert-tarantula': {
     immediateAction: 'Observe from a respectful distance. Tarantulas are not aggressive and rarely bite humans.',
     distanceRecommendation: '12+ inches for viewing. They are docile but will rear up if cornered.',
     do: [
@@ -199,22 +182,6 @@ const PROTOCOLS: Partial<Record<string, EncounterProtocol>> = {
     ifStung:
       'The sting causes immediate, blinding pain lasting 3–5 minutes, then subsides. No antivenom exists or is needed. Ice the site. Take ibuprofen. Do not scratch. The sting is painful but not medically dangerous to healthy adults — call Poison Control if an allergic reaction develops.',
     emergencyNote: 'Anaphylaxis is rare but possible. If breathing difficulty develops: call 911.',
-  },
-
-  'pepsis-wasp': {
-    immediateAction: 'Give way — they are intent on hunting tarantulas, not people.',
-    distanceRecommendation: 'Same species as tarantula hawk. See tarantula-hawk protocol.',
-    do: [
-      'Watch the behavior from a safe distance — witnessing a tarantula hunt is remarkable',
-      'Wear shoes outdoors in late summer desert areas',
-    ],
-    dont: [
-      'Interfere with a hunt in progress',
-      'Swat if one lands on you — stay still and it will move on',
-    ],
-    ifStung:
-      'Intense pain for 3–5 minutes, then subsides. Ice and ibuprofen. Seek care only if systemic allergic reaction develops.',
-    emergencyNote: 'Anaphylaxis: call 911. Poison Control: 1-800-222-1222.',
   },
 
   // ── MAMMALS ───────────────────────────────────────────────────────────────

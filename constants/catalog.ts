@@ -1209,18 +1209,6 @@ export const CATALOG: Species[] = [
     stats: [{ label: 'Height', value: '2–4 ft' }, { label: 'Bloom', value: 'Feb–May' }, { label: 'Resin', value: 'Fragrant' }, { label: 'Status', value: 'Native' }],
   },
   {
-    id: 'blue-palo-verde',
-    commonName: 'Blue Palo Verde',
-    latin: 'Parkinsonia florida',
-    family: 'Legume · Fabaceae',
-    kind: 'cactus',
-    region: 'SONORAN',
-    description: 'The state tree of Arizona. Named for its smooth, blue-green bark that photosynthesizes even when the tree drops its tiny leaves during drought. In April and May, it explodes into a cloud of thousands of small yellow flowers — one of the desert\'s most spectacular blooms.',
-    didYouKnow: 'Blue Palo Verde bark contains chlorophyll and can photosynthesize year-round, meaning the tree never truly "shuts down" even in drought.',
-    idTips: ['Smooth blue-green bark on trunk and branches', 'Tiny compound leaves dropped in drought', 'Yellow 5-petaled flowers with a single orange spot', 'Thorny at branch tips; grows along desert washes'],
-    stats: [{ label: 'Height', value: '15–30 ft' }, { label: 'Bloom', value: 'Apr–May' }, { label: 'State tree', value: 'Arizona' }, { label: 'Lifespan', value: '100+ yr' }],
-  },
-  {
     id: 'desert-poppy',
     commonName: 'Mexican Gold Poppy',
     latin: 'Eschscholzia californica mexicana',
@@ -1428,18 +1416,6 @@ export const CATALOG: Species[] = [
     idTips: ['Pale gray-brown with brown spotting on sides and reddish-brown on back', 'Blunt head, rounded body; row of enlarged dorsal scales', 'Often seen basking on creosote or running across open sand', 'Active even in midday heat when other lizards have retreated'],
     stats: [{ label: 'Length', value: '10–16 in' }, { label: 'Temp tolerance', value: '110°F+' }, { label: 'Diet', value: 'Herbivore' }, { label: 'Status', value: 'Stable' }],
   },
-  {
-    id: 'pepsis-wasp',
-    commonName: 'Tarantula Hawk Wasp',
-    latin: 'Pepsis grossa',
-    family: 'Spider Wasps · Pompilidae',
-    kind: 'insect',
-    region: 'MOJAVE',
-    description: 'With a sting rated among the most painful of any insect in the world (Schmidt Sting Pain Index: 4/4), the tarantula hawk hunts tarantulas, paralyzes them, and lays a single egg inside. The wasp larva slowly consumes the still-living spider over several weeks. Adults feed only on nectar.',
-    didYouKnow: 'The immediate pain from a tarantula hawk sting is so intense that entomologist Justin Schmidt described the only sensible response as "lying down and screaming."',
-    idTips: ['Large wasp 1.5–2 inches long', 'Metallic blue-black body with orange wings (warning coloration)', 'Often seen on milkweed and desert flowers nectaring', 'Dragging a paralyzed tarantula is an unmistakable field sign'],
-    stats: [{ label: 'Length', value: '1.5–2 in' }, { label: 'Sting pain', value: 'Extreme (4/4)' }, { label: 'Season', value: 'Jun–Sep' }, { label: 'Status', value: 'Stable' }],
-  },
   // ─── Chihuahuan Species ──────────────────────────────────────────────────────
   {
     id: 'sotol',
@@ -1512,18 +1488,6 @@ export const CATALOG: Species[] = [
     didYouKnow: 'Black-tailed Rattlesnakes are excellent climbers and are regularly found in trees and shrubs up to 6 feet off the ground, a surprising trait for a heavy-bodied viper.',
     idTips: ['Distinctive jet-black tail contrasting with lighter body', 'Olive-green to yellow-brown body with dark crossbands', 'Large, heavy-bodied', 'Rocky canyon and mountain habitat from 3,500–9,000 ft elevation'],
     stats: [{ label: 'Length', value: '30–50 in' }, { label: 'Venomous', value: 'Yes' }, { label: 'Season', value: 'Apr–Oct' }, { label: 'Status', value: 'Stable' }],
-  },
-  {
-    id: 'tarantula',
-    commonName: 'Desert Tarantula',
-    latin: 'Aphonopelma chalcodes',
-    family: 'Tarantulas · Theraphosidae',
-    kind: 'insect',
-    region: 'CHIHUAHUAN',
-    description: 'Arizona\'s iconic large spider, covered in rusty-brown hair and spanning up to 5 inches. Adult males wander great distances in late summer searching for mates — the origin of the "tarantula migration" seen crossing Chihuahuan Desert roads in August and September. Despite their fearsome appearance, their venom is mild.',
-    didYouKnow: 'Female tarantulas can live 20–30 years in the wild; males die within months of their first mating season, often eaten by the female afterward.',
-    idTips: ['Large, hairy spider with tan abdomen and darker brown legs', 'Spans 4–5 inches leg-tip to leg-tip', 'Slow, deliberate gait', 'Males cross roads in August–September during mating season'],
-    stats: [{ label: 'Span', value: '4–5 in' }, { label: 'Lifespan', value: '20–30 yr (female)' }, { label: 'Season', value: 'Aug–Sep (males)' }, { label: 'Status', value: 'Stable' }],
   },
   // ─── Great Basin Species ─────────────────────────────────────────────────────
   {
@@ -1976,19 +1940,6 @@ export const CATALOG: Species[] = [
     idTips: ['Very slender, long snake with small head', 'Reddish-orange banding in Sonoran subspecies', 'Extremely fast — disappears before you can focus', 'Often seen crossing open roads at midday'],
     stats: [{ label: 'Length', value: '4–6 ft' }, { label: 'Speed', value: 'Up to 6 mph' }, { label: 'Venomous', value: 'No' }, { label: 'Season', value: 'Mar–Oct' }],
   },
-  // ─── Sonoran Birds (round 3) ─────────────────────────────────────────────────
-  {
-    id: 'saguaro-cactus-wren',
-    commonName: 'Cactus Wren',
-    latin: 'Campylorhynchus brunneicapillus',
-    family: 'Wrens · Troglodytidae',
-    kind: 'bird',
-    region: 'SONORAN',
-    description: 'Arizona\'s state bird and the largest wren in North America. Builds football-shaped, thatch-domed nests in the arms of cholla or saguaro cactus — the spines provide effective predator protection. A noisy, bold bird with a distinctive, unmusical "chur-chur-chur-chur" call. Non-migratory and intensely territorial year-round.',
-    didYouKnow: 'Cactus Wrens build dummy nests — extra nests never used for eggs — as decoys to confuse predators and as roosting sites for the male during breeding season.',
-    idTips: ['Large wren with bold white eyebrow stripe', 'Heavily spotted breast and barred wings', 'Loud, harsh rattling call', 'Always near or in cholla or saguaro — the spiny nest platform is diagnostic'],
-    stats: [{ label: 'Length', value: '7–9 in' }, { label: 'State bird', value: 'Arizona' }, { label: 'Season', value: 'Year-round' }, { label: 'Status', value: 'Stable' }],
-  },
   {
     id: 'white-winged-dove',
     commonName: 'White-winged Dove',
@@ -2287,18 +2238,6 @@ export const CATALOG: Species[] = [
     idTips: ['Two distinct black collar rings on neck', 'Large, robust head with powerful jaw muscles', 'Male: blue-green and orange breeding colors', 'Runs bipedally at full speed — visible as a tiny dinosaur sprint'],
     stats: [{ label: 'Length', value: '8–14 in' }, { label: 'Season', value: 'Apr–Sep' }, { label: 'Runs', value: 'Bipedally' }, { label: 'Status', value: 'Stable' }],
   },
-  {
-    id: 'western-rattlesnake',
-    commonName: 'Great Basin Rattlesnake',
-    latin: 'Crotalus oreganus lutosus',
-    family: 'Pit Vipers · Viperidae',
-    kind: 'snake',
-    region: 'GREAT_BASIN',
-    description: 'The dominant rattlesnake of the Great Basin, adapted to cold-tolerant activity at elevations up to 11,000 feet. More cold-active than other rattlesnakes and the last to brumate in fall. Pale tan to gray coloration matches the bleached alkaline soils of the basin floor. Feeds primarily on kangaroo rats and other small desert rodents.',
-    didYouKnow: 'Great Basin Rattlesnakes have been documented active on the surface at temperatures as low as 50°F — much colder than most other rattlesnake species will tolerate.',
-    idTips: ['Pale tan to gray with faded brown blotches', 'Heavy-bodied with the characteristic triangular head and rattle', 'Often found on rocky outcrops at higher elevations than other rattlers', 'More sluggish and less defensive than Mojave or Western Diamondback'],
-    stats: [{ label: 'Length', value: '2–4 ft' }, { label: 'Elevation', value: 'Up to 11,000 ft' }, { label: 'Season', value: 'Apr–Oct' }, { label: 'Venomous', value: 'Yes' }],
-  },
   // ─── Great Basin Mammals (round 2) ───────────────────────────────────────────
   {
     id: 'pygmy-rabbit',
@@ -2351,18 +2290,6 @@ export const CATALOG: Species[] = [
     stats: [{ label: 'Length', value: '3–5 in' }, { label: 'Season', value: 'Apr–Sep' }, { label: 'Camouflage', value: 'Exceptional' }, { label: 'Status', value: 'Stable' }],
   },
   {
-    id: 'gambel-quail',
-    commonName: 'Gambel\'s Quail',
-    latin: 'Callipepla gambelii',
-    family: 'Pheasants · Phasianidae',
-    kind: 'bird',
-    region: 'SONORAN',
-    description: 'The most recognizable bird of the Sonoran Desert — the male\'s drooping black topknot plume is iconic. Travels in family coveys of 20–50 birds that give a constant chorus of calls. One of the few birds that can regulate clutch size based on rainfall: in drought years, females may not breed at all; in wet years, they can produce 12–16 eggs.',
-    didYouKnow: 'Gambel\'s Quail chicks can run within hours of hatching and begin finding their own food at 2 days old — among the most precocial birds in North America.',
-    idTips: ['Teardrop-shaped black topknot plume on male', 'Male: chestnut crown and flanks, black face, scaled belly', 'Female: plain gray-brown without topknot black markings', 'Runs ahead of threats rather than flying; coveys of 20–50'],
-    stats: [{ label: 'Length', value: '9–11 in' }, { label: 'Covey size', value: '20–50' }, { label: 'Season', value: 'Year-round' }, { label: 'Status', value: 'Stable' }],
-  },
-  {
     id: 'desert-spiny-lizard',
     commonName: 'Desert Spiny Lizard',
     latin: 'Sceloporus magister',
@@ -2400,18 +2327,6 @@ export const CATALOG: Species[] = [
   },
 
   // ── Arachnids ─────────────────────────────────────────────────────────────
-  {
-    id: 'western-black-widow',
-    commonName: 'Western Black Widow',
-    latin: 'Latrodectus hesperus',
-    family: 'Cobweb Spiders · Theridiidae',
-    kind: 'arachnid',
-    region: 'SONORAN',
-    description: 'The most medically significant spider in North America. Females are jet black with a vivid red hourglass on the underside of the abdomen. Venom contains a potent neurotoxin (latrotoxin) that causes severe muscle cramps, sweating, and nausea, but fatalities in healthy adults are rare with modern medical treatment. Found under rocks, woodpiles, and debris across all four North American deserts.',
-    didYouKnow: 'The "widow" name comes from the female\'s habit of occasionally eating the male after mating — though this happens far less often in the wild than in captivity.',
-    idTips: ['Female: shiny black, 1.5 in leg span; red or orange hourglass on underside', 'Messy, irregular cobweb close to ground in sheltered spots', 'Male is much smaller and patterned; rarely encountered', 'Do not confuse with false black widow (Steatoda) — no hourglass'],
-    stats: [{ label: 'Body', value: '0.5 in (female)' }, { label: 'Venom', value: 'Neurotoxic' }, { label: 'Active', value: 'Nocturnal' }, { label: 'Status', value: 'Very common' }],
-  },
   {
     id: 'giant-desert-hairy-scorpion',
     commonName: 'Giant Desert Hairy Scorpion',
@@ -2735,7 +2650,6 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'prickly-pear':           ALL,
   'desert-marigold':        [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   'brittlebush':            [2, 3, 4, 5, 10, 11, 12],
-  'blue-palo-verde':        ALL,
   'desert-poppy':           [2, 3, 4],
 
   // Additional Sonoran Birds
@@ -2761,7 +2675,6 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'le-conte-thrasher':      ALL,
   'mojave-sidewinder':      [3, 4, 5, 6, 7, 8, 9, 10],
   'desert-iguana':          [4, 5, 6, 7, 8, 9],
-  'pepsis-wasp':            [6, 7, 8, 9],
 
   // Chihuahuan
   'sotol':                  ALL,
@@ -2770,7 +2683,6 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'aplomado-falcon':        ALL,
   'texas-banded-gecko':     [4, 5, 6, 7, 8, 9, 10],
   'black-tailed-rattlesnake': [4, 5, 6, 7, 8, 9, 10],
-  'tarantula':              [8, 9, 10],
 
   // Great Basin
   'utah-juniper':           ALL,
@@ -2830,7 +2742,6 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'sonoran-coachwhip':      [3, 4, 5, 6, 7, 8, 9, 10],
 
   // Sonoran Birds round 3
-  'saguaro-cactus-wren':    ALL,
   'white-winged-dove':      [4, 5, 6, 7, 8, 9],
 
   // Mojave Birds round 2
@@ -2855,7 +2766,6 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
 
   // Great Basin Reptiles round 2
   'great-basin-collared-lizard': [4, 5, 6, 7, 8, 9],
-  'western-rattlesnake':    [4, 5, 6, 7, 8, 9, 10],
 
   // Great Basin Mammals round 2
   'pygmy-rabbit':           ALL,
@@ -2864,13 +2774,11 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
 
   // Final 5
   'desert-horned-lizard':   [4, 5, 6, 7, 8, 9],
-  'gambel-quail':           ALL,
   'desert-spiny-lizard':    [3, 4, 5, 6, 7, 8, 9, 10, 11],
   'white-throated-swift':   [3, 4, 5, 6, 7, 8, 9, 10],
   'desert-kangaroo-rat':    ALL,
 
   // Arachnids
-  'western-black-widow':        ALL,
   'giant-desert-hairy-scorpion': [4, 5, 6, 7, 8, 9, 10],
   'vinegaroon':                 [7, 8, 9, 10],   // monsoon season emergence
   // Expanded plants
@@ -2968,7 +2876,6 @@ const IUCN_STATUSES: Partial<Record<string, IUCNStatus>> = {
   'mojave-yucca':        'LC',
   'big-sagebrush':       'LC',
   'prickly-pear':        'LC',
-  'blue-palo-verde':     'LC',
   'lechuguilla':         'LC',
   // Birds
   'gambels-quail':       'LC',
@@ -3046,7 +2953,6 @@ const TAXONOMY_MAP: Partial<Record<string, Taxonomy>> = {
   'mojave-yucca':    { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Yucca',         species:'schidigera'  },
   'big-sagebrush':   { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Asterales',      family:'Asteraceae',       genus:'Artemisia',     species:'tridentata'  },
   'prickly-pear':    { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Caryophyllales', family:'Cactaceae',        genus:'Opuntia',       species:'engelmannii' },
-  'blue-palo-verde': { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Fabales',        family:'Fabaceae',         genus:'Parkinsonia',   species:'florida'     },
   'lechuguilla':          { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Liliopsida',    order:'Asparagales',    family:'Asparagaceae',     genus:'Agave',         species:'lechuguilla'   },
   // ── Expanded plants ──────────────────────────────────────────────────────────
   'globe-mallow':         { kingdom:'Plantae',  phylum:'Tracheophyta', class:'Magnoliopsida', order:'Malvales',       family:'Malvaceae',        genus:'Sphaeralcea',   species:'ambigua'       },
@@ -3168,7 +3074,6 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'prickly-pear':               'native',
   'desert-marigold':            'native',
   brittlebush:                  'native',
-  'blue-palo-verde':            'native',
   'desert-poppy':               'native',
   'gambels-quail':              'native',
   roadrunner:                   'native',
@@ -3200,8 +3105,6 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'tiger-rattlesnake':          'native',
   'long-nosed-snake':           'native',
   'scott-oriole':               'native',
-  'pepsis-wasp':                'native',
-  'saguaro-cactus-wren':        'native',
   'white-winged-dove':          'native',
   'common-raven':               'native',
   verdin:                       'native',
@@ -3251,7 +3154,6 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'short-horned-lizard':        'native',
   'western-meadowlark':         'native',
   'horned-lark':                'native',
-  'western-rattlesnake':        'native',
   'burrowing-owl':              'native',
   'utah-juniper':               'native',
   'single-leaf-pinyon':         'native',
@@ -3276,7 +3178,6 @@ const ESTABLISHMENT_MAP: Partial<Record<string, EstablishmentStatus>> = {
   'pygmy-rabbit':               'native',
   shadscale:                    'native',
   greasewood:                   'native',
-  'gambel-quail':               'native',
   // ── Expanded plants ──────────────────────────────────────────────────────────
   'globe-mallow':               'native',
   'sacred-datura':              'native',
@@ -3373,20 +3274,10 @@ const DANGER_INFO: Partial<Record<string, DangerInfo>> = {
     summary: 'Hemotoxic venom. The most common rattlesnake across the Great Basin.',
     firstAid: 'Immobilize the bitten limb and seek emergency care. Call Poison Control (1-800-222-1222).',
   },
-  'western-rattlesnake': {
-    level: 'venomous',
-    summary: 'Hemotoxic venom with potency that varies by population and elevation.',
-    firstAid: 'Any bite is a medical emergency. Immobilize the limb and go directly to an emergency room.',
-  },
   'black-widow': {
     level: 'venomous',
     summary: 'Neurotoxic venom 15× stronger than a rattlesnake\'s by weight. Bite causes muscle cramps, abdominal pain, and elevated blood pressure.',
     firstAid: 'Clean the wound. Most healthy adults recover without antivenom. Seek medical evaluation — antivenom is available for severe cases.',
-  },
-  'western-black-widow': {
-    level: 'venomous',
-    summary: 'Same neurotoxic venom as the Eastern Black Widow. Only females are dangerous — males are tiny and harmless.',
-    firstAid: 'Seek medical evaluation, especially for children or elderly. Antivenom is available for severe cases.',
   },
   'giant-desert-centipede': {
     level: 'caution',
@@ -3402,11 +3293,6 @@ const DANGER_INFO: Partial<Record<string, DangerInfo>> = {
     level: 'caution',
     summary: 'Sting ranked #4 on the Schmidt Pain Index — the most painful of any insect. Blinding pain lasting ~3 minutes. Not typically medically dangerous.',
     firstAid: 'Sit down to avoid injuring yourself during the brief pain episode. Apply ice. Seek care only if you have a known wasp allergy.',
-  },
-  'pepsis-wasp': {
-    level: 'caution',
-    summary: 'A spider hawk wasp closely related to the Tarantula Hawk with a similarly intense sting.',
-    firstAid: 'Sit down and apply ice. Not typically medically dangerous unless you have a known wasp allergy.',
   },
   'colorado-river-toad': {
     level: 'caution',
@@ -3470,7 +3356,6 @@ export function getDangerInfo(speciesId: string): DangerInfo | undefined {
 const ECOSYSTEM_ROLES: Partial<Record<string, string>> = {
   'saguaro': 'The keystone of the Sonoran Desert. Gila Woodpeckers excavate nest cavities that Elf Owls and Purple Martins move into the following year. White-winged Doves depend on the June fruit for pre-migration fat reserves. Harris\'s Hawks use the arms as hunting perches. Over 100 species use the Saguaro in some form — it is the living infrastructure of this ecosystem.',
   'palo-verde': 'The Sonoran Desert\'s chief nurse plant. Nearly all Saguaro seedlings germinate under the Palo Verde canopy, sheltered from killing frost and lethal summer sun. Its root bacteria also fix atmospheric nitrogen, slowly enriching surrounding soil.',
-  'blue-palo-verde': 'One of the first desert trees to flower each spring, providing a critical nectar bridge for queen bees and hummingbirds emerging from winter dormancy before other plants bloom.',
   'ironwood': 'The supreme nurse plant and wildlife anchor of the Sonoran Desert. Its canopy shelters 230+ wildlife species. An Ironwood takes 800+ years to reach full size — and its fallen trunk persists 10,000 years without rotting, providing habitat long after the tree itself is gone.',
   'ocotillo': 'A hummingbird migration highway. Its red tubular flowers are timed precisely for Costa\'s and Black-chinned Hummingbirds tracking north through the Sonoran Desert, providing a critical refueling stop. Without it, hummingbird migration through this region would be far more perilous.',
   'mesquite': 'One of the desert\'s most ecologically generous trees. Nitrogen-fixing root bacteria enrich surrounding soil. The bean pods sustain coyotes, javelinas, doves, and many birds through the brutal summer months. Its canopy creates the distinctive "mesquite bosque" — the richest riparian habitat in the lowland Sonoran Desert.',
@@ -3578,7 +3463,6 @@ const EDIBILITY_MAP: Partial<Record<string, EdibilityInfo>> = {
   // ── Trees ──
   'mesquite': { status: 'edible', note: 'Ripe bean pods dried and ground into sweet, high-protein flour (pinole). Raw pods are also chewed for their sweetness. A desert staple for 4,000+ years.' },
   'palo-verde': { status: 'parts-edible', note: 'Young green seeds edible raw or cooked. Dried seeds ground into flour. Do not eat large quantities of mature dried pods directly.' },
-  'blue-palo-verde': { status: 'parts-edible', note: 'Seeds edible when young and green. Ground into flour when dried, like blue palo verde\'s close relative.' },
   'ironwood': { status: 'parts-edible', note: 'Seeds (tiny beans inside the pods) edible roasted or ground into flour. A traditional protein source for the Seri people of Sonora.' },
   'joshua-tree': { status: 'parts-edible', note: 'Flowers and flower buds roasted or eaten raw historically. Fleshy fruit edible when ripe. Not a primary food source.' },
   'utah-juniper': { status: 'parts-edible', note: 'Blue-gray berries used as a spice or steeped for tea. Not eaten in quantity — bitter resins can cause nausea if over-consumed.' },

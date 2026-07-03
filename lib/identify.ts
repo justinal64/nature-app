@@ -121,7 +121,7 @@ export async function identifySpecies(
         commonName: sp?.commonName ?? r.taxon.preferred_common_name ?? r.taxon.name,
         latin: sp?.latin ?? r.taxon.name,
         kind: sp?.kind ?? iconicTaxonToKind(r.taxon.iconic_taxon_name),
-        confidence: Math.round(r.combined_score * 100),
+        confidence: Math.min(100, Math.round(r.combined_score)),
         isOffline: false,
       };
     });

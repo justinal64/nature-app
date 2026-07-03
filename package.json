@@ -11,7 +11,8 @@
     "test:watch": "jest --watch",
     "lint": "expo lint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "deploy:ios": "eas build --platform ios --profile production --auto-submit"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
@@ -25,6 +26,7 @@
     "expo-audio": "~55.0.14",
     "expo-camera": "~55.0.19",
     "expo-constants": "~55.0.16",
+    "expo-dev-client": "~55.0.36",
     "expo-file-system": "~55.0.x",
     "expo-font": "~55.0.7",
     "expo-haptics": "~55.0.x",

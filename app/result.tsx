@@ -116,7 +116,7 @@ export default function ResultScreen() {
       setIdentifying(false);
       return;
     }
-    identifySpecies(uri)
+    identifySpecies(uri, { coords: locationRef.current })
       .then(setResults)
       .finally(() => setIdentifying(false));
   }, [photoUri]);

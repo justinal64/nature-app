@@ -1,3 +1,5 @@
+import * as Network from 'expo-network';
+
 import { CATALOG } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
 import { identifyFromPhoto } from '@/lib/local-identify';
@@ -13,6 +15,20 @@ export type IdentifyResult = {
 
 const INAT_CV_URL = 'https://api.inaturalist.org/v1/computervision/score_image';
 const TIMEOUT_MS = 8000;
+
+// iNaturalist's score_image endpoint requires an authenticated JWT. Supplied
+// via env var until the on-device model replaces this path (see the Obsidian
+// note "decision-identification-online-api"). Tokens are short-lived (~24h).
+const INAT_API_TOKEN = process.env.EXPO_PUBLIC_INATURALIST_API_TOKEN ?? '';
+
+async function hasNetwork(): Promise<boolean> {
+  try {
+    const state = await Network.getNetworkStateAsync();
+    return Boolean(state.isConnected && state.isInternetReachable !== false);
+  } catch {
+    return true; // if we can't tell, let the request attempt and fail fast
+  }
+}
 
 const byLatin = new Map(CATALOG.map((s) => [s.latin.toLowerCase(), s]));
 const byName = new Map(CATALOG.map((s) => [s.commonName.toLowerCase(), s]));
@@ -60,20 +76,36 @@ type InatApiResult = {
   taxon: InatTaxon;
 };
 
-export async function identifySpecies(imageUri: string): Promise<IdentifyResult[]> {
+export type IdentifyOptions = { coords?: { lat: number; lng: number } | null };
+
+export async function identifySpecies(
+  imageUri: string,
+  options: IdentifyOptions = {},
+): Promise<IdentifyResult[]> {
+  // No token or no network → skip the online round-trip and use on-device.
+  if (!INAT_API_TOKEN || !(await hasNetwork())) {
+    return identifyFromPhoto(imageUri);
+  }
+
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     const body = new FormData();
-    body.append('file', {
+    // iNat expects the file under the `image` field, not `file`.
+    body.append('image', {
       uri: imageUri,
       name: 'photo.jpg',
       type: 'image/jpeg',
     } as unknown as Blob);
+    if (options.coords) {
+      body.append('lat', String(options.coords.lat));
+      body.append('lng', String(options.coords.lng));
+    }
 
     const res = await fetch(INAT_CV_URL, {
       method: 'POST',
+      headers: { Authorization: INAT_API_TOKEN },
       body,
       signal: controller.signal,
     });

@@ -187,7 +187,7 @@ export default function FieldCamScreen() {
       {/* Selected species overlay card */}
       {selected && (
         <Animated.View
-          entering={SlideInDown.springify().damping(16).stiffness(200)}
+          entering={SlideInDown.duration(300)}
           exiting={FadeOutDown}
           style={{
             position: 'absolute',
@@ -248,7 +248,7 @@ export default function FieldCamScreen() {
       {/* Species candidates panel */}
       {showPanel && (
         <Animated.View
-          entering={SlideInDown.springify().damping(16).stiffness(180)}
+          entering={SlideInDown.duration(300)}
           style={{
             position: 'absolute',
             bottom: 0,
@@ -278,7 +278,7 @@ export default function FieldCamScreen() {
             {candidates.map((sp, i) => (
               <Animated.View
                 key={sp.id}
-                entering={FadeInDown.delay(i * 50).springify().damping(15)}
+                entering={FadeInDown.delay(i * 50).duration(300)}
               >
                 <TouchableOpacity
                   onPress={() => setSelected(selected?.id === sp.id ? null : sp)}

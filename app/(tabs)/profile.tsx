@@ -153,7 +153,7 @@ export default function ProfileScreen() {
             gap: 16,
           }}
         >
-          <Animated.View entering={ZoomIn.springify().damping(12)}>
+          <Animated.View entering={ZoomIn.duration(300)}>
             <View
               style={[
                 {
@@ -291,7 +291,7 @@ export default function ProfileScreen() {
             earnedBadges.map((badge, i) => (
               <Animated.View
                 key={badge.id}
-                entering={ZoomIn.delay(260 + i * 90).springify().damping(11).stiffness(180)}
+                entering={ZoomIn.delay(260 + i * 90).duration(300)}
                 style={{ width: 100, alignItems: 'center' }}
               >
                 <Pressable

@@ -345,7 +345,7 @@ export default function SpeciesDetailScreen() {
           {(species?.stats ?? []).map((s, i) => (
             <Animated.View
               key={s.label}
-              entering={ZoomIn.delay(140 + i * 70).springify().damping(13).stiffness(180)}
+              entering={ZoomIn.delay(140 + i * 70).duration(300)}
               style={[
                 {
                   width: '47.5%',

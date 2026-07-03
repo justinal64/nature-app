@@ -176,7 +176,7 @@ export default function GuideScreen() {
           {CATS.map((cat, i) => {
             const active = cat.name === activeCategory;
             return (
-              <Animated.View key={cat.name} entering={FadeInRight.delay(120 + i * 60).springify().damping(15)}>
+              <Animated.View key={cat.name} entering={FadeInRight.delay(120 + i * 60).duration(300)}>
                 <PressableScale
                   scaleTo={0.93}
                   onPress={() => setActiveCategory(cat.name)}
@@ -320,7 +320,7 @@ export default function GuideScreen() {
           {filtered.map((sp, i) => (
             <Animated.View
               key={sp.id}
-              entering={FadeInDown.delay(200 + i * 55).springify().damping(15).stiffness(150)}
+              entering={FadeInDown.delay(200 + i * 55).duration(300)}
             >
               <PressableScale
                 onPress={() => router.push(`/species/${sp.id}`)}

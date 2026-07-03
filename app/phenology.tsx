@@ -201,7 +201,7 @@ export default function PhenologyScreen() {
         {CATEGORY_ORDER.filter((cat) => grouped[cat]).map((cat, catIndex) => (
           <Animated.View
             key={cat}
-            entering={FadeInDown.delay(catIndex * 40).springify().damping(18)}
+            entering={FadeInDown.delay(catIndex * 40).duration(300)}
           >
             {/* Category header */}
             <View

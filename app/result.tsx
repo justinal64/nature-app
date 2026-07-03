@@ -258,7 +258,7 @@ export default function ResultScreen() {
               </PressableScale>
             </Animated.View>
 
-            <Animated.View entering={ZoomIn.delay(350).springify().damping(11).stiffness(220)}>
+            <Animated.View entering={ZoomIn.delay(350).duration(300)}>
               {identifying ? (
                 <View
                   style={{
@@ -482,10 +482,7 @@ export default function ResultScreen() {
                       {stats.slice(0, 3).map((stat, i) => (
                         <Animated.View
                           key={stat.label}
-                          entering={FadeInDown.delay(300 + i * 80)
-                            .springify()
-                            .damping(15)
-                            .stiffness(160)}
+                          entering={FadeInDown.delay(300 + i * 80).duration(300)}
                           style={{
                             flex: 1,
                             backgroundColor: COLORS.cream,

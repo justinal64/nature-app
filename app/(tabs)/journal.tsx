@@ -327,7 +327,7 @@ export default function JournalScreen() {
               {filtered.map((entry, i) => (
                 <Animated.View
                   key={entry.id}
-                  entering={FadeInDown.delay(120 + i * 80).springify().damping(15).stiffness(150)}
+                  entering={FadeInDown.delay(120 + i * 80).duration(300)}
                   style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}
                 >
                   <View

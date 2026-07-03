@@ -275,7 +275,7 @@ export default function SoundIdScreen() {
             {results.map((r, i) => (
               <Animated.View
                 key={r.species.id}
-                entering={FadeInDown.delay(i * 70).springify().damping(15).stiffness(150)}
+                entering={FadeInDown.delay(i * 70).duration(300)}
               >
                 <Pressable
                   onPress={() => saveSighting(r)}

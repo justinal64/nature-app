@@ -252,7 +252,7 @@ export default function AskScreen() {
         {messages.map((msg, i) => (
           <Animated.View
             key={i}
-            entering={FadeInDown.delay(60).springify().damping(16)}
+            entering={FadeInDown.delay(60).duration(300)}
             style={{ alignItems: msg.role === 'user' ? 'flex-end' : 'flex-start' }}
           >
             <View

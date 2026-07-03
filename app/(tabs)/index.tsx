@@ -116,7 +116,7 @@ export default function HomeScreen() {
               {firstName}.
             </Text>
           </View>
-          <Animated.View entering={ZoomIn.delay(200).springify().damping(12)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Animated.View entering={ZoomIn.delay(200).duration(300)} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <PressableScale
               onPress={() => router.push('/search' as never)}
               scaleTo={0.9}
@@ -382,7 +382,7 @@ export default function HomeScreen() {
           recentFinds.map((item, i) => (
             <Animated.View
               key={item.id}
-              entering={FadeInDown.delay(220 + i * 70).springify().damping(15).stiffness(150)}
+              entering={FadeInDown.delay(220 + i * 70).duration(300)}
             >
               <PressableScale
                 onPress={() => router.push(`/species/${item.speciesId}` as never)}
@@ -481,7 +481,7 @@ export default function HomeScreen() {
         {CATEGORIES.map((cat, i) => (
           <Animated.View
             key={cat.name}
-            entering={FadeInDown.delay(320 + i * 70).springify().damping(15).stiffness(150)}
+            entering={FadeInDown.delay(320 + i * 70).duration(300)}
             style={{ width: '47.5%' }}
           >
             <PressableScale

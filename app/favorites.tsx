@@ -115,7 +115,7 @@ export default function FavoritesScreen() {
             {favorites.map((sp, i) => (
               <Animated.View
                 key={sp.id}
-                entering={FadeInDown.delay(i * 50).springify().damping(16)}
+                entering={FadeInDown.delay(i * 50).duration(300)}
                 style={{ width: '47%' }}
               >
                 <PressableScale

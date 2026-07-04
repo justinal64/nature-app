@@ -1,4 +1,3 @@
-import * as FileSystem from 'expo-file-system/legacy';
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import jpeg from 'jpeg-js';
 import { loadTensorflowModel } from 'react-native-fast-tflite';
@@ -7,24 +6,16 @@ import type { TfliteModel } from 'react-native-fast-tflite';
 import { CATALOG } from '@/constants/catalog';
 import type { IdentifyResult } from '@/lib/identify';
 
-const DOC_DIR = FileSystem.documentDirectory ?? '';
-const MODELS_DIR = `${DOC_DIR}wildlens-models/`;
-const MODEL_FILE = `${MODELS_DIR}species_id.tflite`;
-const TAXONOMY_FILE = `${MODELS_DIR}taxonomy.json`;
-
-// Source: https://github.com/inaturalist/model-files (release v25.01.15).
-// The vision model outputs a 507-class vector indexed by `leaf_class_id`;
-// taxonomy.json maps each leaf_class_id to a scientific name.
-const MODEL_RELEASE = 'v25.01.15';
-const MODEL_BASE = `https://github.com/inaturalist/model-files/releases/download/${MODEL_RELEASE}`;
-export const MODEL_DOWNLOAD_URL = `${MODEL_BASE}/INatVision_Small_2_fact256_8bit.tflite`;
-export const TAXONOMY_DOWNLOAD_URL = `${MODEL_BASE}/taxonomy.json`;
+// Our own WildLens classifier (MobileNetV3Small, INT8-quantized, trained over
+// the catalog species — see scripts/train_classifier.ipynb). At ~0.6 MB it's
+// bundled in the app binary rather than downloaded at runtime.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const MODEL_ASSET = require('../assets/models/species_id.tflite');
+// Flat array: output index → catalog species id (see species_labels.json).
+const SPECIES_LABELS: string[] = require('../assets/models/species_labels.json');
 
 let cachedModel: TfliteModel | null = null;
 let loadAttempted = false;
-let downloadInProgress = false;
-// Indexed by leaf_class_id → scientific name (the model's output vector order).
-let leafNames: string[] = [];
 
 const LOCAL_FALLBACK: IdentifyResult[] = (
   ['saguaro', 'gambels-quail', 'gopher-snake', 'gila-woodpecker', 'desert-tarantula'] as const
@@ -40,60 +31,27 @@ const LOCAL_FALLBACK: IdentifyResult[] = (
   };
 });
 
+// The classifier is bundled in the binary now (require()'d above), so there's
+// nothing left to fetch at runtime. These are kept as no-ops purely so
+// ModelInitContext/Profile don't need to change: they immediately report the
+// model as present/ready.
 export async function isModelDownloaded(): Promise<boolean> {
-  const info = await FileSystem.getInfoAsync(MODEL_FILE);
-  return info.exists;
+  return true;
 }
 
 export async function downloadModel(
   onProgress?: (fraction: number) => void,
 ): Promise<void> {
-  if (downloadInProgress) return;
-  downloadInProgress = true;
-  try {
-    const dirInfo = await FileSystem.getInfoAsync(MODELS_DIR);
-    if (!dirInfo.exists) {
-      await FileSystem.makeDirectoryAsync(MODELS_DIR, { intermediates: true });
-    }
-
-    const dl = FileSystem.createDownloadResumable(
-      MODEL_DOWNLOAD_URL,
-      MODEL_FILE,
-      {},
-      (prog) => onProgress?.(prog.totalBytesWritten / prog.totalBytesExpectedToWrite),
-    );
-    await dl.downloadAsync();
-    await FileSystem.downloadAsync(TAXONOMY_DOWNLOAD_URL, TAXONOMY_FILE);
-
-    // Force reload on next inference call
-    cachedModel = null;
-    loadAttempted = false;
-  } finally {
-    downloadInProgress = false;
-  }
+  onProgress?.(1);
 }
-
-type TaxonRow = { leaf_class_id: number | null; name: string };
 
 async function loadModel(): Promise<void> {
   if (loadAttempted) return;
   loadAttempted = true;
   try {
-    const info = await FileSystem.getInfoAsync(MODEL_FILE);
-    if (!info.exists) return;
     // Pass [] for CPU delegate — compatible with all models.
     // Switch to ['core-ml'] or ['metal'] if the model supports GPU acceleration.
-    cachedModel = await loadTensorflowModel({ url: MODEL_FILE }, []);
-
-    // taxonomy.json is an array of taxon rows. Only leaf taxa carry a
-    // leaf_class_id, which is the index into the model's output vector.
-    const raw = await FileSystem.readAsStringAsync(TAXONOMY_FILE);
-    const rows = JSON.parse(raw) as TaxonRow[];
-    const names: string[] = [];
-    for (const row of rows) {
-      if (row.leaf_class_id != null) names[row.leaf_class_id] = row.name;
-    }
-    leafNames = names;
+    cachedModel = await loadTensorflowModel(MODEL_ASSET, []);
   } catch {
     cachedModel = null;
   }
@@ -109,7 +67,7 @@ function base64ToBytes(b64: string): Uint8Array {
 
 export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResult[]> {
   await loadModel();
-  if (!cachedModel || leafNames.length === 0) return LOCAL_FALLBACK;
+  if (!cachedModel) return LOCAL_FALLBACK;
 
   try {
     // Derive the expected input size/type from the model rather than
@@ -168,9 +126,11 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
       .flatMap(({ score, i }) => {
-        const latin = leafNames[i];
-        if (!latin) return [];
-        const sp = CATALOG.find((s) => s.latin.toLowerCase() === latin.toLowerCase());
+        // Our own model's output index maps directly to a catalog species id
+        // (species_labels.json) — no scientific-name indirection needed.
+        const speciesId = SPECIES_LABELS[i];
+        if (!speciesId) return [];
+        const sp = CATALOG.find((s) => s.id === speciesId);
         if (!sp) return [];
         return [
           {
@@ -179,7 +139,7 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
             latin: sp.latin,
             kind: sp.kind,
             confidence: Math.round(Math.min(1, score / scale) * 100),
-            isOffline: true,
+            isOffline: false,
           },
         ];
       });

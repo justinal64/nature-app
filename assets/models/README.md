@@ -1,48 +1,42 @@
 # On-Device Species ID Model
 
-The app identifies species offline with a TFLite classifier. The model is **not
-bundled and not checked into git** — it is **downloaded once at runtime** and
-cached on-device, so the app binary stays small.
+The app identifies species offline with WildLens's own TFLite classifier,
+trained over the catalog species (see `scripts/train_classifier.ipynb` and
+`custom-model-pipeline.md`). At ~0.6 MB it's **bundled directly in the app
+binary** — no runtime download.
 
-## How delivery works (no manual setup)
+## Files in this directory
 
-`context/ModelInitContext.tsx` (`ModelInitProvider`, mounted in
-`app/_layout.tsx`) runs after email verification — while the user still has the
-connectivity they used to sign in — and calls `downloadModel()` from
-`lib/local-identify.ts`. It fetches:
+- `species_id.tflite` — MobileNetV3Small backbone, INT8-quantized
+  (uint8 in/out), fine-tuned on the 83-species catalog core.
+- `species_labels.json` — flat JSON array; index `i` is the model's output
+  index, value is the matching `catalog.ts` species `id` directly (no
+  scientific-name indirection needed, unlike the old public iNat model).
 
-- `INatVision_Small_2_fact256_8bit.tflite` → saved as `species_id.tflite`
-- `taxonomy.json`
+Both are committed to git — small enough not to need Git LFS.
 
-into `FileSystem.documentDirectory/wildlens-models/`. After that first
-download the model works fully offline on every launch. Progress/status is
-surfaced in the Profile screen via `useModelInit()`. If the download hasn't
-happened yet, `identifyFromPhoto()` falls back to the 5-species list.
+## How it's loaded
 
-This directory only holds this README (and `.gitkeep`) — nothing needs to be
-placed here by hand.
+`lib/local-identify.ts` bundles both files via `require('@/assets/models/...')`
+and loads the model with `loadTensorflowModel(MODEL_ASSET, [])`. Metro is
+configured in `metro.config.js` (`config.resolver.assetExts.push('tflite')`) to
+treat `.tflite` as a binary asset.
 
-## Model source
+`context/ModelInitContext.tsx` / the Profile screen's "Offline ID model" card
+still exist from the old download-based flow; `isModelDownloaded()` /
+`downloadModel()` in `local-identify.ts` are now harmless no-ops (the model is
+always present) so that code keeps working unchanged and reports "ready"
+immediately. Since there's no real download left to show progress for, it's
+fine to simplify/retire that UI later.
 
-iNaturalist's public model, release **v25.01.15**:
-<https://github.com/inaturalist/model-files/releases>
+## Retraining / updating the model
 
-- Vision model output is a **507-class** vector indexed by `leaf_class_id`.
-- `taxonomy.json` is a **JSON array of taxon objects**
-  (`{ taxon_id, leaf_class_id, rank_level, name, ... }`); only leaf taxa carry a
-  `leaf_class_id`. `lib/local-identify.ts` builds a `leaf_class_id → scientific
-  name` map from it, then matches those names against `constants/catalog.ts`.
+Every time species are added to `constants/catalog.ts`:
 
-## Changing the model
-
-To swap in a different classifier (e.g. a WildLens-specific fine-tune):
-
-1. Update `MODEL_DOWNLOAD_URL` / `TAXONOMY_DOWNLOAD_URL` in
-   `lib/local-identify.ts`.
-2. Make sure the taxonomy maps the model's output indices to scientific names
-   present in the catalog. `local-identify.ts` derives input size and dtype
-   from the model's own input tensor, so a different input size needs no code
-   change.
+1. Re-run Phase 1 (`scripts/pull_inat_dataset.py --species <new-ids>`).
+2. Re-run `scripts/train_classifier.ipynb` on the expanded set.
+3. Copy the new `species_id.tflite` + `species_labels.json` in here, replacing
+   the old ones, and rebuild the app.
 
 ## GPU acceleration
 

@@ -40,7 +40,7 @@ export function DesertRangeMap({ region }: Props) {
   return (
     <Svg width="100%" viewBox="0 0 280 230" style={{ aspectRatio: 280 / 230 }}>
       {/* Ocean / background */}
-      <Rect x={0} y={0} width={280} height={230} rx={0} fill={COLORS.cream} />
+      <Rect x={0} y={0} width={280} height={230} rx={0} fill={COLORS.bone} />
 
       {DESERTS.map((d) => {
         const active = d.key === region;
@@ -48,7 +48,7 @@ export function DesertRangeMap({ region }: Props) {
           <Path
             key={d.key}
             d={d.d}
-            fill={active ? COLORS.clay : COLORS.sand}
+            fill={active ? COLORS.lichen : COLORS.granite}
             stroke={COLORS.background}
             strokeWidth={2}
             opacity={active ? 1 : 0.55}
@@ -57,11 +57,11 @@ export function DesertRangeMap({ region }: Props) {
       })}
 
       {/* Region labels */}
-      <SvgText x={40} y={44} fill={COLORS.bark} fontSize={9} fontWeight="600" textAnchor="middle">Great</SvgText>
-      <SvgText x={40} y={55} fill={COLORS.bark} fontSize={9} fontWeight="600" textAnchor="middle">Basin</SvgText>
-      <SvgText x={52} y={115} fill={COLORS.bark} fontSize={8} fontWeight="600" textAnchor="middle">Mojave</SvgText>
-      <SvgText x={112} y={168} fill={region === 'SONORAN' ? COLORS.cream : COLORS.bark} fontSize={9} fontWeight="600" textAnchor="middle">Sonoran</SvgText>
-      <SvgText x={218} y={180} fill={region === 'CHIHUAHUAN' ? COLORS.cream : COLORS.bark} fontSize={8} fontWeight="600" textAnchor="middle">Chihuahuan</SvgText>
+      <SvgText x={40} y={44} fill={COLORS.granite} fontSize={9} fontWeight="600" textAnchor="middle">Great</SvgText>
+      <SvgText x={40} y={55} fill={COLORS.granite} fontSize={9} fontWeight="600" textAnchor="middle">Basin</SvgText>
+      <SvgText x={52} y={115} fill={COLORS.granite} fontSize={8} fontWeight="600" textAnchor="middle">Mojave</SvgText>
+      <SvgText x={112} y={168} fill={region === 'SONORAN' ? COLORS.bone : COLORS.granite} fontSize={9} fontWeight="600" textAnchor="middle">Sonoran</SvgText>
+      <SvgText x={218} y={180} fill={region === 'CHIHUAHUAN' ? COLORS.bone : COLORS.granite} fontSize={8} fontWeight="600" textAnchor="middle">Chihuahuan</SvgText>
     </Svg>
   );
 }

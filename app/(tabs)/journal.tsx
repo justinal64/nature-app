@@ -124,8 +124,8 @@ export default function JournalScreen() {
           <RefreshControl
             refreshing={loading}
             onRefresh={refresh}
-            tintColor={COLORS.clay}
-            colors={[COLORS.clay]}
+            tintColor={COLORS.lichen}
+            colors={[COLORS.lichen]}
           />
         }
       >
@@ -143,7 +143,7 @@ export default function JournalScreen() {
             <View>
               <Text
                 style={{
-                  color: COLORS.bark,
+                  color: COLORS.granite,
                   fontSize: 12,
                   fontWeight: '700',
                   letterSpacing: 0.6,
@@ -168,10 +168,10 @@ export default function JournalScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 }}
               >
-                <Ionicons name="images-outline" size={20} color={COLORS.clay} />
+                <Ionicons name="images-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/journal-stats' as never)}
@@ -185,10 +185,10 @@ export default function JournalScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 }}
               >
-                <Ionicons name="stats-chart-outline" size={20} color={COLORS.clay} />
+                <Ionicons name="stats-chart-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/sightings-map' as never)}
@@ -202,10 +202,10 @@ export default function JournalScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 }}
               >
-                <Ionicons name="map-outline" size={20} color={COLORS.clay} />
+                <Ionicons name="map-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
@@ -229,10 +229,10 @@ export default function JournalScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 }}
               >
-                <Ionicons name="download-outline" size={20} color={COLORS.clay} />
+                <Ionicons name="download-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
             </View>
           </View>
@@ -258,14 +258,14 @@ export default function JournalScreen() {
                       paddingHorizontal: 16,
                       paddingVertical: 8,
                       borderRadius: 20,
-                      backgroundColor: active ? COLORS.clay : COLORS.surface,
+                      backgroundColor: active ? COLORS.lichen : COLORS.surface,
                       borderWidth: 1,
-                      borderColor: active ? COLORS.clay : COLORS.sand,
+                      borderColor: active ? COLORS.lichen : COLORS.granite,
                     }}
                   >
                     <Text
                       style={{
-                        color: active ? COLORS.cream : COLORS.ink,
+                        color: active ? COLORS.bone : COLORS.ink,
                         fontWeight: '600',
                         fontSize: 13,
                       }}
@@ -282,7 +282,7 @@ export default function JournalScreen() {
         <View style={{ paddingHorizontal: 20 }}>
           {loading ? (
             <View style={{ paddingTop: 40, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.bark, fontSize: 14 }}>Loading…</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 14 }}>Loading…</Text>
             </View>
           ) : sightings.length === 0 ? (
             <Reveal delay={100}>
@@ -292,7 +292,7 @@ export default function JournalScreen() {
                 </Text>
                 <Text
                   style={{
-                    color: COLORS.bark,
+                    color: COLORS.granite,
                     fontSize: 14,
                     textAlign: 'center',
                     lineHeight: 20,
@@ -308,7 +308,7 @@ export default function JournalScreen() {
                 <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
                   No {KIND_FILTERS.find((f) => f.value === kindFilter)?.label.toLowerCase()} logged yet
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 13 }}>Try a different filter.</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 13 }}>Try a different filter.</Text>
               </View>
             </Reveal>
           ) : (
@@ -321,7 +321,7 @@ export default function JournalScreen() {
                   bottom: 14,
                   width: 2,
                   borderRadius: 1,
-                  backgroundColor: COLORS.sand,
+                  backgroundColor: COLORS.granite,
                 }}
               />
               {filtered.map((entry, i) => (
@@ -336,12 +336,12 @@ export default function JournalScreen() {
                         width: 16,
                         height: 16,
                         borderRadius: 8,
-                        backgroundColor: i === 0 ? COLORS.clay : COLORS.sage,
+                        backgroundColor: i === 0 ? COLORS.lichen : COLORS.lichen,
                         borderWidth: 3,
-                        borderColor: COLORS.cream,
+                        borderColor: COLORS.bone,
                         marginRight: 12,
                       },
-                      i === 0 ? glow(COLORS.clay, 6) : {},
+                      i === 0 ? glow(COLORS.lichen, 6) : {},
                     ]}
                   />
                   <PressableScale
@@ -359,7 +359,7 @@ export default function JournalScreen() {
                         borderRadius: 16,
                         padding: 14,
                         borderWidth: 1,
-                        borderColor: COLORS.sand,
+                        borderColor: COLORS.granite,
                         gap: 14,
                       },
                       softShadow(0.04, 6, 2),
@@ -387,12 +387,12 @@ export default function JournalScreen() {
                             width: 56,
                             height: 56,
                             borderRadius: 14,
-                            backgroundColor: COLORS.sage,
+                            backgroundColor: COLORS.lichen,
                             alignItems: 'center',
                             justifyContent: 'center',
                           }}
                         >
-                          <SpeciesIcon kind={entry.kind} size={34} color={COLORS.cream} />
+                          <SpeciesIcon kind={entry.kind} size={34} color={COLORS.bone} />
                         </View>
                       );
                     })()}
@@ -402,7 +402,7 @@ export default function JournalScreen() {
                       </Text>
                       <Text
                         style={{
-                          color: COLORS.bark,
+                          color: COLORS.granite,
                           fontStyle: preferScientific ? 'normal' : 'italic',
                           fontSize: 13,
                           marginTop: 1,
@@ -411,15 +411,15 @@ export default function JournalScreen() {
                         {preferScientific ? entry.commonName : entry.latinName}
                       </Text>
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 }}>
-                        <Text style={{ color: COLORS.bark, fontSize: 12 }}>
+                        <Text style={{ color: COLORS.granite, fontSize: 12 }}>
                           {formatRelativeDate(entry.capturedAt)}
                         </Text>
                         {(() => {
                           const grade = getQualityGrade(entry);
                           const gradeConfig = {
-                            research:  { label: 'Research Grade', color: COLORS.sage },
-                            needs_id:  { label: 'Needs ID',       color: COLORS.gold },
-                            casual:    { label: 'Casual',          color: COLORS.bark },
+                            research:  { label: 'Research Grade', color: COLORS.lichen },
+                            needs_id:  { label: 'Needs ID',       color: COLORS.lichen },
+                            casual:    { label: 'Casual',          color: COLORS.granite },
                           }[grade];
                           return (
                             <View style={{ backgroundColor: gradeConfig.color + '30', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1, borderWidth: 1, borderColor: gradeConfig.color + '60' }}>
@@ -432,15 +432,15 @@ export default function JournalScreen() {
                       </View>
                       {entry.locationObscured && (
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 }}>
-                          <Ionicons name="eye-off-outline" size={11} color={COLORS.bark} />
-                          <Text style={{ color: COLORS.bark, fontSize: 10, fontStyle: 'italic' }}>Location obscured</Text>
+                          <Ionicons name="eye-off-outline" size={11} color={COLORS.granite} />
+                          <Text style={{ color: COLORS.granite, fontSize: 10, fontStyle: 'italic' }}>Location obscured</Text>
                         </View>
                       )}
                       {entry.notes ? (
                         <Text
                           numberOfLines={1}
                           style={{
-                            color: COLORS.bark,
+                            color: COLORS.granite,
                             fontSize: 12,
                             marginTop: 3,
                             fontStyle: 'italic',
@@ -460,7 +460,7 @@ export default function JournalScreen() {
                       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       style={{ padding: 4 }}
                     >
-                      <Ionicons name="share-outline" size={20} color={COLORS.bark} />
+                      <Ionicons name="share-outline" size={20} color={COLORS.granite} />
                     </TouchableOpacity>
                   </PressableScale>
                 </Animated.View>
@@ -511,7 +511,7 @@ export default function JournalScreen() {
                     flex: 1,
                     paddingVertical: 14,
                     borderRadius: 14,
-                    backgroundColor: COLORS.clay,
+                    backgroundColor: COLORS.lichen,
                     alignItems: 'center',
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -560,18 +560,18 @@ export default function JournalScreen() {
                 accessibilityLabel="Cancel"
                 accessibilityRole="button"
               >
-                <Ionicons name="close" size={22} color={COLORS.bark} />
+                <Ionicons name="close" size={22} color={COLORS.granite} />
               </TouchableOpacity>
             </View>
             {editingSighting && (
-              <Text style={{ color: COLORS.bark, fontSize: 13, fontStyle: 'italic', marginBottom: 12 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 13, fontStyle: 'italic', marginBottom: 12 }}>
                 {editingSighting.commonName} · {formatRelativeDate(editingSighting.capturedAt)}
               </Text>
             )}
             <View
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 borderRadius: 14,
                 padding: 14,
                 minHeight: 100,
@@ -583,7 +583,7 @@ export default function JournalScreen() {
                 value={editNotes}
                 onChangeText={setEditNotes}
                 placeholder="Add field notes…"
-                placeholderTextColor={COLORS.bark}
+                placeholderTextColor={COLORS.granite}
                 multiline
                 style={{ color: COLORS.ink, fontSize: 15, lineHeight: 22 }}
                 autoFocus
@@ -597,15 +597,15 @@ export default function JournalScreen() {
               accessibilityRole="button"
               style={[
                 {
-                  backgroundColor: COLORS.clay,
+                  backgroundColor: COLORS.lichen,
                   borderRadius: 24,
                   paddingVertical: 16,
                   alignItems: 'center',
                 },
-                glow(COLORS.clay, 8),
+                glow(COLORS.lichen, 8),
               ]}
             >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>Save</Text>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>Save</Text>
             </Pressable>
           </Pressable>
         </Pressable>

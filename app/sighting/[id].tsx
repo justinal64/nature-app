@@ -23,16 +23,16 @@ import type { DataQualityFlags, Sighting, SightingComment } from '@/lib/sighting
 import { addComment, deleteComment, deleteSighting, getQualityGrade, getSightingById, updateSighting } from '@/lib/sightings';
 
 const KIND_COLOR: Record<string, string> = {
-  cactus: COLORS.sage,
-  bird: COLORS.clay,
-  insect: COLORS.gold,
-  snake: COLORS.dusk,
-  mammal: COLORS.bark,
-  lizard: COLORS.dusk,
-  amphibian: COLORS.sage,
+  cactus: COLORS.lichen,
+  bird: COLORS.lichen,
+  insect: COLORS.lichen,
+  snake: COLORS.slate,
+  mammal: COLORS.granite,
+  lizard: COLORS.slate,
+  amphibian: COLORS.lichen,
   arachnid: COLORS.ink,
-  fungus: COLORS.gold,
-  fish: COLORS.dusk,
+  fungus: COLORS.lichen,
+  fish: COLORS.slate,
 };
 
 function formatFullDate(iso: string): string {
@@ -125,13 +125,13 @@ export default function SightingDetailScreen() {
   if (!sighting) {
     return (
       <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: COLORS.bark, fontSize: 14 }}>Loading…</Text>
+        <Text style={{ color: COLORS.granite, fontSize: 14 }}>Loading…</Text>
       </View>
     );
   }
 
   const species = getSpeciesById(sighting.speciesId);
-  const kindColor = KIND_COLOR[sighting.kind] ?? COLORS.sage;
+  const kindColor = KIND_COLOR[sighting.kind] ?? COLORS.lichen;
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -145,7 +145,7 @@ export default function SightingDetailScreen() {
           alignItems: 'center',
           gap: 12,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
           backgroundColor: COLORS.background,
         }}
       >
@@ -156,7 +156,7 @@ export default function SightingDetailScreen() {
           style={{
             width: 40, height: 40, borderRadius: 20,
             backgroundColor: COLORS.surface, alignItems: 'center', justifyContent: 'center',
-            borderWidth: 1, borderColor: COLORS.sand,
+            borderWidth: 1, borderColor: COLORS.granite,
           }}
         >
           <Ionicons name="chevron-back" size={20} color={COLORS.ink} />
@@ -170,7 +170,7 @@ export default function SightingDetailScreen() {
           accessibilityRole="button"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Ionicons name="trash-outline" size={20} color={COLORS.clay} />
+          <Ionicons name="trash-outline" size={20} color={COLORS.lichen} />
         </TouchableOpacity>
       </View>
 
@@ -183,7 +183,7 @@ export default function SightingDetailScreen() {
             if (photos.length === 0) {
               return (
                 <View style={{ width: '100%', height: 180, borderRadius: 20, backgroundColor: kindColor, alignItems: 'center', justifyContent: 'center' }}>
-                  <SpeciesIcon kind={sighting.kind as never} size={80} color={COLORS.cream} />
+                  <SpeciesIcon kind={sighting.kind as never} size={80} color={COLORS.bone} />
                 </View>
               );
             }
@@ -199,7 +199,7 @@ export default function SightingDetailScreen() {
                     <Image key={`${uri}-${i}`} source={{ uri }} style={{ width: 260, height: 240, borderRadius: 20 }} contentFit="cover" />
                   ))}
                 </ScrollView>
-                <Text style={{ color: COLORS.bark, fontSize: 11, textAlign: 'center', marginTop: 6 }}>{photos.length} photos · swipe to browse</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 11, textAlign: 'center', marginTop: 6 }}>{photos.length} photos · swipe to browse</Text>
               </View>
             );
           })()}
@@ -207,20 +207,20 @@ export default function SightingDetailScreen() {
 
         {/* Identity */}
         <Animated.View entering={FadeInDown.delay(80).duration(280)} style={[
-          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.granite },
           softShadow(0.04, 6, 2),
         ]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <View style={{ width: 52, height: 52, borderRadius: 14, backgroundColor: kindColor, alignItems: 'center', justifyContent: 'center' }}>
-              <SpeciesIcon kind={sighting.kind as never} size={32} color={COLORS.cream} />
+              <SpeciesIcon kind={sighting.kind as never} size={32} color={COLORS.bone} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ color: COLORS.ink, fontWeight: '800', fontSize: 20 }}>{sighting.commonName}</Text>
-              <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 14, marginTop: 2 }}>{sighting.latinName}</Text>
+              <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 14, marginTop: 2 }}>{sighting.latinName}</Text>
             </View>
           </View>
           {species && (
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 12, lineHeight: 18 }} numberOfLines={3}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 12, lineHeight: 18 }} numberOfLines={3}>
               {species.description}
             </Text>
           )}
@@ -228,16 +228,16 @@ export default function SightingDetailScreen() {
 
         {/* Date, Location & Privacy */}
         <Animated.View entering={FadeInDown.delay(140).duration(280)} style={[
-          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand, gap: 12 },
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.granite, gap: 12 },
           softShadow(0.03, 4, 1),
         ]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <Ionicons name="calendar-outline" size={18} color={COLORS.clay} />
+            <Ionicons name="calendar-outline" size={18} color={COLORS.lichen} />
             <Text style={{ color: COLORS.ink, fontSize: 14, flex: 1 }}>{formatFullDate(sighting.capturedAt)}</Text>
           </View>
           {sighting.location && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <Ionicons name="location-outline" size={18} color={COLORS.clay} />
+              <Ionicons name="location-outline" size={18} color={COLORS.lichen} />
               <Text style={{ color: COLORS.ink, fontSize: 14 }}>
                 {sighting.location.lat.toFixed(4)}°, {sighting.location.lng.toFixed(4)}°
               </Text>
@@ -256,8 +256,8 @@ export default function SightingDetailScreen() {
             accessibilityState={{ checked: !!sighting.isPrivate }}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
           >
-            <Ionicons name={sighting.isPrivate ? 'lock-closed' : 'lock-open-outline'} size={18} color={sighting.isPrivate ? COLORS.dusk : COLORS.bark} />
-            <Text style={{ color: sighting.isPrivate ? COLORS.dusk : COLORS.bark, fontSize: 14, flex: 1, fontWeight: sighting.isPrivate ? '600' : '400' }}>
+            <Ionicons name={sighting.isPrivate ? 'lock-closed' : 'lock-open-outline'} size={18} color={sighting.isPrivate ? COLORS.slate : COLORS.granite} />
+            <Text style={{ color: sighting.isPrivate ? COLORS.slate : COLORS.granite, fontSize: 14, flex: 1, fontWeight: sighting.isPrivate ? '600' : '400' }}>
               {sighting.isPrivate ? 'Private — excluded from exports' : 'Public (tap to make private)'}
             </Text>
           </Pressable>
@@ -265,11 +265,11 @@ export default function SightingDetailScreen() {
 
         {/* Notes */}
         <Animated.View entering={FadeInDown.delay(200).duration(280)} style={[
-          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 20, borderWidth: 1, borderColor: COLORS.sand },
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 20, borderWidth: 1, borderColor: COLORS.granite },
           softShadow(0.03, 4, 1),
         ]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-            <Text style={{ flex: 1, color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            <Text style={{ flex: 1, color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>
               Field notes
             </Text>
             <TouchableOpacity
@@ -277,7 +277,7 @@ export default function SightingDetailScreen() {
               accessibilityLabel={editingNotes ? 'Cancel editing notes' : 'Edit notes'}
               accessibilityRole="button"
             >
-              <Text style={{ color: COLORS.clay, fontWeight: '600', fontSize: 13 }}>
+              <Text style={{ color: COLORS.lichen, fontWeight: '600', fontSize: 13 }}>
                 {editingNotes ? 'Cancel' : 'Edit'}
               </Text>
             </TouchableOpacity>
@@ -288,13 +288,13 @@ export default function SightingDetailScreen() {
                 value={notes}
                 onChangeText={setNotes}
                 placeholder="What did you notice? Behavior, habitat, conditions…"
-                placeholderTextColor={COLORS.bark}
+                placeholderTextColor={COLORS.granite}
                 multiline
                 maxLength={500}
                 autoFocus
                 style={{
                   color: COLORS.ink, fontSize: 14, lineHeight: 21,
-                  minHeight: 80, borderWidth: 1, borderColor: COLORS.sand,
+                  minHeight: 80, borderWidth: 1, borderColor: COLORS.granite,
                   borderRadius: 10, padding: 10,
                 }}
               />
@@ -303,15 +303,15 @@ export default function SightingDetailScreen() {
                 accessibilityLabel="Save notes"
                 accessibilityRole="button"
                 style={[
-                  { backgroundColor: COLORS.clay, borderRadius: 20, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
-                  glow(COLORS.clay, 6),
+                  { backgroundColor: COLORS.lichen, borderRadius: 20, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
+                  glow(COLORS.lichen, 6),
                 ]}
               >
-                <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 14 }}>Save notes</Text>
+                <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 14 }}>Save notes</Text>
               </Pressable>
             </>
           ) : (
-            <Text style={{ color: sighting.notes ? COLORS.ink : COLORS.bark, fontSize: 14, lineHeight: 21, fontStyle: sighting.notes ? 'normal' : 'italic' }}>
+            <Text style={{ color: sighting.notes ? COLORS.ink : COLORS.granite, fontSize: 14, lineHeight: 21, fontStyle: sighting.notes ? 'normal' : 'italic' }}>
               {sighting.notes ?? 'No notes yet — tap Edit to add some.'}
             </Text>
           )}
@@ -319,15 +319,15 @@ export default function SightingDetailScreen() {
 
         {/* Comments */}
         <Animated.View entering={FadeInDown.delay(230).duration(280)} style={[
-          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.granite },
           softShadow(0.03, 4, 1),
         ]}>
-          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>
             Comments
           </Text>
 
           {comments.length === 0 && (
-            <Text style={{ color: COLORS.bark, fontSize: 14, fontStyle: 'italic', marginBottom: 14 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14, fontStyle: 'italic', marginBottom: 14 }}>
               No comments yet.
             </Text>
           )}
@@ -341,11 +341,11 @@ export default function SightingDetailScreen() {
                 gap: 10,
                 paddingVertical: 10,
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.sand,
+                borderBottomColor: COLORS.granite,
               }}
             >
               <View style={{ flex: 1 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11, marginBottom: 3 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, marginBottom: 3 }}>
                   {new Date(c.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                 </Text>
                 <Text style={{ color: COLORS.ink, fontSize: 14, lineHeight: 20 }}>{c.text}</Text>
@@ -356,7 +356,7 @@ export default function SightingDetailScreen() {
                 accessibilityRole="button"
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Ionicons name="close-circle-outline" size={18} color={COLORS.bark} />
+                <Ionicons name="close-circle-outline" size={18} color={COLORS.granite} />
               </Pressable>
             </View>
           ))}
@@ -366,7 +366,7 @@ export default function SightingDetailScreen() {
               value={commentDraft}
               onChangeText={setCommentDraft}
               placeholder="Add a comment…"
-              placeholderTextColor={COLORS.bark}
+              placeholderTextColor={COLORS.granite}
               multiline
               maxLength={300}
               style={{
@@ -375,7 +375,7 @@ export default function SightingDetailScreen() {
                 fontSize: 14,
                 lineHeight: 20,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 borderRadius: 12,
                 paddingHorizontal: 12,
                 paddingVertical: 8,
@@ -389,32 +389,32 @@ export default function SightingDetailScreen() {
               accessibilityLabel="Post comment"
               accessibilityRole="button"
               style={{
-                backgroundColor: commentDraft.trim() ? COLORS.clay : COLORS.sand,
+                backgroundColor: commentDraft.trim() ? COLORS.lichen : COLORS.granite,
                 borderRadius: 20,
                 paddingHorizontal: 16,
                 paddingVertical: 10,
               }}
             >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>Post</Text>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 13 }}>Post</Text>
             </Pressable>
           </View>
         </Animated.View>
 
         {/* Data quality flags */}
         <Animated.View entering={FadeInDown.delay(260).duration(280)} style={[
-          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.sand },
+          { backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: COLORS.granite },
           softShadow(0.03, 4, 1),
         ]}>
           {(() => {
             const grade = getQualityGrade(sighting);
             const cfg = {
-              research: { label: 'Research Grade', color: COLORS.sage },
-              needs_id: { label: 'Needs ID',       color: COLORS.gold },
-              casual:   { label: 'Casual',          color: COLORS.bark },
+              research: { label: 'Research Grade', color: COLORS.lichen },
+              needs_id: { label: 'Needs ID',       color: COLORS.lichen },
+              casual:   { label: 'Casual',          color: COLORS.granite },
             }[grade];
             return (
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                   Data quality review
                 </Text>
                 <View style={{ backgroundColor: cfg.color + '25', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, borderWidth: 1, borderColor: cfg.color + '55' }}>
@@ -438,24 +438,24 @@ export default function SightingDetailScreen() {
                 onPress={() => toggleFlag(key)}
                 accessibilityLabel={`${label}: ${val === true ? 'passes' : val === false ? 'flagged' : 'unreviewed'}. Tap to cycle.`}
                 accessibilityRole="button"
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: COLORS.sand }}
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: COLORS.granite }}
               >
                 <Text style={{ color: COLORS.ink, fontSize: 14, flex: 1 }}>{label}</Text>
                 <View style={{
                   width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
-                  backgroundColor: val === true ? COLORS.sage : val === false ? COLORS.clay : COLORS.cream,
-                  borderWidth: 1.5, borderColor: val === undefined ? COLORS.sand : 'transparent',
+                  backgroundColor: val === true ? COLORS.lichen : val === false ? COLORS.lichen : COLORS.bone,
+                  borderWidth: 1.5, borderColor: val === undefined ? COLORS.granite : 'transparent',
                 }}>
                   <Ionicons
                     name={val === true ? 'checkmark' : val === false ? 'close' : 'help'}
                     size={15}
-                    color={val === undefined ? COLORS.bark : COLORS.cream}
+                    color={val === undefined ? COLORS.granite : COLORS.bone}
                   />
                 </View>
               </Pressable>
             );
           })}
-          <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 10, fontStyle: 'italic' }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 10, fontStyle: 'italic' }}>
             Tap to cycle: unreviewed → passes → flagged
           </Text>
         </Animated.View>
@@ -469,15 +469,15 @@ export default function SightingDetailScreen() {
               accessibilityRole="button"
               style={[
                 {
-                  backgroundColor: COLORS.clay, borderRadius: 24,
+                  backgroundColor: COLORS.lichen, borderRadius: 24,
                   paddingVertical: 16, alignItems: 'center',
                   flexDirection: 'row', justifyContent: 'center', gap: 8,
                 },
-                glow(COLORS.clay, 8),
+                glow(COLORS.lichen, 8),
               ]}
             >
-              <Ionicons name="book-outline" size={18} color={COLORS.cream} />
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>View in field guide</Text>
+              <Ionicons name="book-outline" size={18} color={COLORS.bone} />
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>View in field guide</Text>
             </TouchableOpacity>
           </Animated.View>
         )}

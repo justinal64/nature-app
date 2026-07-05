@@ -169,7 +169,7 @@ export default function SoundIdScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
+          <Ionicons name="chevron-back" size={22} color={COLORS.bone} />
         </TouchableOpacity>
       </Animated.View>
 
@@ -177,13 +177,13 @@ export default function SoundIdScreen() {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
           <Animated.Text
             entering={FadeIn.delay(150).duration(400)}
-            style={{ color: COLORS.cream, fontSize: 24, fontWeight: '700', marginBottom: 8, textAlign: 'center' }}
+            style={{ color: COLORS.bone, fontSize: 24, fontWeight: '700', marginBottom: 8, textAlign: 'center' }}
           >
             {phase === 'idle' ? 'Sound ID' : phase === 'recording' ? 'Listening…' : 'Analyzing…'}
           </Animated.Text>
           <Animated.Text
             entering={FadeIn.delay(200).duration(400)}
-            style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 60 }}
+            style={{ color: COLORS.granite, fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 60 }}
           >
             {phase === 'idle'
               ? 'Hold up your phone and tap to record a bird call. Works offline.'
@@ -203,7 +203,7 @@ export default function SoundIdScreen() {
                       width: 160,
                       height: 160,
                       borderRadius: 80,
-                      backgroundColor: COLORS.clay,
+                      backgroundColor: COLORS.lichen,
                     },
                     ring1Style,
                   ]}
@@ -215,7 +215,7 @@ export default function SoundIdScreen() {
                       width: 160,
                       height: 160,
                       borderRadius: 80,
-                      backgroundColor: COLORS.clay,
+                      backgroundColor: COLORS.lichen,
                     },
                     ring2Style,
                   ]}
@@ -231,19 +231,19 @@ export default function SoundIdScreen() {
                     width: 110,
                     height: 110,
                     borderRadius: 55,
-                    backgroundColor: phase === 'recording' ? COLORS.clay : 'rgba(255,255,255,0.12)',
+                    backgroundColor: phase === 'recording' ? COLORS.lichen : 'rgba(255,255,255,0.12)',
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderWidth: 3,
-                    borderColor: phase === 'recording' ? COLORS.clay : COLORS.cream,
+                    borderColor: phase === 'recording' ? COLORS.lichen : COLORS.bone,
                   },
-                  phase === 'recording' ? glow(COLORS.clay, 16) : {},
+                  phase === 'recording' ? glow(COLORS.lichen, 16) : {},
                 ]}
               >
                 <Ionicons
                   name={phase === 'recording' ? 'stop' : 'mic'}
                   size={44}
-                  color={COLORS.cream}
+                  color={COLORS.bone}
                 />
               </Pressable>
             </Animated.View>
@@ -252,7 +252,7 @@ export default function SoundIdScreen() {
           {phase === 'recording' && (
             <Animated.Text
               entering={FadeIn.duration(300)}
-              style={{ color: COLORS.bark, fontSize: 13, marginTop: 32, textAlign: 'center' }}
+              style={{ color: COLORS.granite, fontSize: 13, marginTop: 32, textAlign: 'center' }}
             >
               Tap to stop early
             </Animated.Text>
@@ -261,10 +261,10 @@ export default function SoundIdScreen() {
       ) : (
         <View style={{ flex: 1 }}>
           <View style={{ paddingTop: top + 70, paddingHorizontal: 24, paddingBottom: 16 }}>
-            <Text style={{ color: COLORS.cream, fontSize: 24, fontWeight: '700' }}>
+            <Text style={{ color: COLORS.bone, fontSize: 24, fontWeight: '700' }}>
               {isOfflineMode ? 'Which bird did you hear?' : 'Best matches'}
             </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 4, lineHeight: 18 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 13, marginTop: 4, lineHeight: 18 }}>
               {isOfflineMode
                 ? 'No connection — showing birds active in your region this season. Tap the one you heard.'
                 : 'Tap a result to save it to your journal.'}
@@ -292,7 +292,7 @@ export default function SoundIdScreen() {
                       borderColor: 'rgba(255,255,255,0.1)',
                       opacity: saving && saving !== r.species.id ? 0.4 : 1,
                     },
-                    saving === r.species.id ? glow(COLORS.clay, 10) : {},
+                    saving === r.species.id ? glow(COLORS.lichen, 10) : {},
                   ]}
                 >
                   <View
@@ -300,18 +300,18 @@ export default function SoundIdScreen() {
                       width: 52,
                       height: 52,
                       borderRadius: 13,
-                      backgroundColor: COLORS.sage,
+                      backgroundColor: COLORS.lichen,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    <SpeciesIcon kind="bird" size={34} color={COLORS.cream} />
+                    <SpeciesIcon kind="bird" size={34} color={COLORS.bone} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>
+                    <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>
                       {r.species.commonName}
                     </Text>
-                    <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 13, marginTop: 1 }}>
+                    <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 13, marginTop: 1 }}>
                       {r.species.latin}
                     </Text>
                     {!isOfflineMode && (
@@ -329,21 +329,21 @@ export default function SoundIdScreen() {
                             height: '100%',
                             width: `${r.confidence}%`,
                             borderRadius: 2,
-                            backgroundColor: r.confidence >= 50 ? COLORS.sage : COLORS.clay,
+                            backgroundColor: r.confidence >= 50 ? COLORS.lichen : COLORS.lichen,
                           }}
                         />
                       </View>
                     )}
                   </View>
                   {!isOfflineMode && (
-                    <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 14 }}>
+                    <Text style={{ color: COLORS.granite, fontWeight: '700', fontSize: 14 }}>
                       {r.confidence}%
                     </Text>
                   )}
                   <Ionicons
                     name={saving === r.species.id ? 'checkmark-circle' : 'add-circle-outline'}
                     size={24}
-                    color={saving === r.species.id ? COLORS.sage : COLORS.bark}
+                    color={saving === r.species.id ? COLORS.lichen : COLORS.granite}
                   />
                 </Pressable>
               </Animated.View>
@@ -363,7 +363,7 @@ export default function SoundIdScreen() {
                 softShadow(0, 0, 0),
               ]}
             >
-              <Text style={{ color: COLORS.bark, fontWeight: '600', fontSize: 15 }}>Record again</Text>
+              <Text style={{ color: COLORS.granite, fontWeight: '600', fontSize: 15 }}>Record again</Text>
             </Pressable>
           </ScrollView>
         </View>

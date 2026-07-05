@@ -163,7 +163,7 @@ export default function BatchImportScreen() {
   if (items.length === 0) {
     return (
       <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: COLORS.bark, fontSize: 14 }}>Opening photo library…</Text>
+        <Text style={{ color: COLORS.granite, fontSize: 14 }}>Opening photo library…</Text>
       </View>
     );
   }
@@ -180,7 +180,7 @@ export default function BatchImportScreen() {
           alignItems: 'center',
           gap: 12,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
         }}
       >
         <TouchableOpacity
@@ -195,14 +195,14 @@ export default function BatchImportScreen() {
             alignItems: 'center',
             justifyContent: 'center',
             borderWidth: 1,
-            borderColor: COLORS.sand,
+            borderColor: COLORS.granite,
           }}
         >
           <Ionicons name="close" size={20} color={COLORS.ink} />
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
           <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Import photos</Text>
-          <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
             {assignedCount} of {items.length} assigned
           </Text>
         </View>
@@ -212,14 +212,14 @@ export default function BatchImportScreen() {
           accessibilityLabel="Save all assigned sightings"
           accessibilityRole="button"
           style={{
-            backgroundColor: assignedCount > 0 ? COLORS.clay : COLORS.sand,
+            backgroundColor: assignedCount > 0 ? COLORS.lichen : COLORS.granite,
             borderRadius: 20,
             paddingHorizontal: 16,
             paddingVertical: 9,
             opacity: saving ? 0.6 : 1,
           }}
         >
-          <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 14 }}>
+          <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 14 }}>
             {saving ? 'Saving…' : assignedCount > 0 ? `Save ${assignedCount}` : 'Save'}
           </Text>
         </Pressable>
@@ -241,7 +241,7 @@ export default function BatchImportScreen() {
                 borderRadius: 16,
                 padding: 12,
                 borderWidth: 1,
-                borderColor: item.species ? COLORS.sage : COLORS.sand,
+                borderColor: item.species ? COLORS.lichen : COLORS.granite,
                 gap: 12,
               },
               softShadow(0.04, 5, 1),
@@ -265,30 +265,30 @@ export default function BatchImportScreen() {
                       width: 32,
                       height: 32,
                       borderRadius: 8,
-                      backgroundColor: COLORS.sage,
+                      backgroundColor: COLORS.lichen,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    <SpeciesIcon kind={item.species.kind as SpeciesKind} size={20} color={COLORS.cream} />
+                    <SpeciesIcon kind={item.species.kind as SpeciesKind} size={20} color={COLORS.bone} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>
                       {item.species.commonName}
                     </Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontStyle: 'italic' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontStyle: 'italic' }}>
                       {item.species.latin}
                     </Text>
                   </View>
                 </View>
               ) : (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Ionicons name="search-outline" size={15} color={COLORS.bark} />
-                  <Text style={{ color: COLORS.bark, fontSize: 14 }}>Assign species…</Text>
+                  <Ionicons name="search-outline" size={15} color={COLORS.granite} />
+                  <Text style={{ color: COLORS.granite, fontSize: 14 }}>Assign species…</Text>
                 </View>
               )}
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11 }}>
                   {item.capturedAt.toLocaleDateString(undefined, {
                     month: 'short',
                     day: 'numeric',
@@ -296,7 +296,7 @@ export default function BatchImportScreen() {
                   })}
                 </Text>
                 {item.location && (
-                  <Ionicons name="location" size={11} color={COLORS.sage} />
+                  <Ionicons name="location" size={11} color={COLORS.lichen} />
                 )}
               </View>
             </Pressable>
@@ -306,7 +306,7 @@ export default function BatchImportScreen() {
               accessibilityLabel="Remove from import"
               accessibilityRole="button"
             >
-              <Ionicons name="close-circle" size={20} color={COLORS.bark} />
+              <Ionicons name="close-circle" size={20} color={COLORS.granite} />
             </TouchableOpacity>
           </View>
         ))}
@@ -345,19 +345,19 @@ export default function BatchImportScreen() {
                 backgroundColor: COLORS.surface,
                 borderRadius: 22,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 paddingHorizontal: 14,
                 height: 44,
                 gap: 8,
                 marginBottom: 14,
               }}
             >
-              <Ionicons name="search" size={16} color={COLORS.bark} />
+              <Ionicons name="search" size={16} color={COLORS.granite} />
               <TextInput
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 placeholder="Search species…"
-                placeholderTextColor={COLORS.bark}
+                placeholderTextColor={COLORS.granite}
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoFocus
@@ -366,7 +366,7 @@ export default function BatchImportScreen() {
               />
               {searchQuery.length > 0 && (
                 <Pressable onPress={() => setSearchQuery('')} accessibilityRole="button">
-                  <Ionicons name="close-circle" size={16} color={COLORS.bark} />
+                  <Ionicons name="close-circle" size={16} color={COLORS.granite} />
                 </Pressable>
               )}
             </View>
@@ -382,7 +382,7 @@ export default function BatchImportScreen() {
                     alignItems: 'center',
                     paddingVertical: 10,
                     borderBottomWidth: 1,
-                    borderBottomColor: COLORS.sand,
+                    borderBottomColor: COLORS.granite,
                     gap: 12,
                   }}
                 >
@@ -391,7 +391,7 @@ export default function BatchImportScreen() {
                       width: 38,
                       height: 38,
                       borderRadius: 10,
-                      backgroundColor: COLORS.cream,
+                      backgroundColor: COLORS.bone,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
@@ -402,11 +402,11 @@ export default function BatchImportScreen() {
                     <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 14 }}>
                       {sp.commonName}
                     </Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontStyle: 'italic' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontStyle: 'italic' }}>
                       {sp.latin}
                     </Text>
                   </View>
-                  <Ionicons name="add-circle-outline" size={20} color={COLORS.clay} />
+                  <Ionicons name="add-circle-outline" size={20} color={COLORS.lichen} />
                 </Pressable>
               ))}
             </ScrollView>

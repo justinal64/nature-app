@@ -13,7 +13,7 @@ function Section({ title, children }: SectionProps) {
     <View style={{ marginBottom: 24 }}>
       <Text
         style={{
-          color: COLORS.clay,
+          color: COLORS.lichen,
           fontSize: 13,
           fontWeight: '700',
           letterSpacing: 0.6,
@@ -48,7 +48,7 @@ export default function PrivacyPolicyScreen() {
           flexDirection: 'row',
           alignItems: 'center',
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
           backgroundColor: COLORS.background,
         }}
       >
@@ -58,7 +58,7 @@ export default function PrivacyPolicyScreen() {
           accessibilityRole="button"
           accessibilityLabel="Go back"
         >
-          <Text style={{ color: COLORS.clay, fontSize: 17 }}>‹</Text>
+          <Text style={{ color: COLORS.lichen, fontSize: 17 }}>‹</Text>
         </Pressable>
         <Text style={{ color: COLORS.ink, fontSize: 18, fontWeight: '700', flex: 1 }}>
           Privacy Policy
@@ -69,7 +69,7 @@ export default function PrivacyPolicyScreen() {
         contentContainerStyle={{ padding: 24, paddingBottom: 48 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ color: COLORS.bark, fontSize: 13, marginBottom: 28 }}>
+        <Text style={{ color: COLORS.granite, fontSize: 13, marginBottom: 28 }}>
           Last updated {LAST_UPDATED}
         </Text>
 

@@ -100,7 +100,7 @@ export default function HomeScreen() {
           <View>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 13,
                 fontWeight: '600',
                 letterSpacing: 0.5,
@@ -131,7 +131,7 @@ export default function HomeScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 },
                 softShadow(0.06, 6, 2),
               ]}
@@ -144,16 +144,16 @@ export default function HomeScreen() {
                   width: 52,
                   height: 52,
                   borderRadius: 26,
-                  backgroundColor: COLORS.dusk,
+                  backgroundColor: COLORS.slate,
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 2,
-                  borderColor: COLORS.cream,
+                  borderColor: COLORS.bone,
                 },
                 softShadow(0.12, 8, 3),
               ]}
             >
-              <Text style={{ color: COLORS.cream, fontSize: 22, fontWeight: '700' }}>{initial}</Text>
+              <Text style={{ color: COLORS.bone, fontSize: 22, fontWeight: '700' }}>{initial}</Text>
             </View>
           </Animated.View>
         </View>
@@ -176,7 +176,7 @@ export default function HomeScreen() {
           ]}
         >
           <LinearGradient
-            colors={[COLORS.gold, COLORS.clay]}
+            colors={[COLORS.lichen, COLORS.lichen]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1.3 }}
             style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
@@ -190,7 +190,7 @@ export default function HomeScreen() {
           >
             <Path
               d="M -20 100 Q 80 60, 180 90 T 380 70 L 380 168 L -20 168 Z"
-              fill={COLORS.gold}
+              fill={COLORS.lichen}
               opacity={0.7}
             />
             <Path
@@ -235,7 +235,7 @@ export default function HomeScreen() {
               bottom: 16,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: COLORS.cream,
+              backgroundColor: COLORS.bone,
               paddingHorizontal: 14,
               paddingVertical: 10,
               borderRadius: 22,
@@ -261,7 +261,7 @@ export default function HomeScreen() {
               marginTop: 14,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: COLORS.sage,
+              backgroundColor: COLORS.lichen,
               borderRadius: 18,
               padding: 14,
               gap: 12,
@@ -276,28 +276,28 @@ export default function HomeScreen() {
                 width: 52,
                 height: 52,
                 borderRadius: 14,
-                backgroundColor: COLORS.cream,
+                backgroundColor: COLORS.bone,
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               },
-              glow(COLORS.sage, 8),
+              glow(COLORS.lichen, 8),
             ]}
           >
             <SpeciesIcon kind={(sotdSpecies?.kind ?? 'cactus') as SpeciesKind} size={34} color={COLORS.ink} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: COLORS.cream, fontSize: 10, fontWeight: '700', letterSpacing: 0.6, textTransform: 'uppercase', opacity: 0.85 }}>
+            <Text style={{ color: COLORS.bone, fontSize: 10, fontWeight: '700', letterSpacing: 0.6, textTransform: 'uppercase', opacity: 0.85 }}>
               Species of the Day
             </Text>
-            <Text numberOfLines={1} style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15, marginTop: 2 }}>
+            <Text numberOfLines={1} style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15, marginTop: 2 }}>
               {sotd.commonName}
             </Text>
-            <Text numberOfLines={1} style={{ color: COLORS.cream, fontSize: 12, opacity: 0.8, marginTop: 1 }}>
+            <Text numberOfLines={1} style={{ color: COLORS.bone, fontSize: 12, opacity: 0.8, marginTop: 1 }}>
               {sotd.description.slice(0, 64)}…
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={COLORS.cream} style={{ opacity: 0.8 }} />
+          <Ionicons name="chevron-forward" size={16} color={COLORS.bone} style={{ opacity: 0.8 }} />
         </PressableScale>
       </Reveal>
 
@@ -317,7 +317,7 @@ export default function HomeScreen() {
               borderRadius: 18,
               padding: 14,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
               gap: 12,
             },
             softShadow(0.05, 8, 2),
@@ -328,18 +328,18 @@ export default function HomeScreen() {
               width: 40,
               height: 40,
               borderRadius: 20,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.bone} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>Ask the Field Guide</Text>
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>On-device AI · No internet needed</Text>
+            <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>On-device AI · No internet needed</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+          <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
         </PressableScale>
       </Reveal>
 
@@ -362,7 +362,7 @@ export default function HomeScreen() {
             accessibilityLabel="See all journal entries"
             accessibilityRole="button"
           >
-            <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
+            <Text style={{ color: COLORS.lichen, fontSize: 13, fontWeight: '600' }}>See all ›</Text>
           </Pressable>
         </View>
       </Reveal>
@@ -374,7 +374,7 @@ export default function HomeScreen() {
       >
         {recentFinds.length === 0 ? (
           <View style={{ paddingVertical: 8, paddingHorizontal: 4 }}>
-            <Text style={{ color: COLORS.bark, fontSize: 14 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14 }}>
               Your finds will appear here after your first capture.
             </Text>
           </View>
@@ -395,7 +395,7 @@ export default function HomeScreen() {
                     backgroundColor: COLORS.surface,
                     padding: 14,
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                   },
                   softShadow(0.05, 8, 2),
                 ]}
@@ -405,18 +405,18 @@ export default function HomeScreen() {
                     width: 64,
                     height: 64,
                     borderRadius: 14,
-                    backgroundColor: COLORS.sage,
+                    backgroundColor: COLORS.lichen,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: 10,
                   }}
                 >
-                  <SpeciesIcon kind={item.kind as SpeciesKind} size={44} color={COLORS.cream} />
+                  <SpeciesIcon kind={item.kind as SpeciesKind} size={44} color={COLORS.bone} />
                 </View>
                 <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>
                   {item.commonName}
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 2 }}>
                   {formatRelativeDate(item.capturedAt)}
                 </Text>
               </PressableScale>
@@ -436,9 +436,9 @@ export default function HomeScreen() {
           }}
         >
           {[
-            { label: "Today's finds", value: todayCount.toString(), icon: 'leaf-outline' as const, color: COLORS.sage },
-            { label: 'Kinds spotted', value: uniqueKindsToday.toString(), icon: 'apps-outline' as const, color: COLORS.clay },
-            { label: 'Day streak', value: streak.toString(), icon: 'flame-outline' as const, color: COLORS.gold },
+            { label: "Today's finds", value: todayCount.toString(), icon: 'leaf-outline' as const, color: COLORS.lichen },
+            { label: 'Kinds spotted', value: uniqueKindsToday.toString(), icon: 'apps-outline' as const, color: COLORS.lichen },
+            { label: 'Day streak', value: streak.toString(), icon: 'flame-outline' as const, color: COLORS.lichen },
           ].map((stat) => (
             <View
               key={stat.label}
@@ -451,14 +451,14 @@ export default function HomeScreen() {
                   alignItems: 'center',
                   gap: 4,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 },
                 softShadow(0.04, 5, 1),
               ]}
             >
               <Ionicons name={stat.icon} size={20} color={stat.color} />
               <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '800' }}>{stat.value}</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center', lineHeight: 13 }}>{stat.label}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 10, textAlign: 'center', lineHeight: 13 }}>{stat.label}</Text>
             </View>
           ))}
         </View>
@@ -495,7 +495,7 @@ export default function HomeScreen() {
                   backgroundColor: COLORS.surface,
                   padding: 16,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                   alignItems: 'center',
                 },
                 softShadow(0.05, 8, 2),
@@ -506,7 +506,7 @@ export default function HomeScreen() {
                   width: 80,
                   height: 80,
                   borderRadius: 16,
-                  backgroundColor: COLORS.cream,
+                  backgroundColor: COLORS.bone,
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: 10,
@@ -515,8 +515,8 @@ export default function HomeScreen() {
                 <SpeciesIcon kind={cat.kind} size={56} color={COLORS.ink} />
               </View>
               <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>{cat.name}</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
-                <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{getCategoryCount(cat.kind)}</Text> species
+              <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>{getCategoryCount(cat.kind)}</Text> species
               </Text>
             </PressableScale>
           </Animated.View>
@@ -551,18 +551,18 @@ function PhenologyCard() {
       >
         <View style={{ padding: 14 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <Ionicons name="leaf-outline" size={15} color={COLORS.sage} />
-            <Text style={{ color: COLORS.sage, fontSize: 11, fontWeight: '700', marginLeft: 5, letterSpacing: 0.5 }}>
+            <Ionicons name="leaf-outline" size={15} color={COLORS.lichen} />
+            <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700', marginLeft: 5, letterSpacing: 0.5 }}>
               PHENOLOGY
             </Text>
             <View style={{ flex: 1 }} />
-            <Text style={{ color: COLORS.bark, fontSize: 11 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 11 }}>
               {events.length} events in {MONTH_NAMES_FULL[month]}
             </Text>
-            <Ionicons name="chevron-forward" size={13} color={COLORS.bark} style={{ marginLeft: 2 }} />
+            <Ionicons name="chevron-forward" size={13} color={COLORS.granite} style={{ marginLeft: 2 }} />
           </View>
 
-          <Text style={{ color: COLORS.cream, fontSize: 15, fontWeight: '700', marginBottom: 10 }}>
+          <Text style={{ color: COLORS.bone, fontSize: 15, fontWeight: '700', marginBottom: 10 }}>
             What&apos;s Happening Now
           </Text>
 
@@ -581,19 +581,19 @@ function PhenologyCard() {
                   width: 6,
                   height: 6,
                   borderRadius: 3,
-                  backgroundColor: COLORS.sage,
+                  backgroundColor: COLORS.lichen,
                   marginLeft: 2,
                 }}
               />
-              <Text style={{ color: COLORS.sand, fontSize: 13, flex: 1 }} numberOfLines={1}>
+              <Text style={{ color: COLORS.granite, fontSize: 13, flex: 1 }} numberOfLines={1}>
                 {e.commonName}
-                <Text style={{ color: COLORS.bark, fontSize: 12 }}> — {e.eventType}</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 12 }}> — {e.eventType}</Text>
               </Text>
             </View>
           ))}
 
           {events.length > 3 && (
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 6 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 6 }}>
               + {events.length - 3} more →
             </Text>
           )}

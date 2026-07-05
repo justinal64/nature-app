@@ -22,17 +22,17 @@ import {
 type EventConfig = { icon: string; color: string; label: string };
 
 const EVENT_TYPE_CONFIG: Record<PhenologyEventType, EventConfig> = {
-  bloom:     { icon: 'flower-outline',        color: COLORS.sage,    label: 'Blooming'   },
+  bloom:     { icon: 'flower-outline',        color: COLORS.lichen,    label: 'Blooming'   },
   fruiting:  { icon: 'nutrition-outline',     color: '#7BAF5C',      label: 'Fruiting'   },
-  arrival:   { icon: 'arrow-up-circle-outline', color: COLORS.dusk,  label: 'Arriving'   },
+  arrival:   { icon: 'arrow-up-circle-outline', color: COLORS.slate,  label: 'Arriving'   },
   departure: { icon: 'arrow-down-circle-outline', color: '#9B7EB8',  label: 'Departing'  },
-  nesting:   { icon: 'home-outline',          color: COLORS.bark,    label: 'Nesting'    },
-  active:    { icon: 'flash-outline',         color: COLORS.clay,    label: 'Active'     },
+  nesting:   { icon: 'home-outline',          color: COLORS.granite,    label: 'Nesting'    },
+  active:    { icon: 'flash-outline',         color: COLORS.lichen,    label: 'Active'     },
   dormant:   { icon: 'moon-outline',          color: '#8E9AAF',      label: 'Dormant'    },
-  mating:    { icon: 'heart-outline',         color: COLORS.gold,    label: 'Mating'     },
+  mating:    { icon: 'heart-outline',         color: COLORS.lichen,    label: 'Mating'     },
   birthing:  { icon: 'happy-outline',         color: '#E8A95A',      label: 'Birthing'   },
-  emergence: { icon: 'sunny-outline',         color: COLORS.gold,    label: 'Emerging'   },
-  special:   { icon: 'star-outline',          color: COLORS.clay,    label: 'Special'    },
+  emergence: { icon: 'sunny-outline',         color: COLORS.lichen,    label: 'Emerging'   },
+  special:   { icon: 'star-outline',          color: COLORS.lichen,    label: 'Special'    },
 };
 
 const CATEGORY_ICONS: Record<PhenologyCategory, string> = {
@@ -80,7 +80,7 @@ export default function PhenologyScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.cream }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.bone }}>
       {/* Header */}
       <View
         style={{
@@ -97,11 +97,11 @@ export default function PhenologyScreen() {
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >
-            <Ionicons name="arrow-back" size={22} color={COLORS.cream} />
+            <Ionicons name="arrow-back" size={22} color={COLORS.bone} />
           </Pressable>
           <Text
             style={{
-              color: COLORS.cream,
+              color: COLORS.bone,
               fontSize: 18,
               fontWeight: '700',
               marginLeft: 14,
@@ -112,28 +112,28 @@ export default function PhenologyScreen() {
           </Text>
         </View>
 
-        <Text style={{ color: COLORS.sand, fontSize: 13, lineHeight: 18 }}>
+        <Text style={{ color: COLORS.granite, fontSize: 13, lineHeight: 18 }}>
           What&apos;s happening in the desert Southwest — blooms, migrations, and seasonal events.
         </Text>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, gap: 6 }}>
           <View
             style={{
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 12,
               paddingHorizontal: 10,
               paddingVertical: 3,
             }}
           >
-            <Text style={{ color: COLORS.cream, fontSize: 12, fontWeight: '700' }}>
+            <Text style={{ color: COLORS.bone, fontSize: 12, fontWeight: '700' }}>
               {MONTH_NAMES_FULL[selectedMonth]}
             </Text>
           </View>
-          <Text style={{ color: COLORS.bark, fontSize: 12 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 12 }}>
             {events.length} event{events.length !== 1 ? 's' : ''} active
           </Text>
           {selectedMonth === today && (
-            <Text style={{ color: COLORS.sage, fontSize: 12, fontWeight: '600' }}>· Now</Text>
+            <Text style={{ color: COLORS.lichen, fontSize: 12, fontWeight: '600' }}>· Now</Text>
           )}
         </View>
       </View>
@@ -167,7 +167,7 @@ export default function PhenologyScreen() {
                   style={{
                     fontSize: 12,
                     fontWeight: isSelected ? '700' : '500',
-                    color: isSelected ? COLORS.cream : isToday ? COLORS.clay : COLORS.bark,
+                    color: isSelected ? COLORS.bone : isToday ? COLORS.lichen : COLORS.granite,
                   }}
                 >
                   {name}
@@ -180,9 +180,9 @@ export default function PhenologyScreen() {
                     borderRadius: 2,
                     marginTop: 3,
                     backgroundColor:
-                      count > 15 ? COLORS.clay
-                      : count > 8 ? COLORS.gold
-                      : count > 0 ? COLORS.sage
+                      count > 15 ? COLORS.lichen
+                      : count > 8 ? COLORS.lichen
+                      : count > 0 ? COLORS.lichen
                       : 'transparent',
                   }}
                 />
@@ -217,18 +217,18 @@ export default function PhenologyScreen() {
               <Ionicons
                 name={CATEGORY_ICONS[cat] as never}
                 size={16}
-                color={COLORS.bark}
+                color={COLORS.granite}
               />
               <Text style={{ color: COLORS.ink, fontSize: 14, fontWeight: '700' }}>{cat}</Text>
               <View
                 style={{
-                  backgroundColor: COLORS.sand,
+                  backgroundColor: COLORS.granite,
                   borderRadius: 8,
                   paddingHorizontal: 6,
                   paddingVertical: 1,
                 }}
               >
-                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '600' }}>
                   {grouped[cat].length}
                 </Text>
               </View>
@@ -243,10 +243,10 @@ export default function PhenologyScreen() {
 
         {events.length === 0 && (
           <View style={{ alignItems: 'center', paddingTop: 60, paddingHorizontal: 40 }}>
-            <Ionicons name="moon-outline" size={40} color={COLORS.sand} />
+            <Ionicons name="moon-outline" size={40} color={COLORS.granite} />
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 15,
                 textAlign: 'center',
                 marginTop: 12,
@@ -270,7 +270,7 @@ export default function PhenologyScreen() {
             borderColor: COLORS.border,
           }}
         >
-          <Text style={{ color: COLORS.bark, fontSize: 11, lineHeight: 16 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, lineHeight: 16 }}>
             Event timing is approximate and varies with elevation, microclimate, and year-to-year rainfall.
             Data informed by USANPN, Arizona-Sonora Desert Museum, and Sonoran Desert Network monitoring.
             Week ranges are median observations — extreme years shift timing by 2–4 weeks.
@@ -334,7 +334,7 @@ function EventCard({ event }: { event: PhenologyEvent }) {
               </Text>
             </View>
             {event.peakWeek && (
-              <Text style={{ color: COLORS.bark, fontSize: 10 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 10 }}>
                 peaks wk {event.peakWeek}
               </Text>
             )}
@@ -344,7 +344,7 @@ function EventCard({ event }: { event: PhenologyEvent }) {
         <Ionicons
           name={expanded ? 'chevron-up' : 'chevron-down'}
           size={14}
-          color={COLORS.bark}
+          color={COLORS.granite}
         />
       </View>
 
@@ -358,7 +358,7 @@ function EventCard({ event }: { event: PhenologyEvent }) {
             borderTopColor: COLORS.border,
           }}
         >
-          <Text style={{ color: COLORS.bark, fontSize: 13, lineHeight: 19, marginTop: 10 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 13, lineHeight: 19, marginTop: 10 }}>
             {event.note}
           </Text>
         </View>

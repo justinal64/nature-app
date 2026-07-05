@@ -33,16 +33,16 @@ const KIND_LABEL: Record<Species['kind'], string> = {
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
-  cactus: COLORS.sage,
-  bird: COLORS.clay,
-  insect: COLORS.gold,
-  snake: COLORS.dusk,
-  mammal: COLORS.bark,
-  lizard: COLORS.dusk,
-  amphibian: COLORS.sage,
+  cactus: COLORS.lichen,
+  bird: COLORS.lichen,
+  insect: COLORS.lichen,
+  snake: COLORS.slate,
+  mammal: COLORS.granite,
+  lizard: COLORS.slate,
+  amphibian: COLORS.lichen,
   arachnid: COLORS.ink,
-  fungus: COLORS.gold,
-  fish: COLORS.dusk,
+  fungus: COLORS.lichen,
+  fish: COLORS.slate,
 };
 
 const REGION_LABEL: Record<string, string> = {
@@ -106,7 +106,7 @@ export default function SearchScreen() {
           alignItems: 'center',
           gap: 10,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
         }}
       >
         <View
@@ -118,7 +118,7 @@ export default function SearchScreen() {
               backgroundColor: COLORS.surface,
               borderRadius: 22,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
               paddingHorizontal: 14,
               height: 44,
               gap: 8,
@@ -126,13 +126,13 @@ export default function SearchScreen() {
             softShadow(0.04, 4, 1),
           ]}
         >
-          <Ionicons name="search" size={18} color={COLORS.bark} />
+          <Ionicons name="search" size={18} color={COLORS.granite} />
           <TextInput
             ref={inputRef}
             value={query}
             onChangeText={setQuery}
             placeholder="Search 90 species…"
-            placeholderTextColor={COLORS.bark}
+            placeholderTextColor={COLORS.granite}
             returnKeyType="search"
             autoCapitalize="none"
             autoCorrect={false}
@@ -141,7 +141,7 @@ export default function SearchScreen() {
           />
           {query.length > 0 && (
             <Pressable onPress={() => setQuery('')} accessibilityLabel="Clear search" accessibilityRole="button">
-              <Ionicons name="close-circle" size={18} color={COLORS.bark} />
+              <Ionicons name="close-circle" size={18} color={COLORS.granite} />
             </Pressable>
           )}
         </View>
@@ -150,7 +150,7 @@ export default function SearchScreen() {
           accessibilityLabel="Cancel search"
           accessibilityRole="button"
         >
-          <Text style={{ color: COLORS.clay, fontSize: 15, fontWeight: '600' }}>Cancel</Text>
+          <Text style={{ color: COLORS.lichen, fontSize: 15, fontWeight: '600' }}>Cancel</Text>
         </Pressable>
       </Animated.View>
 
@@ -164,7 +164,7 @@ export default function SearchScreen() {
           <Animated.View entering={FadeInDown.delay(80).duration(300)} style={{ padding: 20 }}>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.5,
@@ -192,7 +192,7 @@ export default function SearchScreen() {
                         backgroundColor: COLORS.surface,
                         padding: 16,
                         borderWidth: 1,
-                        borderColor: COLORS.sand,
+                        borderColor: COLORS.granite,
                         alignItems: 'center',
                         gap: 8,
                       },
@@ -209,11 +209,11 @@ export default function SearchScreen() {
                         justifyContent: 'center',
                       }}
                     >
-                      <SpeciesIcon kind={cat.kind} size={32} color={COLORS.cream} />
+                      <SpeciesIcon kind={cat.kind} size={32} color={COLORS.bone} />
                     </View>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{cat.label}</Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 12 }}>
-                      <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{seen}</Text>/{count} seen
+                    <Text style={{ color: COLORS.granite, fontSize: 12 }}>
+                      <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>{seen}</Text>/{count} seen
                     </Text>
                   </PressableScale>
                 );
@@ -222,7 +222,7 @@ export default function SearchScreen() {
 
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.5,
@@ -251,7 +251,7 @@ export default function SearchScreen() {
                       padding: 14,
                       marginBottom: 10,
                       borderWidth: 1,
-                      borderColor: COLORS.sand,
+                      borderColor: COLORS.granite,
                       gap: 14,
                     },
                     softShadow(0.04, 5, 1),
@@ -262,22 +262,22 @@ export default function SearchScreen() {
                       width: 40,
                       height: 40,
                       borderRadius: 12,
-                      backgroundColor: COLORS.cream,
+                      backgroundColor: COLORS.bone,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    <Ionicons name="map-outline" size={20} color={COLORS.clay} />
+                    <Ionicons name="map-outline" size={20} color={COLORS.lichen} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
                       {REGION_LABEL[region]} Desert
                     </Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                       {count} species
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+                  <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
                 </PressableScale>
               );
             })}
@@ -290,11 +290,11 @@ export default function SearchScreen() {
             entering={FadeInDown.duration(250)}
             style={{ paddingTop: 60, alignItems: 'center', gap: 8 }}
           >
-            <Ionicons name="search-outline" size={40} color={COLORS.sand} />
+            <Ionicons name="search-outline" size={40} color={COLORS.granite} />
             <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 17, marginTop: 8 }}>
               No matches
             </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', paddingHorizontal: 40 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14, textAlign: 'center', paddingHorizontal: 40 }}>
               Try the common name, Latin name, or family — e.g. &quot;saguaro&quot;, &quot;carnegiea&quot;, or &quot;cactaceae&quot;.
             </Text>
           </Animated.View>
@@ -304,7 +304,7 @@ export default function SearchScreen() {
           <View style={{ paddingHorizontal: 16, paddingTop: 14 }}>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.5,
@@ -335,7 +335,7 @@ export default function SearchScreen() {
                         padding: 14,
                         marginBottom: 10,
                         borderWidth: 1,
-                        borderColor: seen ? COLORS.sage : COLORS.sand,
+                        borderColor: seen ? COLORS.lichen : COLORS.granite,
                         gap: 14,
                       },
                       softShadow(0.04, 6, 2),
@@ -346,18 +346,18 @@ export default function SearchScreen() {
                         width: 52,
                         height: 52,
                         borderRadius: 14,
-                        backgroundColor: seen ? COLORS.sage : COLORS.cream,
+                        backgroundColor: seen ? COLORS.lichen : COLORS.bone,
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                     >
-                      <SpeciesIcon kind={sp.kind as SpeciesKind} size={32} color={seen ? COLORS.cream : COLORS.ink} />
+                      <SpeciesIcon kind={sp.kind as SpeciesKind} size={32} color={seen ? COLORS.bone : COLORS.ink} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
                         {sp.commonName}
                       </Text>
-                      <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 13, marginTop: 1 }}>
+                      <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 13, marginTop: 1 }}>
                         {sp.latin}
                       </Text>
                       <View style={{ flexDirection: 'row', gap: 6, marginTop: 4 }}>
@@ -369,39 +369,39 @@ export default function SearchScreen() {
                             paddingVertical: 2,
                           }}
                         >
-                          <Text style={{ color: COLORS.cream, fontSize: 10, fontWeight: '700' }}>
+                          <Text style={{ color: COLORS.bone, fontSize: 10, fontWeight: '700' }}>
                             {KIND_LABEL[sp.kind]}
                           </Text>
                         </View>
                         <View
                           style={{
-                            backgroundColor: COLORS.cream,
+                            backgroundColor: COLORS.bone,
                             borderRadius: 10,
                             paddingHorizontal: 7,
                             paddingVertical: 2,
                             borderWidth: 1,
-                            borderColor: COLORS.sand,
+                            borderColor: COLORS.granite,
                           }}
                         >
-                          <Text style={{ color: COLORS.bark, fontSize: 10, fontWeight: '600' }}>
+                          <Text style={{ color: COLORS.granite, fontSize: 10, fontWeight: '600' }}>
                             {REGION_LABEL[sp.region]}
                           </Text>
                         </View>
                         {seen && (
                           <View
                             style={{
-                              backgroundColor: COLORS.sage,
+                              backgroundColor: COLORS.lichen,
                               borderRadius: 10,
                               paddingHorizontal: 7,
                               paddingVertical: 2,
                             }}
                           >
-                            <Text style={{ color: COLORS.cream, fontSize: 10, fontWeight: '700' }}>Seen</Text>
+                            <Text style={{ color: COLORS.bone, fontSize: 10, fontWeight: '700' }}>Seen</Text>
                           </View>
                         )}
                       </View>
                     </View>
-                    <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+                    <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
                   </PressableScale>
                 </Animated.View>
               );

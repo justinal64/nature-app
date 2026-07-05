@@ -118,8 +118,8 @@ export default function GuideScreen() {
           <RefreshControl
             refreshing={sightingsLoading}
             onRefresh={refreshSightings}
-            tintColor={COLORS.clay}
-            colors={[COLORS.clay]}
+            tintColor={COLORS.lichen}
+            colors={[COLORS.lichen]}
           />
         }
       >
@@ -127,7 +127,7 @@ export default function GuideScreen() {
           <View style={{ paddingHorizontal: 24, paddingTop: 8, paddingBottom: 14 }}>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.6,
@@ -153,15 +153,15 @@ export default function GuideScreen() {
               alignItems: 'center',
               gap: 10,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
             }}
           >
-            <Ionicons name="search" size={16} color={COLORS.bark} />
+            <Ionicons name="search" size={16} color={COLORS.granite} />
             <TextInput
               value={search}
               onChangeText={setSearch}
               placeholder="Search species…"
-              placeholderTextColor={COLORS.bark}
+              placeholderTextColor={COLORS.granite}
               returnKeyType="search"
               style={{ flex: 1, color: COLORS.ink, fontSize: 14 }}
             />
@@ -187,19 +187,19 @@ export default function GuideScreen() {
                       paddingHorizontal: 14,
                       paddingVertical: 10,
                       borderRadius: 22,
-                      backgroundColor: active ? COLORS.clay : COLORS.surface,
+                      backgroundColor: active ? COLORS.lichen : COLORS.surface,
                       borderWidth: 1,
-                      borderColor: active ? COLORS.clay : COLORS.sand,
+                      borderColor: active ? COLORS.lichen : COLORS.granite,
                       gap: 8,
                     },
                     active ? softShadow(0.1, 8, 3) : {},
                   ]}
                 >
-                  <SpeciesIcon kind={cat.kind} size={18} color={active ? COLORS.cream : COLORS.ink} />
-                  <Text style={{ color: active ? COLORS.cream : COLORS.ink, fontWeight: '700', fontSize: 13 }}>
+                  <SpeciesIcon kind={cat.kind} size={18} color={active ? COLORS.bone : COLORS.ink} />
+                  <Text style={{ color: active ? COLORS.bone : COLORS.ink, fontWeight: '700', fontSize: 13 }}>
                     {cat.name}
                   </Text>
-                  <Text style={{ color: active ? 'rgba(244, 236, 218, 0.7)' : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                  <Text style={{ color: active ? 'rgba(244, 236, 218, 0.7)' : COLORS.granite, fontWeight: '600', fontSize: 12 }}>
                     {getCategoryCount(cat.kind)}
                   </Text>
                 </PressableScale>
@@ -221,7 +221,7 @@ export default function GuideScreen() {
           >
             <Text style={{ color: COLORS.ink, fontSize: 14, fontWeight: '600' }}>
               <Text style={{ fontWeight: '700' }}>{filtered.length}</Text> species ·{' '}
-              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>{seenCount} seen</Text>
+              <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>{seenCount} seen</Text>
             </Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <Pressable
@@ -232,16 +232,16 @@ export default function GuideScreen() {
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
-                  backgroundColor: unseenOnly ? COLORS.gold : COLORS.surface,
+                  backgroundColor: unseenOnly ? COLORS.lichen : COLORS.surface,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 14,
                   borderWidth: 1,
-                  borderColor: unseenOnly ? COLORS.gold : COLORS.sand,
+                  borderColor: unseenOnly ? COLORS.lichen : COLORS.granite,
                 }}
               >
-                <Ionicons name="eye-off-outline" size={12} color={unseenOnly ? COLORS.ink : COLORS.bark} />
-                <Text style={{ color: unseenOnly ? COLORS.ink : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                <Ionicons name="eye-off-outline" size={12} color={unseenOnly ? COLORS.ink : COLORS.granite} />
+                <Text style={{ color: unseenOnly ? COLORS.ink : COLORS.granite, fontWeight: '600', fontSize: 12 }}>
                   Unseen
                 </Text>
               </Pressable>
@@ -253,15 +253,15 @@ export default function GuideScreen() {
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
-                  backgroundColor: visibleNow ? COLORS.sage : COLORS.surface,
+                  backgroundColor: visibleNow ? COLORS.lichen : COLORS.surface,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 14,
                   borderWidth: 1,
-                  borderColor: visibleNow ? COLORS.sage : COLORS.sand,
+                  borderColor: visibleNow ? COLORS.lichen : COLORS.granite,
                 }}
               >
-                <Text style={{ color: visibleNow ? COLORS.ink : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                <Text style={{ color: visibleNow ? COLORS.ink : COLORS.granite, fontWeight: '600', fontSize: 12 }}>
                   Now
                 </Text>
               </Pressable>
@@ -271,20 +271,20 @@ export default function GuideScreen() {
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
-                  backgroundColor: nearMe ? COLORS.dusk : COLORS.surface,
+                  backgroundColor: nearMe ? COLORS.slate : COLORS.surface,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 14,
                   borderWidth: 1,
-                  borderColor: nearMe ? COLORS.dusk : COLORS.sand,
+                  borderColor: nearMe ? COLORS.slate : COLORS.granite,
                 }}
               >
                 <Ionicons
                   name={locLoading ? 'hourglass-outline' : 'location-outline'}
                   size={12}
-                  color={nearMe ? COLORS.cream : COLORS.bark}
+                  color={nearMe ? COLORS.bone : COLORS.granite}
                 />
-                <Text style={{ color: nearMe ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                <Text style={{ color: nearMe ? COLORS.bone : COLORS.granite, fontWeight: '600', fontSize: 12 }}>
                   Near me
                 </Text>
               </Pressable>
@@ -294,18 +294,18 @@ export default function GuideScreen() {
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
-                  backgroundColor: activeRegion !== 'ALL' && !nearMe ? COLORS.clay : COLORS.surface,
+                  backgroundColor: activeRegion !== 'ALL' && !nearMe ? COLORS.lichen : COLORS.surface,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 14,
                   borderWidth: 1,
-                  borderColor: activeRegion !== 'ALL' && !nearMe ? COLORS.clay : COLORS.sand,
+                  borderColor: activeRegion !== 'ALL' && !nearMe ? COLORS.lichen : COLORS.granite,
                 }}
               >
-                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.cream : COLORS.bark, fontWeight: '600', fontSize: 12 }}>
+                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.bone : COLORS.granite, fontWeight: '600', fontSize: 12 }}>
                   {regionLabel}
                 </Text>
-                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.cream : COLORS.bark, fontSize: 10 }}>▾</Text>
+                <Text style={{ color: activeRegion !== 'ALL' && !nearMe ? COLORS.bone : COLORS.granite, fontSize: 10 }}>▾</Text>
               </Pressable>
             </View>
           </View>
@@ -314,7 +314,7 @@ export default function GuideScreen() {
         <View style={{ paddingHorizontal: 20, gap: 10 }}>
           {filtered.length === 0 && (
             <View style={{ paddingVertical: 32, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.bark, fontSize: 14 }}>No species match &ldquo;{search}&rdquo;</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 14 }}>No species match &ldquo;{search}&rdquo;</Text>
             </View>
           )}
           {filtered.map((sp, i) => (
@@ -335,7 +335,7 @@ export default function GuideScreen() {
                     borderRadius: 16,
                     padding: 14,
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                     gap: 14,
                   },
                   softShadow(0.04, 6, 2),
@@ -346,12 +346,12 @@ export default function GuideScreen() {
                     width: 56,
                     height: 56,
                     borderRadius: 14,
-                    backgroundColor: sightings.some((s) => s.speciesId === sp.id) ? COLORS.sage : COLORS.sand,
+                    backgroundColor: sightings.some((s) => s.speciesId === sp.id) ? COLORS.lichen : COLORS.granite,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
                 >
-                  <SpeciesIcon kind={sp.kind} size={36} color={COLORS.cream} />
+                  <SpeciesIcon kind={sp.kind} size={36} color={COLORS.bone} />
                 </View>
 
                 <View style={{ flex: 1 }}>
@@ -360,7 +360,7 @@ export default function GuideScreen() {
                   </Text>
                   <Text
                     style={{
-                      color: COLORS.bark,
+                      color: COLORS.granite,
                       fontStyle: preferScientific ? 'normal' : 'italic',
                       fontSize: 13,
                       marginTop: 1,
@@ -372,7 +372,7 @@ export default function GuideScreen() {
                     style={{
                       alignSelf: 'flex-start',
                       marginTop: 6,
-                      backgroundColor: COLORS.cream,
+                      backgroundColor: COLORS.bone,
                       paddingHorizontal: 8,
                       paddingVertical: 3,
                       borderRadius: 6,
@@ -380,7 +380,7 @@ export default function GuideScreen() {
                   >
                     <Text
                       style={{
-                        color: COLORS.bark,
+                        color: COLORS.granite,
                         fontSize: 10,
                         fontWeight: '700',
                         letterSpacing: 0.6,
@@ -395,9 +395,9 @@ export default function GuideScreen() {
                   const spCount = sightings.filter((s) => s.speciesId === sp.id).length;
                   return spCount > 0 ? (
                     <View style={{ alignItems: 'flex-end' }}>
-                      <Text style={{ color: COLORS.clay, fontSize: 18, fontWeight: '700' }}>
+                      <Text style={{ color: COLORS.lichen, fontSize: 18, fontWeight: '700' }}>
                         {spCount}
-                        <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '500' }}>
+                        <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '500' }}>
                           {' '}
                           seen
                         </Text>
@@ -405,12 +405,12 @@ export default function GuideScreen() {
                       <Ionicons
                         name="checkmark-circle"
                         size={16}
-                        color={COLORS.sage}
+                        color={COLORS.lichen}
                         style={{ marginTop: 4 }}
                       />
                     </View>
                   ) : (
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontStyle: 'italic' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontStyle: 'italic' }}>
                       not seen
                     </Text>
                   );

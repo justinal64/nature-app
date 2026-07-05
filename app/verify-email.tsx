@@ -61,17 +61,17 @@ export default function VerifyEmailScreen() {
               width: 96,
               height: 96,
               borderRadius: 48,
-              backgroundColor: COLORS.sage,
+              backgroundColor: COLORS.lichen,
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 24,
               borderWidth: 4,
-              borderColor: COLORS.cream,
+              borderColor: COLORS.bone,
             },
-            glow(COLORS.sage, 14),
+            glow(COLORS.lichen, 14),
           ]}
         >
-          <Ionicons name="mail-unread-outline" size={42} color={COLORS.cream} />
+          <Ionicons name="mail-unread-outline" size={42} color={COLORS.bone} />
         </View>
 
         <Text
@@ -81,7 +81,7 @@ export default function VerifyEmailScreen() {
         </Text>
         <Text
           style={{
-            color: COLORS.bark,
+            color: COLORS.granite,
             fontSize: 14,
             textAlign: 'center',
             marginTop: 10,
@@ -92,7 +92,7 @@ export default function VerifyEmailScreen() {
         </Text>
         <Text
           style={{
-            color: COLORS.clay,
+            color: COLORS.lichen,
             fontSize: 15,
             fontWeight: '700',
             textAlign: 'center',
@@ -103,7 +103,7 @@ export default function VerifyEmailScreen() {
         </Text>
         <Text
           style={{
-            color: COLORS.bark,
+            color: COLORS.granite,
             fontSize: 13,
             textAlign: 'center',
             marginTop: 18,
@@ -121,16 +121,16 @@ export default function VerifyEmailScreen() {
             {
               marginTop: 36,
               width: '100%',
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 24,
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
             },
-            glow(COLORS.clay, 10),
+            glow(COLORS.lichen, 10),
           ]}
         >
-          <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+          <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>
             {loading ? 'Checking…' : "I've verified it"}
           </Text>
         </TouchableOpacity>
@@ -146,17 +146,17 @@ export default function VerifyEmailScreen() {
             paddingVertical: 16,
             alignItems: 'center',
             borderWidth: 1.5,
-            borderColor: COLORS.bark,
+            borderColor: COLORS.granite,
             opacity: loading ? 0.6 : 1,
           }}
         >
-          <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>Resend email</Text>
+          <Text style={{ color: COLORS.granite, fontWeight: '700', fontSize: 15 }}>Resend email</Text>
         </TouchableOpacity>
 
         <Pressable onPress={signOut} style={{ marginTop: 24, padding: 8 }}>
           <Text
             style={{
-              color: COLORS.bark,
+              color: COLORS.granite,
               fontSize: 13,
               textDecorationLine: 'underline',
             }}

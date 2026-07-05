@@ -19,7 +19,7 @@ export function OfflineBar() {
         left: 0,
         right: 0,
         zIndex: 999,
-        backgroundColor: COLORS.dusk,
+        backgroundColor: COLORS.slate,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -27,8 +27,8 @@ export function OfflineBar() {
         gap: 6,
       }}
     >
-      <Ionicons name="wifi-outline" size={14} color={COLORS.cream} />
-      <Text style={{ color: COLORS.cream, fontSize: 12, fontWeight: '700' }}>
+      <Ionicons name="wifi-outline" size={14} color={COLORS.bone} />
+      <Text style={{ color: COLORS.bone, fontSize: 12, fontWeight: '700' }}>
         No connection — working offline
       </Text>
     </Animated.View>

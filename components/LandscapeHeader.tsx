@@ -30,7 +30,7 @@ function Bird({ size = 22, opacity = 0.45 }: { size?: number; opacity?: number }
     <Svg width={size} height={size * 0.55} viewBox="0 0 24 13" opacity={opacity}>
       <Path
         d="M2 10 Q 7 2 12 9 Q 17 2 22 10"
-        stroke={COLORS.bark}
+        stroke={COLORS.granite}
         strokeWidth={2.2}
         strokeLinecap="round"
         fill="none"
@@ -83,9 +83,9 @@ export function LandscapeHeader({ height = 200 }: Props) {
             width: 56,
             height: 56,
             borderRadius: 28,
-            backgroundColor: COLORS.gold,
+            backgroundColor: COLORS.lichen,
           },
-          glow(COLORS.gold, 18),
+          glow(COLORS.lichen, 18),
           sunStyle,
         ]}
       />
@@ -101,7 +101,7 @@ export function LandscapeHeader({ height = 200 }: Props) {
         style={[{ position: 'absolute', top: 0, bottom: 0, left: '-8%', width: '116%' }, backWaveStyle]}
       >
         <Svg width="100%" height="100%" viewBox="0 0 393 200" preserveAspectRatio="none">
-          <Path d="M0 80 Q 100 50, 200 90 T 393 70 L 393 200 L 0 200 Z" fill={COLORS.clay} opacity={0.16} />
+          <Path d="M0 80 Q 100 50, 200 90 T 393 70 L 393 200 L 0 200 Z" fill={COLORS.lichen} opacity={0.16} />
         </Svg>
       </Animated.View>
 
@@ -109,7 +109,7 @@ export function LandscapeHeader({ height = 200 }: Props) {
         style={[{ position: 'absolute', top: 0, bottom: 0, left: '-8%', width: '116%' }, frontWaveStyle]}
       >
         <Svg width="100%" height="100%" viewBox="0 0 393 200" preserveAspectRatio="none">
-          <Path d="M0 130 Q 130 100, 260 130 T 393 120 L 393 200 L 0 200 Z" fill={COLORS.bark} opacity={0.12} />
+          <Path d="M0 130 Q 130 100, 260 130 T 393 120 L 393 200 L 0 200 Z" fill={COLORS.granite} opacity={0.12} />
         </Svg>
       </Animated.View>
     </View>
@@ -126,22 +126,22 @@ export function DesertLandscape({ height = 320 }: { height?: number }) {
         right: 0,
         height,
         overflow: 'hidden',
-        backgroundColor: COLORS.gold,
+        backgroundColor: COLORS.lichen,
         pointerEvents: 'none',
       }}
     >
       <Svg width="100%" height="100%" viewBox="0 0 393 320" preserveAspectRatio="none">
         <Path
           d="M0 220 L 80 180 L 140 210 L 220 170 L 290 200 L 393 175 L 393 320 L 0 320 Z"
-          fill={COLORS.dusk}
+          fill={COLORS.slate}
           opacity={0.4}
         />
         <Path
           d="M0 250 L 100 220 L 180 245 L 260 215 L 350 240 L 393 225 L 393 320 L 0 320 Z"
-          fill={COLORS.bark}
+          fill={COLORS.granite}
           opacity={0.5}
         />
-        <Path d="M0 280 L 393 280 L 393 320 L 0 320 Z" fill={COLORS.clay} opacity={0.7} />
+        <Path d="M0 280 L 393 280 L 393 320 L 0 320 Z" fill={COLORS.lichen} opacity={0.7} />
         <Path
           d="M160 120 h28 v180 h-28 z M160 200 q -28 0 -28 -28 v -20 q 0 -10 10 -10 v 28 q 0 6 6 6 h 12 z M188 180 q 28 0 28 -28 v -28 q 0 -10 -10 -10 v 36 q 0 6 -6 6 h -12 z"
           fill={COLORS.ink}

@@ -38,14 +38,14 @@ type Slide = {
 function CameraIllustration() {
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center', width: 200, height: 200 }}>
-      <View style={[{ width: 160, height: 120, borderRadius: 24, backgroundColor: COLORS.ink, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.gold }, softShadow(0.25, 20, 8)]}>
-        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.cream }}>
-          <SpeciesIcon kind="cactus" size={34} color={COLORS.cream} />
+      <View style={[{ width: 160, height: 120, borderRadius: 24, backgroundColor: COLORS.ink, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.lichen }, softShadow(0.25, 20, 8)]}>
+        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.bone }}>
+          <SpeciesIcon kind="cactus" size={34} color={COLORS.bone} />
         </View>
       </View>
-      <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: COLORS.clay, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
         <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-          <Path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke={COLORS.cream} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke={COLORS.bone} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
         </Svg>
       </View>
     </View>
@@ -57,7 +57,7 @@ function GuideIllustration() {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: 180, gap: 12, alignItems: 'center', justifyContent: 'center' }}>
       {kinds.map((k) => (
-        <View key={k} style={[{ width: 76, height: 76, borderRadius: 20, backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: COLORS.sand }, softShadow(0.12, 10, 4)]}>
+        <View key={k} style={[{ width: 76, height: 76, borderRadius: 20, backgroundColor: COLORS.bone, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: COLORS.granite }, softShadow(0.12, 10, 4)]}>
           <SpeciesIcon kind={k} size={46} color={COLORS.ink} />
         </View>
       ))}
@@ -68,19 +68,19 @@ function GuideIllustration() {
 function JournalIllustration() {
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center', width: 200, height: 200 }}>
-      <View style={[{ width: 160, borderRadius: 20, backgroundColor: COLORS.cream, padding: 16, borderWidth: 1.5, borderColor: COLORS.sand }, softShadow(0.15, 14, 6)]}>
+      <View style={[{ width: 160, borderRadius: 20, backgroundColor: COLORS.bone, padding: 16, borderWidth: 1.5, borderColor: COLORS.granite }, softShadow(0.15, 14, 6)]}>
         {[
           { kind: 'bird' as const, name: 'Roadrunner', when: '2 days ago' },
           { kind: 'cactus' as const, name: 'Saguaro', when: 'Last week' },
           { kind: 'snake' as const, name: 'Sidewinder', when: 'June 20' },
         ].map((item, i) => (
-          <View key={item.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 7, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: COLORS.sand }}>
-            <View style={{ width: 34, height: 34, borderRadius: 10, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center' }}>
-              <SpeciesIcon kind={item.kind} size={22} color={COLORS.cream} />
+          <View key={item.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 7, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: COLORS.granite }}>
+            <View style={{ width: 34, height: 34, borderRadius: 10, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
+              <SpeciesIcon kind={item.kind} size={22} color={COLORS.bone} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12 }}>{item.name}</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 10 }}>{item.when}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 10 }}>{item.when}</Text>
             </View>
           </View>
         ))}
@@ -94,7 +94,7 @@ const SLIDES: Slide[] = [
     title: 'Identify what\nyou find',
     subtitle: 'Point your camera at any desert plant or animal. Our AI identifies it instantly — even offline.',
     cta: 'Next',
-    bg: COLORS.gold,
+    bg: COLORS.lichen,
     accent: COLORS.ink,
     illustration: () => <CameraIllustration />,
   },
@@ -102,7 +102,7 @@ const SLIDES: Slide[] = [
     title: 'Explore\n49 species',
     subtitle: 'Browse the full guide across four deserts — Sonoran, Mojave, Chihuahuan, and Great Basin. No signal needed.',
     cta: 'Next',
-    bg: COLORS.sage,
+    bg: COLORS.lichen,
     accent: COLORS.ink,
     illustration: () => <GuideIllustration />,
   },
@@ -110,8 +110,8 @@ const SLIDES: Slide[] = [
     title: 'Build your\nfield journal',
     subtitle: 'Every find is logged, mapped, and shareable. Earn badges as you discover more of the desert.',
     cta: 'Get started',
-    bg: COLORS.clay,
-    accent: COLORS.cream,
+    bg: COLORS.lichen,
+    accent: COLORS.bone,
     illustration: () => <JournalIllustration />,
   },
 ];
@@ -217,7 +217,7 @@ export default function OnboardingScreen() {
               backgroundColor: slide.accent,
               alignItems: 'center',
             },
-            slide.bg === COLORS.clay ? {} : glow(slide.accent, 12),
+            slide.bg === COLORS.lichen ? {} : glow(slide.accent, 12),
           ]}
         >
           <Text style={{ color: slide.bg, fontWeight: '800', fontSize: 17, letterSpacing: 0.2 }}>

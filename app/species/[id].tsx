@@ -149,24 +149,24 @@ export default function SpeciesDetailScreen() {
                 style={{
                   width: SCREEN_WIDTH,
                   height: HERO_HEIGHT,
-                  backgroundColor: COLORS.gold,
+                  backgroundColor: COLORS.lichen,
                   overflow: 'hidden',
                 }}
               >
                 {i === 0 && (
                   <Svg width="100%" height="100%" viewBox="0 0 393 360" preserveAspectRatio="none">
-                    <Rect x={0} y={0} width={393} height={360} fill={COLORS.gold} />
+                    <Rect x={0} y={0} width={393} height={360} fill={COLORS.lichen} />
                     <Path
                       d="M0 250 L 80 210 L 140 240 L 220 200 L 290 230 L 393 205 L 393 360 L 0 360 Z"
-                      fill={COLORS.dusk}
+                      fill={COLORS.slate}
                       opacity={0.4}
                     />
                     <Path
                       d="M0 280 L 100 250 L 180 275 L 260 245 L 350 270 L 393 255 L 393 360 L 0 360 Z"
-                      fill={COLORS.bark}
+                      fill={COLORS.granite}
                       opacity={0.5}
                     />
-                    <Rect x={0} y={310} width={393} height={50} fill={COLORS.clay} opacity={0.7} />
+                    <Rect x={0} y={310} width={393} height={50} fill={COLORS.lichen} opacity={0.7} />
                     <G fill={COLORS.ink} opacity={0.85}>
                       <Rect x={170} y={130} width={32} height={220} rx={12} />
                       <Path d="M170 230 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
@@ -189,7 +189,7 @@ export default function SpeciesDetailScreen() {
               borderRadius: 12,
             }}
           >
-            <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '600' }}>
+            <Text style={{ color: COLORS.bone, fontSize: 11, fontWeight: '600' }}>
               {imageIndex + 1} / {IMAGES.length}
             </Text>
           </View>
@@ -199,7 +199,7 @@ export default function SpeciesDetailScreen() {
           <View style={{ paddingHorizontal: 24, marginTop: 22 }}>
             <Text
               style={{
-                color: COLORS.clay,
+                color: COLORS.lichen,
                 fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.6,
@@ -214,7 +214,7 @@ export default function SpeciesDetailScreen() {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 8, flexWrap: 'wrap' }}>
               <Text
                 style={{
-                  color: COLORS.bark,
+                  color: COLORS.granite,
                   fontStyle: preferScientific ? 'normal' : 'italic',
                   fontSize: 15,
                 }}
@@ -225,13 +225,13 @@ export default function SpeciesDetailScreen() {
                 const status = getIUCNStatus(speciesId);
                 if (!status) return null;
                 const iucnColors: Record<string, string> = {
-                  LC: COLORS.sage, NT: COLORS.sage,
-                  VU: COLORS.gold, EN: COLORS.clay, CR: '#C0392B',
-                  EW: '#7F1D1D', EX: '#4A1010', DD: COLORS.bark,
+                  LC: COLORS.lichen, NT: COLORS.lichen,
+                  VU: COLORS.lichen, EN: COLORS.lichen, CR: '#C0392B',
+                  EW: '#7F1D1D', EX: '#4A1010', DD: COLORS.granite,
                 };
                 return (
-                  <View style={{ backgroundColor: iucnColors[status] ?? COLORS.bark, borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
-                    <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '800' }}>{status}</Text>
+                  <View style={{ backgroundColor: iucnColors[status] ?? COLORS.granite, borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
+                    <Text style={{ color: COLORS.bone, fontSize: 11, fontWeight: '800' }}>{status}</Text>
                   </View>
                 );
               })()}
@@ -239,19 +239,19 @@ export default function SpeciesDetailScreen() {
                 const est = getEstablishmentStatus(speciesId);
                 if (!est) return null;
                 const estColors: Record<string, string> = {
-                  native: COLORS.sage,
-                  endemic: COLORS.dusk,
-                  introduced: COLORS.clay,
+                  native: COLORS.lichen,
+                  endemic: COLORS.slate,
+                  introduced: COLORS.lichen,
                 };
                 return (
                   <View style={{ backgroundColor: estColors[est], borderRadius: 6, paddingHorizontal: 7, paddingVertical: 2 }}>
-                    <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '700' }}>{ESTABLISHMENT_LABEL[est]}</Text>
+                    <Text style={{ color: COLORS.bone, fontSize: 11, fontWeight: '700' }}>{ESTABLISHMENT_LABEL[est]}</Text>
                   </View>
                 );
               })()}
             </View>
             {speciesId && getIUCNStatus(speciesId) && (
-              <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 2 }}>
                 IUCN {IUCN_LABEL[getIUCNStatus(speciesId)!]}
               </Text>
             )}
@@ -263,9 +263,9 @@ export default function SpeciesDetailScreen() {
           const danger = getDangerInfo(speciesId);
           if (!danger) return null;
           const isHarmless = danger.level === 'harmless';
-          const bgColor = isHarmless ? COLORS.sage : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
+          const bgColor = isHarmless ? COLORS.lichen : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.lichen : COLORS.lichen;
           const iconName: React.ComponentProps<typeof Ionicons>['name'] = isHarmless ? 'checkmark-circle' : danger.level === 'highly-venomous' || danger.level === 'venomous' ? 'warning' : 'alert-circle';
-          const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+          const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.bone;
           const label = isHarmless ? 'Non-venomous' : danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution';
           return (
             <Animated.View entering={FadeInDown.delay(60).duration(280)} style={{ marginHorizontal: 16, marginTop: 14 }}>
@@ -296,7 +296,7 @@ export default function SpeciesDetailScreen() {
               flexDirection: 'row',
               marginHorizontal: 24,
               marginTop: 22,
-              backgroundColor: COLORS.cream,
+              backgroundColor: COLORS.bone,
               borderRadius: 14,
               padding: 4,
             }}
@@ -320,7 +320,7 @@ export default function SpeciesDetailScreen() {
                 >
                   <Text
                     style={{
-                      color: active ? COLORS.ink : COLORS.bark,
+                      color: active ? COLORS.ink : COLORS.granite,
                       fontWeight: active ? '700' : '600',
                       fontSize: 13,
                     }}
@@ -353,12 +353,12 @@ export default function SpeciesDetailScreen() {
                   borderRadius: 14,
                   padding: 14,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 },
                 softShadow(0.04, 6, 2),
               ]}
             >
-              <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>{s.label}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '600' }}>{s.label}</Text>
               <Text
                 style={{
                   color: COLORS.ink,
@@ -384,16 +384,16 @@ export default function SpeciesDetailScreen() {
             {/* Range / distribution map */}
             {species?.region ? (
               <Animated.View entering={FadeInDown.delay(120).duration(280)} style={[
-                { marginTop: 22, marginHorizontal: 16, backgroundColor: COLORS.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: COLORS.sand },
+                { marginTop: 22, marginHorizontal: 16, backgroundColor: COLORS.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: COLORS.granite },
                 softShadow(0.04, 6, 2),
               ]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                     Range
                   </Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: COLORS.clay }} />
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                    <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: COLORS.lichen }} />
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '600' }}>
                       {species.region.replace('_', ' ')} Desert
                     </Text>
                   </View>
@@ -408,14 +408,14 @@ export default function SpeciesDetailScreen() {
                   {
                     marginHorizontal: 16,
                     marginTop: 22,
-                    backgroundColor: COLORS.dusk,
+                    backgroundColor: COLORS.slate,
                     borderRadius: 18,
                     padding: 18,
                     flexDirection: 'row',
                     alignItems: 'flex-start',
                     gap: 12,
                   },
-                  glow(COLORS.dusk, 12),
+                  glow(COLORS.slate, 12),
                 ]}
               >
                 <View
@@ -423,7 +423,7 @@ export default function SpeciesDetailScreen() {
                     width: 32,
                     height: 32,
                     borderRadius: 16,
-                    backgroundColor: COLORS.gold,
+                    backgroundColor: COLORS.lichen,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -433,7 +433,7 @@ export default function SpeciesDetailScreen() {
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
-                      color: COLORS.gold,
+                      color: COLORS.lichen,
                       fontSize: 11,
                       fontWeight: '700',
                       letterSpacing: 0.6,
@@ -443,7 +443,7 @@ export default function SpeciesDetailScreen() {
                   >
                     Did you know
                   </Text>
-                  <Text style={{ color: COLORS.cream, fontSize: 14, lineHeight: 20 }}>
+                  <Text style={{ color: COLORS.bone, fontSize: 14, lineHeight: 20 }}>
                     {species.didYouKnow}
                   </Text>
                 </View>
@@ -454,15 +454,15 @@ export default function SpeciesDetailScreen() {
             {speciesId && getEdibilityInfo(speciesId) && (() => {
               const edibility = getEdibilityInfo(speciesId)!;
               const statusConfig: Record<string, { bg: string; icon: React.ComponentProps<typeof Ionicons>['name']; label: string; textColor: string }> = {
-                'edible':       { bg: COLORS.sage,    icon: 'checkmark-circle', label: 'Edible',         textColor: COLORS.ink },
+                'edible':       { bg: COLORS.lichen,    icon: 'checkmark-circle', label: 'Edible',         textColor: COLORS.ink },
                 'parts-edible': { bg: '#A8C97B',      icon: 'leaf',             label: 'Parts Edible',   textColor: COLORS.ink },
-                'caution':      { bg: COLORS.gold,    icon: 'alert-circle',     label: 'Edible — Caution', textColor: COLORS.ink },
-                'not-edible':   { bg: COLORS.surface, icon: 'close-circle',     label: 'Not Edible',     textColor: COLORS.bark },
-                'toxic':        { bg: '#C0392B',      icon: 'skull',            label: 'TOXIC — Do Not Eat', textColor: COLORS.cream },
+                'caution':      { bg: COLORS.lichen,    icon: 'alert-circle',     label: 'Edible — Caution', textColor: COLORS.ink },
+                'not-edible':   { bg: COLORS.surface, icon: 'close-circle',     label: 'Not Edible',     textColor: COLORS.granite },
+                'toxic':        { bg: '#C0392B',      icon: 'skull',            label: 'TOXIC — Do Not Eat', textColor: COLORS.bone },
               };
               const cfg = statusConfig[edibility.status];
               return (
-                <Animated.View entering={FadeInDown.delay(160).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, borderRadius: 18, padding: 16, borderWidth: 1, borderColor: edibility.status === 'not-edible' ? COLORS.sand : 'transparent', backgroundColor: cfg.bg }, edibility.status !== 'not-edible' ? softShadow(0.1, 6, 2) : {}]}>
+                <Animated.View entering={FadeInDown.delay(160).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, borderRadius: 18, padding: 16, borderWidth: 1, borderColor: edibility.status === 'not-edible' ? COLORS.granite : 'transparent', backgroundColor: cfg.bg }, edibility.status !== 'not-edible' ? softShadow(0.1, 6, 2) : {}]}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                     <Ionicons name={cfg.icon} size={18} color={cfg.textColor} />
                     <Text style={{ color: cfg.textColor, fontWeight: '800', fontSize: 13, letterSpacing: 0.3, textTransform: 'uppercase' }}>
@@ -501,12 +501,12 @@ export default function SpeciesDetailScreen() {
 
             {/* Ecosystem role */}
             {speciesId && getEcosystemRole(speciesId) && (
-              <Animated.View entering={FadeInDown.delay(180).duration(280)} style={[{ marginHorizontal: 16, marginTop: 22, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+              <Animated.View entering={FadeInDown.delay(180).duration(280)} style={[{ marginHorizontal: 16, marginTop: 22, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.granite }, softShadow(0.04, 6, 2)]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                  <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
                     <Ionicons name="leaf-outline" size={17} color={COLORS.ink} />
                   </View>
-                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                     Ecosystem Role
                   </Text>
                 </View>
@@ -520,10 +520,10 @@ export default function SpeciesDetailScreen() {
             {speciesId && getSpeciesUses(speciesId) && (() => {
               const uses = getSpeciesUses(speciesId)!;
               const categoryColors: Record<string, string> = {
-                edible: COLORS.sage,
-                medicinal: COLORS.dusk,
-                survival: COLORS.clay,
-                cultural: COLORS.gold,
+                edible: COLORS.lichen,
+                medicinal: COLORS.slate,
+                survival: COLORS.lichen,
+                cultural: COLORS.lichen,
               };
               const categoryIcons: Record<string, string> = {
                 edible: 'restaurant-outline',
@@ -532,23 +532,23 @@ export default function SpeciesDetailScreen() {
                 cultural: 'people-outline',
               };
               return (
-                <Animated.View entering={FadeInDown.delay(220).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+                <Animated.View entering={FadeInDown.delay(220).duration(280)} style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.surface, borderRadius: 18, padding: 18, borderWidth: 1, borderColor: COLORS.granite }, softShadow(0.04, 6, 2)]}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.gold, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
                       <Ionicons name="book-outline" size={17} color={COLORS.ink} />
                     </View>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                       Field Uses
                     </Text>
                   </View>
                   <View style={{ gap: 12 }}>
                     {uses.map((use, i) => (
                       <View key={i} style={{ flexDirection: 'row', gap: 10 }}>
-                        <View style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: categoryColors[use.category] ?? COLORS.sand, alignItems: 'center', justifyContent: 'center', marginTop: 1, flexShrink: 0 }}>
-                          <Ionicons name={categoryIcons[use.category] as 'restaurant-outline'} size={14} color={COLORS.cream} />
+                        <View style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: categoryColors[use.category] ?? COLORS.granite, alignItems: 'center', justifyContent: 'center', marginTop: 1, flexShrink: 0 }}>
+                          <Ionicons name={categoryIcons[use.category] as 'restaurant-outline'} size={14} color={COLORS.bone} />
                         </View>
                         <View style={{ flex: 1 }}>
-                          <Text style={{ color: COLORS.clay, fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 2 }}>
+                          <Text style={{ color: COLORS.lichen, fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 2 }}>
                             {use.category}
                           </Text>
                           <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 19 }}>
@@ -565,9 +565,9 @@ export default function SpeciesDetailScreen() {
             {/* Junior naturalist fact */}
             {juniorMode && speciesId && getJuniorFact(speciesId) && (
               <Animated.View entering={FadeInDown.delay(240).duration(280)}>
-                <View style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.gold, borderRadius: 18, padding: 18, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }, glow(COLORS.gold, 10)]}>
+                <View style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.lichen, borderRadius: 18, padding: 18, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }, glow(COLORS.lichen, 10)]}>
                   <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: COLORS.ink, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: COLORS.gold, fontWeight: '900', fontSize: 18 }}>★</Text>
+                    <Text style={{ color: COLORS.lichen, fontWeight: '900', fontSize: 18 }}>★</Text>
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontSize: 11, fontWeight: '800', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 4 }}>
@@ -585,16 +585,16 @@ export default function SpeciesDetailScreen() {
             <Animated.View entering={FadeInDown.delay(260).duration(280)}>
               <Pressable
                 onPress={() => router.push(`/ask?speciesId=${speciesId}` as never)}
-                style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.clay, borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }, glow(COLORS.clay, 8)]}
+                style={[{ marginHorizontal: 16, marginTop: 16, backgroundColor: COLORS.lichen, borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }, glow(COLORS.lichen, 8)]}
               >
                 <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' }}>
-                  <Ionicons name="chatbubble-ellipses-outline" size={18} color={COLORS.cream} />
+                  <Ionicons name="chatbubble-ellipses-outline" size={18} color={COLORS.bone} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>Ask the Field Guide</Text>
-                  <Text style={{ color: COLORS.cream, fontSize: 12, opacity: 0.8, marginTop: 1 }}>On-device AI · No internet needed</Text>
+                  <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>Ask the Field Guide</Text>
+                  <Text style={{ color: COLORS.bone, fontSize: 12, opacity: 0.8, marginTop: 1 }}>On-device AI · No internet needed</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={18} color={COLORS.cream} />
+                <Ionicons name="chevron-forward" size={18} color={COLORS.bone} />
               </Pressable>
             </Animated.View>
 
@@ -620,26 +620,26 @@ export default function SpeciesDetailScreen() {
                       backgroundColor: COLORS.surface,
                       borderRadius: 16,
                       borderWidth: 1,
-                      borderColor: COLORS.sand,
+                      borderColor: COLORS.granite,
                       overflow: 'hidden',
                     },
                     softShadow(0.04, 6, 2),
                   ]}
                 >
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 14 }}>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                       Taxonomy
                     </Text>
-                    <Ionicons name={taxonomyExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={COLORS.bark} />
+                    <Ionicons name={taxonomyExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={COLORS.granite} />
                   </View>
                   {taxonomyExpanded && (
                     <View style={{ paddingHorizontal: 14, paddingBottom: 14, gap: 6 }}>
                       {ranks.map(([rank, value], i) => (
                         <View key={rank} style={{ flexDirection: 'row', alignItems: 'center' }}>
                           <View style={{ width: 72 }}>
-                            <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700' }}>{rank}</Text>
+                            <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700' }}>{rank}</Text>
                           </View>
-                          <Text style={{ color: i === ranks.length - 1 ? COLORS.clay : COLORS.ink, fontSize: 13, fontStyle: i >= ranks.length - 2 ? 'italic' : 'normal', fontWeight: i === ranks.length - 1 ? '700' : '400', flex: 1 }}>
+                          <Text style={{ color: i === ranks.length - 1 ? COLORS.lichen : COLORS.ink, fontSize: 13, fontStyle: i >= ranks.length - 2 ? 'italic' : 'normal', fontWeight: i === ranks.length - 1 ? '700' : '400', flex: 1 }}>
                             {value}
                           </Text>
                         </View>
@@ -666,7 +666,7 @@ export default function SpeciesDetailScreen() {
                     borderRadius: 16,
                     padding: 14,
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -680,7 +680,7 @@ export default function SpeciesDetailScreen() {
                       width: 32,
                       height: 32,
                       borderRadius: 10,
-                      backgroundColor: COLORS.cream,
+                      backgroundColor: COLORS.bone,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
@@ -689,10 +689,10 @@ export default function SpeciesDetailScreen() {
                   </View>
                   <View>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>Read on Wikipedia</Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 12, fontStyle: 'italic' }}>{species.latin}</Text>
+                    <Text style={{ color: COLORS.granite, fontSize: 12, fontStyle: 'italic' }}>{species.latin}</Text>
                   </View>
                 </View>
-                <Ionicons name="open-outline" size={16} color={COLORS.bark} />
+                <Ionicons name="open-outline" size={16} color={COLORS.granite} />
               </Pressable>
             ) : null}
 
@@ -706,13 +706,13 @@ export default function SpeciesDetailScreen() {
                   borderRadius: 16,
                   padding: 16,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                 },
                 softShadow(0.04, 6, 2),
               ]}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                   My notes
                 </Text>
                 <Pressable
@@ -726,7 +726,7 @@ export default function SpeciesDetailScreen() {
                   }}
                   hitSlop={8}
                 >
-                  <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '700' }}>
+                  <Text style={{ color: COLORS.lichen, fontSize: 13, fontWeight: '700' }}>
                     {editingNote ? 'Save' : 'Edit'}
                   </Text>
                 </Pressable>
@@ -738,7 +738,7 @@ export default function SpeciesDetailScreen() {
                   onChangeText={setNote}
                   multiline
                   placeholder="Add your field observations, habitat notes, behaviors..."
-                  placeholderTextColor={COLORS.bark}
+                  placeholderTextColor={COLORS.granite}
                   style={{
                     color: COLORS.ink,
                     fontSize: 14,
@@ -749,7 +749,7 @@ export default function SpeciesDetailScreen() {
                 />
               ) : (
                 <Pressable onPress={() => { setEditingNote(true); setTimeout(() => noteInputRef.current?.focus(), 50); }}>
-                  <Text style={{ color: note ? COLORS.ink : COLORS.bark, fontSize: 14, lineHeight: 21, fontStyle: note ? 'normal' : 'italic' }}>
+                  <Text style={{ color: note ? COLORS.ink : COLORS.granite, fontSize: 14, lineHeight: 21, fontStyle: note ? 'normal' : 'italic' }}>
                     {note || 'Add your field observations, habitat notes, behaviors...'}
                   </Text>
                 </Pressable>
@@ -767,7 +767,7 @@ export default function SpeciesDetailScreen() {
                 style={{ flexDirection: 'row', gap: 10 }}
               >
                 <Text
-                  style={{ color: COLORS.clay, fontSize: 16, fontWeight: '700', lineHeight: 23 }}
+                  style={{ color: COLORS.lichen, fontSize: 16, fontWeight: '700', lineHeight: 23 }}
                 >
                   •
                 </Text>
@@ -802,14 +802,14 @@ export default function SpeciesDetailScreen() {
 
           return (
             <Animated.View entering={FadeInDown.delay(180).duration(300)} style={{ paddingHorizontal: 16, marginTop: 28 }}>
-              <View style={[{ backgroundColor: COLORS.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: COLORS.sand }, softShadow(0.04, 6, 2)]}>
+              <View style={[{ backgroundColor: COLORS.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: COLORS.granite }, softShadow(0.04, 6, 2)]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                  <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                     Phenology
                   </Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.clay }} />
-                    <Text style={{ color: COLORS.bark, fontSize: 10, fontWeight: '600' }}>this month</Text>
+                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.lichen }} />
+                    <Text style={{ color: COLORS.granite, fontSize: 10, fontWeight: '600' }}>this month</Text>
                   </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
@@ -817,14 +817,14 @@ export default function SpeciesDetailScreen() {
                     const barH = Math.max(3, Math.round(intensity * MAX_H));
                     const isCurrent = (i + 1) === currentMonth;
                     const isActive = base[i] === 1;
-                    const barColor = isCurrent ? COLORS.clay : isActive ? COLORS.sage : COLORS.sand;
+                    const barColor = isCurrent ? COLORS.lichen : isActive ? COLORS.lichen : COLORS.granite;
                     const barOpacity = isCurrent ? 1 : isActive ? 0.85 : 0.45;
                     return (
                       <View key={i} style={{ flex: 1, alignItems: 'center' }}>
                         <View style={{ height: MAX_H, width: '100%', justifyContent: 'flex-end' }}>
                           <View style={{ height: barH, width: '100%', borderRadius: 4, backgroundColor: barColor, opacity: barOpacity }} />
                         </View>
-                        <Text style={{ color: isCurrent ? COLORS.clay : COLORS.bark, fontSize: 9, fontWeight: isCurrent ? '800' : '500', marginTop: 5 }}>
+                        <Text style={{ color: isCurrent ? COLORS.lichen : COLORS.granite, fontSize: 9, fontWeight: isCurrent ? '800' : '500', marginTop: 5 }}>
                           {MONTH_LABELS[i]}
                         </Text>
                       </View>
@@ -842,12 +842,12 @@ export default function SpeciesDetailScreen() {
           if (related.length === 0) return null;
           return (
             <Animated.View entering={FadeInDown.delay(240).duration(300)} style={{ marginTop: 28, paddingBottom: 32 }}>
-              <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 12, paddingHorizontal: 24 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 12, paddingHorizontal: 24 }}>
                 You might also see
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}>
                 {related.map((rel) => (
-                  <View key={rel.id} style={[{ width: 120, borderRadius: 18, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.sand, overflow: 'hidden' }, softShadow(0.04, 6, 2)]}>
+                  <View key={rel.id} style={[{ width: 120, borderRadius: 18, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.granite, overflow: 'hidden' }, softShadow(0.04, 6, 2)]}>
                     <PressableScale
                       onPress={() => router.push(`/species/${rel.id}` as never)}
                       scaleTo={0.96}
@@ -855,21 +855,21 @@ export default function SpeciesDetailScreen() {
                       accessibilityRole="button"
                       style={{ padding: 12, alignItems: 'center', gap: 8 }}
                     >
-                      <View style={{ width: 60, height: 60, borderRadius: 14, backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center' }}>
+                      <View style={{ width: 60, height: 60, borderRadius: 14, backgroundColor: COLORS.bone, alignItems: 'center', justifyContent: 'center' }}>
                         <SpeciesIcon kind={rel.kind as SpeciesKind} size={38} color={COLORS.ink} />
                       </View>
                       <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12, textAlign: 'center', lineHeight: 16 }}>
                         {rel.commonName}
                       </Text>
-                      <Text style={{ color: COLORS.bark, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
+                      <Text style={{ color: COLORS.granite, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
                     </PressableScale>
                     <Pressable
                       onPress={() => router.push(`/compare?a=${speciesId}&b=${rel.id}` as never)}
                       accessibilityLabel={`Compare with ${rel.commonName}`}
-                      style={{ borderTopWidth: 1, borderTopColor: COLORS.sand, paddingVertical: 7, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 4 }}
+                      style={{ borderTopWidth: 1, borderTopColor: COLORS.granite, paddingVertical: 7, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 4 }}
                     >
-                      <Ionicons name="git-compare-outline" size={12} color={COLORS.clay} />
-                      <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700' }}>Compare</Text>
+                      <Ionicons name="git-compare-outline" size={12} color={COLORS.lichen} />
+                      <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700' }}>Compare</Text>
                     </Pressable>
                   </View>
                 ))}
@@ -885,7 +885,7 @@ export default function SpeciesDetailScreen() {
                 <Text style={{ color: COLORS.ink, fontSize: 16, fontWeight: '700' }}>
                   No sightings yet
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
                   {`Spot a ${species?.commonName ?? 'one'}? Use the camera to log your first sighting.`}
                 </Text>
               </View>
@@ -900,7 +900,7 @@ export default function SpeciesDetailScreen() {
                   const CELL = (SCREEN_WIDTH - 40 - 8) / 3;
                   return (
                     <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
-                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 10 }}>
+                      <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 10 }}>
                         Your photos · {allPhotos.length}
                       </Text>
                       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
@@ -936,7 +936,7 @@ export default function SpeciesDetailScreen() {
                             borderRadius: 16,
                             padding: 14,
                             borderWidth: 1,
-                            borderColor: COLORS.sand,
+                            borderColor: COLORS.granite,
                             gap: 14,
                           },
                           softShadow(0.04, 6, 2),
@@ -945,8 +945,8 @@ export default function SpeciesDetailScreen() {
                         {thumbUri ? (
                           <Image source={{ uri: thumbUri }} style={{ width: 52, height: 52, borderRadius: 12 }} contentFit="cover" />
                         ) : (
-                          <View style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: COLORS.sage, alignItems: 'center', justifyContent: 'center' }}>
-                            <SpeciesIcon kind={s.kind as SpeciesKind} size={30} color={COLORS.cream} />
+                          <View style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
+                            <SpeciesIcon kind={s.kind as SpeciesKind} size={30} color={COLORS.bone} />
                           </View>
                         )}
                         <View style={{ flex: 1 }}>
@@ -954,17 +954,17 @@ export default function SpeciesDetailScreen() {
                             {formatRelativeDate(s.capturedAt)}
                           </Text>
                           {s.notes ? (
-                            <Text numberOfLines={1} style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>
+                            <Text numberOfLines={1} style={{ color: COLORS.granite, fontSize: 13, marginTop: 2 }}>
                               {s.notes}
                             </Text>
                           ) : null}
                           {(s.photoUris?.length ?? 0) > 1 && (
-                            <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 2 }}>
+                            <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 2 }}>
                               {s.photoUris!.length} photos
                             </Text>
                           )}
                         </View>
-                        <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+                        <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
                       </PressableScale>
                     );
                   })}
@@ -1001,7 +1001,7 @@ export default function SpeciesDetailScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
+          <Ionicons name="chevron-back" size={22} color={COLORS.bone} />
         </PressableScale>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <PressableScale
@@ -1022,7 +1022,7 @@ export default function SpeciesDetailScreen() {
               <Ionicons
                 name={liked ? 'heart' : 'heart-outline'}
                 size={20}
-                color={liked ? COLORS.clay : COLORS.cream}
+                color={liked ? COLORS.lichen : COLORS.bone}
               />
             </Animated.View>
           </PressableScale>
@@ -1040,7 +1040,7 @@ export default function SpeciesDetailScreen() {
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="git-compare-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="git-compare-outline" size={20} color={COLORS.bone} />
           </PressableScale>
           <PressableScale
             scaleTo={0.88}
@@ -1056,7 +1056,7 @@ export default function SpeciesDetailScreen() {
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.bone} />
           </PressableScale>
           <PressableScale
             scaleTo={0.88}
@@ -1076,7 +1076,7 @@ export default function SpeciesDetailScreen() {
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="share-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="share-outline" size={20} color={COLORS.bone} />
           </PressableScale>
         </View>
       </Animated.View>
@@ -1122,7 +1122,7 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="warning-outline" size={17} color={COLORS.cream} />
+          <Ionicons name="warning-outline" size={17} color={COLORS.bone} />
         </View>
         <View style={{ flex: 1 }}>
           <Text
@@ -1141,7 +1141,7 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
             {info.impactSummary}
           </Text>
         </View>
-        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.granite} />
       </Pressable>
 
       {expanded && (
@@ -1154,8 +1154,8 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
           }}
         >
           <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-            <Ionicons name="git-network-outline" size={14} color={COLORS.bark} style={{ marginTop: 1 }} />
-            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17, flex: 1, fontStyle: 'italic' }}>
+            <Ionicons name="git-network-outline" size={14} color={COLORS.granite} style={{ marginTop: 1 }} />
+            <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17, flex: 1, fontStyle: 'italic' }}>
               Spreads by: {info.spreadMechanism}
             </Text>
           </View>
@@ -1166,7 +1166,7 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
             </Text>
             {info.whatToDo.map((item, i) => (
               <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                <Ionicons name="checkmark" size={13} color={COLORS.sage} style={{ marginTop: 2 }} />
+                <Ionicons name="checkmark" size={13} color={COLORS.lichen} style={{ marginTop: 2 }} />
                 <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
               </View>
             ))}
@@ -1174,12 +1174,12 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
 
           {info.whatNotToDo && (
             <View style={{ gap: 6 }}>
-              <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+              <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
                 What not to do
               </Text>
               {info.whatNotToDo.map((item, i) => (
                 <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                  <Ionicons name="close" size={13} color={COLORS.clay} style={{ marginTop: 2 }} />
+                  <Ionicons name="close" size={13} color={COLORS.lichen} style={{ marginTop: 2 }} />
                   <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
                 </View>
               ))}
@@ -1196,13 +1196,13 @@ function InvasiveCard({ info }: { info: InvasiveInfo }) {
                 borderColor: COLORS.border,
               }}
             >
-              <Text style={{ color: COLORS.bark, fontSize: 12, fontWeight: '700', marginBottom: 3 }}>Removal guidance</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>{info.removalNote}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 12, fontWeight: '700', marginBottom: 3 }}>Removal guidance</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17 }}>{info.removalNote}</Text>
             </View>
           )}
 
           {info.reportTo && (
-            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17 }}>
               <Text style={{ fontWeight: '700' }}>Report to: </Text>{info.reportTo}
             </Text>
           )}
@@ -1221,7 +1221,7 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
   // Show a summary status for the collapsed header
   const hasProhibited = landTypes.some(([, r]) => r === 'prohibited');
   const hasAllowed = landTypes.some(([, r]) => r === 'allowed' || r === 'limited');
-  const headerColor = hasProhibited && !hasAllowed ? COLORS.clay : hasAllowed ? COLORS.sage : COLORS.gold;
+  const headerColor = hasProhibited && !hasAllowed ? COLORS.lichen : hasAllowed ? COLORS.lichen : COLORS.lichen;
   const headerLabel = hasProhibited && !hasAllowed ? 'Prohibited on most public land' : hasAllowed ? 'Permitted with restrictions' : 'Check local regulations';
 
   return (
@@ -1234,7 +1234,7 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
           borderRadius: 18,
           overflow: 'hidden',
           borderWidth: 1,
-          borderColor: COLORS.sand,
+          borderColor: COLORS.granite,
           backgroundColor: COLORS.surface,
         },
         softShadow(0.05, 6, 2),
@@ -1261,7 +1261,7 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
         <View style={{ flex: 1 }}>
           <Text
             style={{
-              color: COLORS.bark,
+              color: COLORS.granite,
               fontSize: 10,
               fontWeight: '700',
               letterSpacing: 0.5,
@@ -1275,7 +1275,7 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
             {headerLabel}
           </Text>
         </View>
-        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.granite} />
       </Pressable>
 
       {expanded && (
@@ -1333,21 +1333,21 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
 
           {info.personalUseLimit && (
             <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-              <Ionicons name="scale-outline" size={14} color={COLORS.bark} style={{ marginTop: 1 }} />
-              <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17, flex: 1 }}>{info.personalUseLimit}</Text>
+              <Ionicons name="scale-outline" size={14} color={COLORS.granite} style={{ marginTop: 1 }} />
+              <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17, flex: 1 }}>{info.personalUseLimit}</Text>
             </View>
           )}
 
-          <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>{info.notes}</Text>
+          <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17 }}>{info.notes}</Text>
 
           {info.foragerTip && (
             <View
               style={{
-                backgroundColor: COLORS.sage + '22',
+                backgroundColor: COLORS.lichen + '22',
                 borderRadius: 10,
                 padding: 10,
                 borderLeftWidth: 3,
-                borderLeftColor: COLORS.sage,
+                borderLeftColor: COLORS.lichen,
               }}
             >
               <Text style={{ color: COLORS.ink, fontSize: 12, lineHeight: 17 }}>
@@ -1356,7 +1356,7 @@ function ForagingLegalityCard({ info }: { info: ForagingLegalityInfo }) {
             </View>
           )}
 
-          <Text style={{ color: COLORS.bark, fontSize: 11, lineHeight: 15, fontStyle: 'italic', marginTop: 2 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, lineHeight: 15, fontStyle: 'italic', marginTop: 2 }}>
             Regulations change. Always verify with the managing agency before foraging.
           </Text>
         </View>
@@ -1398,17 +1398,17 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
             width: 32,
             height: 32,
             borderRadius: 10,
-            backgroundColor: COLORS.clay,
+            backgroundColor: COLORS.lichen,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="shield-half-outline" size={17} color={COLORS.cream} />
+          <Ionicons name="shield-half-outline" size={17} color={COLORS.bone} />
         </View>
         <View style={{ flex: 1 }}>
           <Text
             style={{
-              color: COLORS.bark,
+              color: COLORS.granite,
               fontSize: 10,
               fontWeight: '700',
               letterSpacing: 0.5,
@@ -1422,7 +1422,7 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
             {protocol.immediateAction}
           </Text>
         </View>
-        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.bark} />
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color={COLORS.granite} />
       </Pressable>
 
       {expanded && (
@@ -1436,7 +1436,7 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
         >
           {protocol.distanceRecommendation && (
             <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-              <Ionicons name="locate-outline" size={15} color={COLORS.clay} style={{ marginTop: 1 }} />
+              <Ionicons name="locate-outline" size={15} color={COLORS.lichen} style={{ marginTop: 1 }} />
               <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>
                 {protocol.distanceRecommendation}
               </Text>
@@ -1444,24 +1444,24 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
           )}
 
           <View style={{ gap: 6 }}>
-            <Text style={{ color: COLORS.sage, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+            <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
               Do
             </Text>
             {protocol.do.map((item, i) => (
               <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                <Ionicons name="checkmark" size={14} color={COLORS.sage} style={{ marginTop: 2 }} />
+                <Ionicons name="checkmark" size={14} color={COLORS.lichen} style={{ marginTop: 2 }} />
                 <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
               </View>
             ))}
           </View>
 
           <View style={{ gap: 6 }}>
-            <Text style={{ color: COLORS.clay, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+            <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
               Don&apos;t
             </Text>
             {protocol.dont.map((item, i) => (
               <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                <Ionicons name="close" size={14} color={COLORS.clay} style={{ marginTop: 2 }} />
+                <Ionicons name="close" size={14} color={COLORS.lichen} style={{ marginTop: 2 }} />
                 <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
               </View>
             ))}
@@ -1476,17 +1476,17 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
                 gap: 6,
               }}
             >
-              <Text style={{ color: COLORS.cream, fontSize: 11, fontWeight: '800', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+              <Text style={{ color: COLORS.bone, fontSize: 11, fontWeight: '800', letterSpacing: 0.4, textTransform: 'uppercase' }}>
                 {protocol.ifBitten ? 'If bitten' : 'If stung'}
               </Text>
-              <Text style={{ color: COLORS.cream, fontSize: 13, lineHeight: 18, opacity: 0.95 }}>
+              <Text style={{ color: COLORS.bone, fontSize: 13, lineHeight: 18, opacity: 0.95 }}>
                 {protocol.ifBitten ?? protocol.ifStung}
               </Text>
             </View>
           )}
 
           {protocol.emergencyNote && (
-            <Text style={{ color: COLORS.bark, fontSize: 12, lineHeight: 17 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, lineHeight: 17 }}>
               {protocol.emergencyNote}
             </Text>
           )}

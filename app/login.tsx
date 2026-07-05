@@ -63,20 +63,20 @@ export default function LoginScreen() {
                 width: 76,
                 height: 76,
                 borderRadius: 38,
-                backgroundColor: COLORS.clay,
+                backgroundColor: COLORS.lichen,
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 16,
                 borderWidth: 3,
-                borderColor: COLORS.cream,
+                borderColor: COLORS.bone,
               },
-              glow(COLORS.clay, 14),
+              glow(COLORS.lichen, 14),
             ]}
           >
-            <Ionicons name="leaf" size={36} color={COLORS.cream} />
+            <Ionicons name="leaf" size={36} color={COLORS.bone} />
           </View>
           <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '700' }}>Welcome back</Text>
-          <Text style={{ color: COLORS.bark, fontSize: 14, marginTop: 6 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 14, marginTop: 6 }}>
             Sign in to keep exploring.
           </Text>
         </View>
@@ -104,7 +104,7 @@ export default function LoginScreen() {
           onPress={() => router.push('/forgot-password')}
           style={{ alignSelf: 'flex-end', marginTop: 8, marginBottom: 6 }}
         >
-          <Text style={{ color: COLORS.clay, fontSize: 13, fontWeight: '600' }}>
+          <Text style={{ color: COLORS.lichen, fontSize: 13, fontWeight: '600' }}>
             Forgot password?
           </Text>
         </Pressable>
@@ -117,18 +117,18 @@ export default function LoginScreen() {
           style={[
             {
               marginTop: 6,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 24,
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
             },
-            glow(COLORS.clay, 10),
+            glow(COLORS.lichen, 10),
           ]}
         >
           <Text
             style={{
-              color: COLORS.cream,
+              color: COLORS.bone,
               fontWeight: '700',
               fontSize: 15,
               letterSpacing: 0.5,
@@ -140,9 +140,9 @@ export default function LoginScreen() {
 
         <Link href="/register" asChild>
           <Pressable style={{ marginTop: 22, alignItems: 'center' }}>
-            <Text style={{ color: COLORS.bark, fontSize: 14 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14 }}>
               New here?{' '}
-              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>Create an account</Text>
+              <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>Create an account</Text>
             </Text>
           </Pressable>
         </Link>

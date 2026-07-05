@@ -64,13 +64,13 @@ function MatchBar({ pct, delay }: { pct: number; delay: number }) {
       style={{
         height: 5,
         borderRadius: 3,
-        backgroundColor: COLORS.sand,
+        backgroundColor: COLORS.granite,
         overflow: 'hidden',
         marginTop: 7,
       }}
     >
       <Animated.View
-        style={[{ height: '100%', borderRadius: 3, backgroundColor: COLORS.clay }, fillStyle]}
+        style={[{ height: '100%', borderRadius: 3, backgroundColor: COLORS.lichen }, fillStyle]}
       />
     </View>
   );
@@ -199,7 +199,7 @@ export default function ResultScreen() {
         contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ height: 320, backgroundColor: COLORS.gold, overflow: 'hidden' }}>
+        <View style={{ height: 320, backgroundColor: COLORS.lichen, overflow: 'hidden' }}>
           {photoUri ? (
             <Image
               source={{ uri: photoUri as string }}
@@ -208,18 +208,18 @@ export default function ResultScreen() {
             />
           ) : (
             <Svg width="100%" height="100%" viewBox="0 0 393 320" preserveAspectRatio="none">
-              <Rect x={0} y={0} width={393} height={320} fill={COLORS.gold} />
+              <Rect x={0} y={0} width={393} height={320} fill={COLORS.lichen} />
               <Path
                 d="M0 220 L 80 180 L 140 210 L 220 170 L 290 200 L 393 175 L 393 320 L 0 320 Z"
-                fill={COLORS.dusk}
+                fill={COLORS.slate}
                 opacity={0.4}
               />
               <Path
                 d="M0 250 L 100 220 L 180 245 L 260 215 L 350 240 L 393 225 L 393 320 L 0 320 Z"
-                fill={COLORS.bark}
+                fill={COLORS.granite}
                 opacity={0.5}
               />
-              <Rect x={0} y={280} width={393} height={40} fill={COLORS.clay} opacity={0.7} />
+              <Rect x={0} y={280} width={393} height={40} fill={COLORS.lichen} opacity={0.7} />
               <G fill={COLORS.ink} opacity={0.85}>
                 <Rect x={170} y={110} width={32} height={210} rx={12} />
                 <Path d="M170 210 q -34 0 -34 -34 v -28 q 0 -12 12 -12 v 36 q 0 8 8 8 h 14 z" />
@@ -254,7 +254,7 @@ export default function ResultScreen() {
                   justifyContent: 'center',
                 }}
               >
-                <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
+                <Ionicons name="chevron-back" size={22} color={COLORS.bone} />
               </PressableScale>
             </Animated.View>
 
@@ -271,8 +271,8 @@ export default function ResultScreen() {
                     borderRadius: 18,
                   }}
                 >
-                  <ActivityIndicator size="small" color={COLORS.cream} />
-                  <Text style={{ color: COLORS.cream, fontWeight: '600', fontSize: 13 }}>
+                  <ActivityIndicator size="small" color={COLORS.bone} />
+                  <Text style={{ color: COLORS.bone, fontWeight: '600', fontSize: 13 }}>
                     Identifying…
                   </Text>
                 </View>
@@ -283,17 +283,17 @@ export default function ResultScreen() {
                       flexDirection: 'row',
                       alignItems: 'center',
                       gap: 6,
-                      backgroundColor: COLORS.dusk,
+                      backgroundColor: COLORS.slate,
                       paddingHorizontal: 14,
                       paddingVertical: 8,
                       borderRadius: 18,
                       opacity: 0.92,
                     },
-                    glow(COLORS.dusk, 8),
+                    glow(COLORS.slate, 8),
                   ]}
                 >
-                  <Ionicons name="wifi-outline" size={14} color={COLORS.cream} />
-                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>
+                  <Ionicons name="wifi-outline" size={14} color={COLORS.bone} />
+                  <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 13 }}>
                     Offline
                   </Text>
                 </View>
@@ -304,17 +304,17 @@ export default function ResultScreen() {
                       flexDirection: 'row',
                       alignItems: 'center',
                       gap: 6,
-                      backgroundColor: COLORS.clay,
+                      backgroundColor: COLORS.lichen,
                       paddingHorizontal: 14,
                       paddingVertical: 8,
                       borderRadius: 18,
                       opacity: 0.92,
                     },
-                    glow(COLORS.clay, 8),
+                    glow(COLORS.lichen, 8),
                   ]}
                 >
-                  <Ionicons name="help-circle" size={16} color={COLORS.cream} />
-                  <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 13 }}>
+                  <Ionicons name="help-circle" size={16} color={COLORS.bone} />
+                  <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 13 }}>
                     Not sure
                   </Text>
                 </View>
@@ -325,12 +325,12 @@ export default function ResultScreen() {
                       flexDirection: 'row',
                       alignItems: 'center',
                       gap: 6,
-                      backgroundColor: COLORS.sage,
+                      backgroundColor: COLORS.lichen,
                       paddingHorizontal: 14,
                       paddingVertical: 8,
                       borderRadius: 18,
                     },
-                    glow(COLORS.sage, 10),
+                    glow(COLORS.lichen, 10),
                   ]}
                 >
                   <Ionicons name="checkmark-circle" size={16} color={COLORS.ink} />
@@ -353,15 +353,15 @@ export default function ResultScreen() {
                 borderRadius: 22,
                 padding: 22,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
               },
               softShadow(0.08, 16, 4),
             ]}
           >
             {identifying ? (
               <View style={{ alignItems: 'center', paddingVertical: 24 }}>
-                <ActivityIndicator size="large" color={COLORS.clay} />
-                <Text style={{ color: COLORS.bark, marginTop: 14, fontSize: 15 }}>
+                <ActivityIndicator size="large" color={COLORS.lichen} />
+                <Text style={{ color: COLORS.granite, marginTop: 14, fontSize: 15 }}>
                   Analyzing your photo…
                 </Text>
               </View>
@@ -371,7 +371,7 @@ export default function ResultScreen() {
                   Working offline
                 </Text>
                 <Text
-                  style={{ color: COLORS.bark, fontSize: 15, lineHeight: 22, marginTop: 10 }}
+                  style={{ color: COLORS.granite, fontSize: 15, lineHeight: 22, marginTop: 10 }}
                 >
                   No connection available. Here are common species in your area — select the one
                   you spotted.
@@ -383,7 +383,7 @@ export default function ResultScreen() {
                   We&apos;re not confident
                 </Text>
                 <Text
-                  style={{ color: COLORS.bark, fontSize: 15, lineHeight: 22, marginTop: 10 }}
+                  style={{ color: COLORS.granite, fontSize: 15, lineHeight: 22, marginTop: 10 }}
                 >
                   The photo doesn&apos;t give us enough to be certain. Try getting closer or
                   finding better lighting.
@@ -394,7 +394,7 @@ export default function ResultScreen() {
                 <>
                   <Text
                     style={{
-                      color: COLORS.clay,
+                      color: COLORS.lichen,
                       fontSize: 12,
                       fontWeight: '700',
                       letterSpacing: 0.6,
@@ -411,7 +411,7 @@ export default function ResultScreen() {
                   </Text>
                   <Text
                     style={{
-                      color: COLORS.bark,
+                      color: COLORS.granite,
                       fontStyle: 'italic',
                       fontSize: 15,
                       marginTop: 2,
@@ -424,8 +424,8 @@ export default function ResultScreen() {
                     const danger = getDangerInfo(topResult.speciesId!);
                     if (!danger) return null;
                     const isHarmless = danger.level === 'harmless';
-                    const bgColor = isHarmless ? COLORS.sage : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.clay : COLORS.gold;
-                    const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.cream;
+                    const bgColor = isHarmless ? COLORS.lichen : danger.level === 'highly-venomous' ? '#C0392B' : danger.level === 'venomous' ? COLORS.lichen : COLORS.lichen;
+                    const textColor = isHarmless || danger.level === 'caution' ? COLORS.ink : COLORS.bone;
                     const label = isHarmless ? 'Non-venomous' : danger.level === 'highly-venomous' ? 'Highly Venomous' : danger.level === 'venomous' ? 'Venomous' : 'Use Caution';
                     const iconName = isHarmless ? 'checkmark-circle' : danger.level === 'caution' ? 'alert-circle' : 'warning';
                     return (
@@ -485,12 +485,12 @@ export default function ResultScreen() {
                           entering={FadeInDown.delay(300 + i * 80).duration(300)}
                           style={{
                             flex: 1,
-                            backgroundColor: COLORS.cream,
+                            backgroundColor: COLORS.bone,
                             borderRadius: 14,
                             padding: 12,
                           }}
                         >
-                          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '600' }}>
+                          <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '600' }}>
                             {stat.label}
                           </Text>
                           <Text
@@ -518,7 +518,7 @@ export default function ResultScreen() {
             <View style={{ marginHorizontal: 16, marginTop: 22 }}>
               <Text
                 style={{
-                  color: COLORS.bark,
+                  color: COLORS.granite,
                   fontSize: 12,
                   fontWeight: '700',
                   letterSpacing: 0.6,
@@ -535,7 +535,7 @@ export default function ResultScreen() {
                     borderRadius: 16,
                     overflow: 'hidden',
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                   },
                   softShadow(0.04, 6, 2),
                 ]}
@@ -554,7 +554,7 @@ export default function ResultScreen() {
                       paddingVertical: 12,
                       paddingHorizontal: 14,
                       borderTopWidth: i === 0 ? 0 : 1,
-                      borderTopColor: COLORS.sand,
+                      borderTopColor: COLORS.granite,
                     }}
                   >
                     <View
@@ -562,13 +562,13 @@ export default function ResultScreen() {
                         width: 36,
                         height: 36,
                         borderRadius: 10,
-                        backgroundColor: COLORS.sage,
+                        backgroundColor: COLORS.lichen,
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginRight: 12,
                       }}
                     >
-                      <SpeciesIcon kind={alt.kind} size={22} color={COLORS.cream} />
+                      <SpeciesIcon kind={alt.kind} size={22} color={COLORS.bone} />
                     </View>
                     <View style={{ flex: 1, marginRight: 8 }}>
                       <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -590,7 +590,7 @@ export default function ResultScreen() {
                       )}
                     </View>
                     {!isOffline && (
-                      <Text style={{ color: COLORS.bark, fontSize: 15, fontWeight: '700' }}>
+                      <Text style={{ color: COLORS.granite, fontSize: 15, fontWeight: '700' }}>
                         {alt.confidence}
                         <Text style={{ fontSize: 12, fontWeight: '500' }}>%</Text>
                       </Text>
@@ -599,7 +599,7 @@ export default function ResultScreen() {
                       <Ionicons
                         name="chevron-forward"
                         size={16}
-                        color={COLORS.bark}
+                        color={COLORS.granite}
                         style={{ marginLeft: isOffline ? 0 : 6 }}
                       />
                     )}
@@ -623,7 +623,7 @@ export default function ResultScreen() {
                     justifyContent: 'space-between',
                     borderRadius: 16,
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                     backgroundColor: COLORS.surface,
                     paddingHorizontal: 14,
                     paddingVertical: 13,
@@ -631,14 +631,14 @@ export default function ResultScreen() {
                 ]}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Ionicons name="calendar-outline" size={16} color={COLORS.bark} />
-                  <Text style={{ color: COLORS.bark, fontSize: 13, fontWeight: '600' }}>Date observed</Text>
+                  <Ionicons name="calendar-outline" size={16} color={COLORS.granite} />
+                  <Text style={{ color: COLORS.granite, fontSize: 13, fontWeight: '600' }}>Date observed</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Text style={{ color: COLORS.ink, fontSize: 14, fontWeight: '600' }}>
                     {capturedAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                   </Text>
-                  <Ionicons name="chevron-forward" size={14} color={COLORS.bark} />
+                  <Ionicons name="chevron-forward" size={14} color={COLORS.granite} />
                 </View>
               </Pressable>
 
@@ -657,7 +657,7 @@ export default function ResultScreen() {
 
               {/* Extra photos strip */}
               <View style={{ gap: 8 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                   Photos
                 </Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
@@ -668,9 +668,9 @@ export default function ResultScreen() {
                         onPress={() => setExtraPhotos((prev) => prev.filter((_, idx) => idx !== i))}
                         accessibilityLabel="Remove photo"
                         accessibilityRole="button"
-                        style={{ position: 'absolute', top: -6, right: -6, backgroundColor: COLORS.clay, borderRadius: 10, width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}
+                        style={{ position: 'absolute', top: -6, right: -6, backgroundColor: COLORS.lichen, borderRadius: 10, width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}
                       >
-                        <Ionicons name="close" size={12} color={COLORS.cream} />
+                        <Ionicons name="close" size={12} color={COLORS.bone} />
                       </Pressable>
                     </View>
                   ))}
@@ -680,19 +680,19 @@ export default function ResultScreen() {
                     accessibilityRole="button"
                     style={{
                       width: 72, height: 72, borderRadius: 12,
-                      borderWidth: 1.5, borderColor: COLORS.sand, borderStyle: 'dashed',
+                      borderWidth: 1.5, borderColor: COLORS.granite, borderStyle: 'dashed',
                       backgroundColor: COLORS.surface, alignItems: 'center', justifyContent: 'center', gap: 4,
                     }}
                   >
-                    <Ionicons name="add" size={22} color={COLORS.clay} />
-                    <Text style={{ color: COLORS.clay, fontSize: 10, fontWeight: '700' }}>Add</Text>
+                    <Ionicons name="add" size={22} color={COLORS.lichen} />
+                    <Text style={{ color: COLORS.lichen, fontSize: 10, fontWeight: '700' }}>Add</Text>
                   </Pressable>
                 </ScrollView>
               </View>
 
               {/* Observation type */}
               <View style={{ gap: 8 }}>
-                <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                   What did you find?
                 </Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -713,11 +713,11 @@ export default function ResultScreen() {
                         paddingVertical: 7,
                         borderRadius: 20,
                         borderWidth: 1.5,
-                        borderColor: observationType === type ? COLORS.clay : COLORS.sand,
-                        backgroundColor: observationType === type ? COLORS.clay : COLORS.surface,
+                        borderColor: observationType === type ? COLORS.lichen : COLORS.granite,
+                        backgroundColor: observationType === type ? COLORS.lichen : COLORS.surface,
                       }}
                     >
-                      <Text style={{ color: observationType === type ? COLORS.cream : COLORS.bark, fontSize: 13, fontWeight: '600' }}>
+                      <Text style={{ color: observationType === type ? COLORS.bone : COLORS.granite, fontSize: 13, fontWeight: '600' }}>
                         {label}
                       </Text>
                     </Pressable>
@@ -730,7 +730,7 @@ export default function ResultScreen() {
                 <>
                   {/* Sex */}
                   <View style={{ gap: 6 }}>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                       Sex
                     </Text>
                     <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -743,11 +743,11 @@ export default function ResultScreen() {
                             paddingVertical: 7,
                             borderRadius: 20,
                             borderWidth: 1.5,
-                            borderColor: sex === s ? COLORS.dusk : COLORS.sand,
-                            backgroundColor: sex === s ? COLORS.dusk : COLORS.surface,
+                            borderColor: sex === s ? COLORS.slate : COLORS.granite,
+                            backgroundColor: sex === s ? COLORS.slate : COLORS.surface,
                           }}
                         >
-                          <Text style={{ color: sex === s ? COLORS.cream : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                          <Text style={{ color: sex === s ? COLORS.bone : COLORS.granite, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
                             {s}
                           </Text>
                         </Pressable>
@@ -757,7 +757,7 @@ export default function ResultScreen() {
 
                   {/* Life Stage */}
                   <View style={{ gap: 6 }}>
-                    <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                       Life Stage
                     </Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -770,11 +770,11 @@ export default function ResultScreen() {
                             paddingVertical: 7,
                             borderRadius: 20,
                             borderWidth: 1.5,
-                            borderColor: lifeStage === ls ? COLORS.gold : COLORS.sand,
-                            backgroundColor: lifeStage === ls ? COLORS.gold : COLORS.surface,
+                            borderColor: lifeStage === ls ? COLORS.lichen : COLORS.granite,
+                            backgroundColor: lifeStage === ls ? COLORS.lichen : COLORS.surface,
                           }}
                         >
-                          <Text style={{ color: lifeStage === ls ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                          <Text style={{ color: lifeStage === ls ? COLORS.ink : COLORS.granite, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
                             {ls}
                           </Text>
                         </Pressable>
@@ -785,7 +785,7 @@ export default function ResultScreen() {
                   {/* Activity (animals only) */}
                   {topResult.kind !== 'cactus' && (
                     <View style={{ gap: 6 }}>
-                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                         Activity
                       </Text>
                       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -798,11 +798,11 @@ export default function ResultScreen() {
                               paddingVertical: 7,
                               borderRadius: 20,
                               borderWidth: 1.5,
-                              borderColor: activity === act ? COLORS.sage : COLORS.sand,
-                              backgroundColor: activity === act ? COLORS.sage : COLORS.surface,
+                              borderColor: activity === act ? COLORS.lichen : COLORS.granite,
+                              backgroundColor: activity === act ? COLORS.lichen : COLORS.surface,
                             }}
                           >
-                            <Text style={{ color: activity === act ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                            <Text style={{ color: activity === act ? COLORS.ink : COLORS.granite, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
                               {act}
                             </Text>
                           </Pressable>
@@ -814,7 +814,7 @@ export default function ResultScreen() {
                   {/* Phenology (plants only) */}
                   {topResult.kind === 'cactus' && (
                     <View style={{ gap: 6 }}>
-                      <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                      <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                         Phenology
                       </Text>
                       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -827,11 +827,11 @@ export default function ResultScreen() {
                               paddingVertical: 7,
                               borderRadius: 20,
                               borderWidth: 1.5,
-                              borderColor: phenology === ph ? COLORS.sage : COLORS.sand,
-                              backgroundColor: phenology === ph ? COLORS.sage : COLORS.surface,
+                              borderColor: phenology === ph ? COLORS.lichen : COLORS.granite,
+                              backgroundColor: phenology === ph ? COLORS.lichen : COLORS.surface,
                             }}
                           >
-                            <Text style={{ color: phenology === ph ? COLORS.ink : COLORS.bark, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
+                            <Text style={{ color: phenology === ph ? COLORS.ink : COLORS.granite, fontSize: 13, fontWeight: '600', textTransform: 'capitalize' }}>
                               {ph}
                             </Text>
                           </Pressable>
@@ -847,7 +847,7 @@ export default function ResultScreen() {
                 style={{
                   borderRadius: 16,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                   backgroundColor: COLORS.surface,
                   paddingHorizontal: 14,
                   paddingVertical: 10,
@@ -857,7 +857,7 @@ export default function ResultScreen() {
                   value={note}
                   onChangeText={setNote}
                   placeholder="Add a note… (optional)"
-                  placeholderTextColor={COLORS.bark}
+                  placeholderTextColor={COLORS.granite}
                   multiline
                   maxLength={300}
                   style={{
@@ -883,15 +883,15 @@ export default function ResultScreen() {
                     style={[
                       {
                         flex: 2,
-                        backgroundColor: COLORS.clay,
+                        backgroundColor: COLORS.lichen,
                         borderRadius: 24,
                         paddingVertical: 16,
                         alignItems: 'center',
                       },
-                      glow(COLORS.clay, 10),
+                      glow(COLORS.lichen, 10),
                     ]}
                   >
-                    <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                    <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>
                       Retake photo
                     </Text>
                   </PressableScale>
@@ -905,10 +905,10 @@ export default function ResultScreen() {
                       paddingVertical: 16,
                       alignItems: 'center',
                       borderWidth: 1.5,
-                      borderColor: COLORS.bark,
+                      borderColor: COLORS.granite,
                     }}
                   >
-                    <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                    <Text style={{ color: COLORS.granite, fontWeight: '700', fontSize: 15 }}>
                       Browse guide
                     </Text>
                   </PressableScale>
@@ -922,16 +922,16 @@ export default function ResultScreen() {
                     style={[
                       {
                         flex: 2,
-                        backgroundColor: COLORS.clay,
+                        backgroundColor: COLORS.lichen,
                         borderRadius: 24,
                         paddingVertical: 16,
                         alignItems: 'center',
                         opacity: saving || !topResult ? 0.6 : 1,
                       },
-                      glow(COLORS.clay, 10),
+                      glow(COLORS.lichen, 10),
                     ]}
                   >
-                    <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+                    <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>
                       {saving ? 'Saving…' : 'Save to Journal'}
                     </Text>
                   </PressableScale>
@@ -945,10 +945,10 @@ export default function ResultScreen() {
                       paddingVertical: 16,
                       alignItems: 'center',
                       borderWidth: 1.5,
-                      borderColor: COLORS.bark,
+                      borderColor: COLORS.granite,
                     }}
                   >
-                    <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 15 }}>
+                    <Text style={{ color: COLORS.granite, fontWeight: '700', fontSize: 15 }}>
                       Retake
                     </Text>
                   </PressableScale>

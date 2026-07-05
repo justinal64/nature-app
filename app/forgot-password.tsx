@@ -56,13 +56,13 @@ export default function ForgotPasswordScreen() {
                 width: 72,
                 height: 72,
                 borderRadius: 36,
-                backgroundColor: COLORS.sage,
+                backgroundColor: COLORS.lichen,
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 8,
               }}
             >
-              <Ionicons name="mail" size={34} color={COLORS.cream} />
+              <Ionicons name="mail" size={34} color={COLORS.bone} />
             </View>
             <Text
               style={{ color: COLORS.ink, fontSize: 26, fontWeight: '700', textAlign: 'center' }}
@@ -71,7 +71,7 @@ export default function ForgotPasswordScreen() {
             </Text>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 14,
                 textAlign: 'center',
                 lineHeight: 21,
@@ -81,7 +81,7 @@ export default function ForgotPasswordScreen() {
               We sent a reset link to {email.trim()}. It may take a minute to arrive.
             </Text>
             <Pressable onPress={() => router.back()} style={{ marginTop: 20 }}>
-              <Text style={{ color: COLORS.clay, fontWeight: '700', fontSize: 15 }}>
+              <Text style={{ color: COLORS.lichen, fontWeight: '700', fontSize: 15 }}>
                 Back to sign in
               </Text>
             </Pressable>
@@ -92,7 +92,7 @@ export default function ForgotPasswordScreen() {
               <Text style={{ color: COLORS.ink, fontSize: 28, fontWeight: '700' }}>
                 Forgot password?
               </Text>
-              <Text style={{ color: COLORS.bark, fontSize: 14, marginTop: 6 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 14, marginTop: 6 }}>
                 Enter your email and we&apos;ll send a reset link.
               </Text>
             </View>
@@ -108,7 +108,7 @@ export default function ForgotPasswordScreen() {
             />
 
             {submitError ? (
-              <Text style={{ color: COLORS.clay, fontSize: 13, marginBottom: 12 }}>
+              <Text style={{ color: COLORS.lichen, fontSize: 13, marginBottom: 12 }}>
                 {submitError}
               </Text>
             ) : null}
@@ -119,24 +119,24 @@ export default function ForgotPasswordScreen() {
               activeOpacity={0.8}
               style={[
                 {
-                  backgroundColor: COLORS.clay,
+                  backgroundColor: COLORS.lichen,
                   borderRadius: 24,
                   paddingVertical: 16,
                   alignItems: 'center',
                   opacity: loading ? 0.6 : 1,
                 },
-                glow(COLORS.clay, 10),
+                glow(COLORS.lichen, 10),
               ]}
             >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>
                 {loading ? 'Sending…' : 'Send reset link'}
               </Text>
             </TouchableOpacity>
 
             <Pressable onPress={() => router.back()} style={{ marginTop: 22, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.bark, fontSize: 14 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 14 }}>
                 Back to{' '}
-                <Text style={{ color: COLORS.clay, fontWeight: '700' }}>sign in</Text>
+                <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>sign in</Text>
               </Text>
             </Pressable>
           </>

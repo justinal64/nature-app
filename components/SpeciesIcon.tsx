@@ -10,7 +10,7 @@ type Props = {
   color?: string;
 };
 
-export function SpeciesIcon({ kind, size = 50, color = COLORS.cream }: Props) {
+export function SpeciesIcon({ kind, size = 50, color = COLORS.bone }: Props) {
   return (
     <Svg width={size} height={size} viewBox="0 0 80 80">
       {kind === 'cactus' && (

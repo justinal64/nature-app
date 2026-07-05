@@ -55,7 +55,7 @@ export default function SightingsMapScreen() {
           <Marker
             key={s.id}
             coordinate={{ latitude: s.location!.lat, longitude: s.location!.lng }}
-            pinColor={COLORS.clay}
+            pinColor={COLORS.lichen}
           >
             <View
               style={[
@@ -63,16 +63,16 @@ export default function SightingsMapScreen() {
                   width: 36,
                   height: 36,
                   borderRadius: 18,
-                  backgroundColor: COLORS.clay,
+                  backgroundColor: COLORS.lichen,
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 2,
-                  borderColor: COLORS.cream,
+                  borderColor: COLORS.bone,
                 },
                 softShadow(0.25, 8, 3),
               ]}
             >
-              <SpeciesIcon kind={s.kind} size={20} color={COLORS.cream} />
+              <SpeciesIcon kind={s.kind} size={20} color={COLORS.bone} />
             </View>
             <Callout onPress={() => router.push(`/species/${s.speciesId}` as never)}>
               <View style={{ width: 180, padding: 10 }}>
@@ -80,14 +80,14 @@ export default function SightingsMapScreen() {
                   {s.commonName}
                 </Text>
                 <Text
-                  style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 12, marginTop: 1 }}
+                  style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 12, marginTop: 1 }}
                 >
                   {s.latinName}
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 4 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 4 }}>
                   {formatRelativeDate(s.capturedAt)}
                 </Text>
-                <Text style={{ color: COLORS.clay, fontSize: 11, marginTop: 4, fontWeight: '600' }}>
+                <Text style={{ color: COLORS.lichen, fontSize: 11, marginTop: 4, fontWeight: '600' }}>
                   Tap to view species →
                 </Text>
               </View>
@@ -111,7 +111,7 @@ export default function SightingsMapScreen() {
               width: 44,
               height: 44,
               borderRadius: 22,
-              backgroundColor: COLORS.cream,
+              backgroundColor: COLORS.bone,
               alignItems: 'center',
               justifyContent: 'center',
             },
@@ -133,7 +133,7 @@ export default function SightingsMapScreen() {
         <View
           style={[
             {
-              backgroundColor: COLORS.cream,
+              backgroundColor: COLORS.bone,
               borderRadius: 14,
               paddingHorizontal: 12,
               paddingVertical: 8,
@@ -159,7 +159,7 @@ export default function SightingsMapScreen() {
           <View
             style={[
               {
-                backgroundColor: COLORS.cream,
+                backgroundColor: COLORS.bone,
                 borderRadius: 16,
                 padding: 16,
                 alignItems: 'center',
@@ -172,7 +172,7 @@ export default function SightingsMapScreen() {
             </Text>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 13,
                 textAlign: 'center',
                 marginTop: 6,

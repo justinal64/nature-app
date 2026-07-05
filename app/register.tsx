@@ -84,22 +84,22 @@ export default function RegisterScreen() {
                 width: 72,
                 height: 72,
                 borderRadius: 36,
-                backgroundColor: COLORS.sage,
+                backgroundColor: COLORS.lichen,
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 16,
                 borderWidth: 3,
-                borderColor: COLORS.cream,
+                borderColor: COLORS.bone,
               },
-              glow(COLORS.sage, 12),
+              glow(COLORS.lichen, 12),
             ]}
           >
-            <Ionicons name="leaf-outline" size={34} color={COLORS.cream} />
+            <Ionicons name="leaf-outline" size={34} color={COLORS.bone} />
           </View>
           <Text style={{ color: COLORS.ink, fontSize: 26, fontWeight: '700' }}>
             Start your field guide
           </Text>
-          <Text style={{ color: COLORS.bark, fontSize: 14, marginTop: 6 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 14, marginTop: 6 }}>
             Create an account to save what you find.
           </Text>
         </View>
@@ -149,18 +149,18 @@ export default function RegisterScreen() {
           style={[
             {
               marginTop: 6,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 24,
               paddingVertical: 16,
               alignItems: 'center',
               opacity: loading ? 0.6 : 1,
             },
-            glow(COLORS.clay, 10),
+            glow(COLORS.lichen, 10),
           ]}
         >
           <Text
             style={{
-              color: COLORS.cream,
+              color: COLORS.bone,
               fontWeight: '700',
               fontSize: 15,
               letterSpacing: 0.5,
@@ -172,9 +172,9 @@ export default function RegisterScreen() {
 
         <Link href="/login" asChild>
           <Pressable style={{ marginTop: 22, alignItems: 'center' }}>
-            <Text style={{ color: COLORS.bark, fontSize: 14 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14 }}>
               Already have an account?{' '}
-              <Text style={{ color: COLORS.clay, fontWeight: '700' }}>Sign in</Text>
+              <Text style={{ color: COLORS.lichen, fontWeight: '700' }}>Sign in</Text>
             </Text>
           </Pressable>
         </Link>

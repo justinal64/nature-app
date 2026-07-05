@@ -160,16 +160,16 @@ export default function ProfileScreen() {
                   width: 76,
                   height: 76,
                   borderRadius: 38,
-                  backgroundColor: COLORS.dusk,
+                  backgroundColor: COLORS.slate,
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderWidth: 3,
-                  borderColor: COLORS.cream,
+                  borderColor: COLORS.bone,
                 },
-                glow(COLORS.dusk, 10),
+                glow(COLORS.slate, 10),
               ]}
             >
-              <Text style={{ color: COLORS.cream, fontSize: 32, fontWeight: '700' }}>
+              <Text style={{ color: COLORS.bone, fontSize: 32, fontWeight: '700' }}>
                 {initial}
               </Text>
             </View>
@@ -184,9 +184,9 @@ export default function ProfileScreen() {
               <Text style={{ color: COLORS.ink, fontSize: 22, fontWeight: '700' }}>
                 {displayName}
               </Text>
-              <Ionicons name="pencil-outline" size={14} color={COLORS.bark} />
+              <Ionicons name="pencil-outline" size={14} color={COLORS.granite} />
             </Pressable>
-            <Text style={{ color: COLORS.bark, fontSize: 13, marginTop: 2 }}>{joinedLabel}</Text>
+            <Text style={{ color: COLORS.granite, fontSize: 13, marginTop: 2 }}>{joinedLabel}</Text>
           </Reveal>
           <PressableScale
             onPress={confirmSignOut}
@@ -197,11 +197,11 @@ export default function ProfileScreen() {
               width: 38,
               height: 38,
               borderRadius: 19,
-              backgroundColor: COLORS.cream,
+              backgroundColor: COLORS.bone,
               alignItems: 'center',
               justifyContent: 'center',
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
             }}
           >
             <Ionicons name="log-out-outline" size={18} color={COLORS.ink} />
@@ -219,7 +219,7 @@ export default function ProfileScreen() {
                 padding: 16,
                 flexDirection: 'row',
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
               },
               softShadow(0.05, 8, 2),
             ]}
@@ -231,7 +231,7 @@ export default function ProfileScreen() {
                   flex: 1,
                   alignItems: 'center',
                   borderLeftWidth: i === 0 ? 0 : 1,
-                  borderLeftColor: COLORS.sand,
+                  borderLeftColor: COLORS.granite,
                 }}
               >
                 <CountUp
@@ -242,7 +242,7 @@ export default function ProfileScreen() {
                 />
                 <Text
                   style={{
-                    color: COLORS.bark,
+                    color: COLORS.granite,
                     fontSize: 11,
                     fontWeight: '600',
                     letterSpacing: 0.4,
@@ -270,7 +270,7 @@ export default function ProfileScreen() {
             <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
               Badges
             </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 13 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 13 }}>
               {earnedBadges.length}/{earnedBadges.length + (16 - earnedBadges.length)} earned
             </Text>
           </View>
@@ -283,7 +283,7 @@ export default function ProfileScreen() {
         >
           {earnedBadges.length === 0 ? (
             <View style={{ paddingVertical: 12, paddingHorizontal: 4 }}>
-              <Text style={{ color: COLORS.bark, fontSize: 13 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 13 }}>
                 Log your first sighting to earn a badge.
               </Text>
             </View>
@@ -304,16 +304,16 @@ export default function ProfileScreen() {
                         width: 80,
                         height: 80,
                         borderRadius: 40,
-                        backgroundColor: COLORS.sage,
+                        backgroundColor: COLORS.lichen,
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderWidth: 3,
-                        borderColor: COLORS.gold,
+                        borderColor: COLORS.lichen,
                       },
-                      glow(COLORS.gold, 8),
+                      glow(COLORS.lichen, 8),
                     ]}
                   >
-                    <SpeciesIcon kind={badge.kind} size={42} color={COLORS.cream} />
+                    <SpeciesIcon kind={badge.kind} size={42} color={COLORS.bone} />
                   </View>
                   <Text
                     style={{
@@ -348,7 +348,7 @@ export default function ProfileScreen() {
                 backgroundColor: COLORS.surface,
                 borderRadius: 18,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 overflow: 'hidden',
               },
               softShadow(0.04, 6, 2),
@@ -356,7 +356,7 @@ export default function ProfileScreen() {
           >
             {recentEntries.length === 0 ? (
               <View style={{ padding: 20, alignItems: 'center' }}>
-                <Text style={{ color: COLORS.bark, fontSize: 14 }}>No entries yet</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 14 }}>No entries yet</Text>
               </View>
             ) : (
               recentEntries.map((entry, i) => (
@@ -369,7 +369,7 @@ export default function ProfileScreen() {
                     padding: 14,
                     gap: 12,
                     borderTopWidth: i === 0 ? 0 : 1,
-                    borderTopColor: COLORS.sand,
+                    borderTopColor: COLORS.granite,
                   }}
                 >
                   <View
@@ -377,22 +377,22 @@ export default function ProfileScreen() {
                       width: 44,
                       height: 44,
                       borderRadius: 12,
-                      backgroundColor: COLORS.sage,
+                      backgroundColor: COLORS.lichen,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    <SpeciesIcon kind={entry.kind as SpeciesKind} size={28} color={COLORS.cream} />
+                    <SpeciesIcon kind={entry.kind as SpeciesKind} size={28} color={COLORS.bone} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
                       {entry.commonName}
                     </Text>
-                    <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                    <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                       {formatRelativeDate(entry.capturedAt)}
                     </Text>
                   </View>
-                  <Text style={{ color: COLORS.bark, fontSize: 18 }}>›</Text>
+                  <Text style={{ color: COLORS.granite, fontSize: 18 }}>›</Text>
                 </Pressable>
               ))
             )}
@@ -431,7 +431,7 @@ export default function ProfileScreen() {
               borderRadius: 16,
               padding: 16,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -440,7 +440,7 @@ export default function ProfileScreen() {
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                   Streak reminders
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                   Daily nudge at 7 PM if you haven&apos;t logged a sighting
                 </Text>
               </View>
@@ -450,7 +450,7 @@ export default function ProfileScreen() {
                 width: 44,
                 height: 26,
                 borderRadius: 13,
-                backgroundColor: notificationsOn ? COLORS.sage : COLORS.sand,
+                backgroundColor: notificationsOn ? COLORS.lichen : COLORS.granite,
                 justifyContent: 'center',
                 paddingHorizontal: 2,
               }}
@@ -460,7 +460,7 @@ export default function ProfileScreen() {
                   width: 22,
                   height: 22,
                   borderRadius: 11,
-                  backgroundColor: COLORS.cream,
+                  backgroundColor: COLORS.bone,
                   alignSelf: notificationsOn ? 'flex-end' : 'flex-start',
                 }}
               />
@@ -500,7 +500,7 @@ export default function ProfileScreen() {
               borderRadius: 16,
               padding: 16,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -509,7 +509,7 @@ export default function ProfileScreen() {
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                   Species of the day
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                   Daily featured species at 8 AM
                 </Text>
               </View>
@@ -519,7 +519,7 @@ export default function ProfileScreen() {
                 width: 44,
                 height: 26,
                 borderRadius: 13,
-                backgroundColor: sotdOn ? COLORS.sage : COLORS.sand,
+                backgroundColor: sotdOn ? COLORS.lichen : COLORS.granite,
                 justifyContent: 'center',
                 paddingHorizontal: 2,
               }}
@@ -529,7 +529,7 @@ export default function ProfileScreen() {
                   width: 22,
                   height: 22,
                   borderRadius: 11,
-                  backgroundColor: COLORS.cream,
+                  backgroundColor: COLORS.bone,
                   alignSelf: sotdOn ? 'flex-end' : 'flex-start',
                 }}
               />
@@ -553,7 +553,7 @@ export default function ProfileScreen() {
               borderRadius: 16,
               padding: 16,
               borderWidth: 1,
-              borderColor: COLORS.sand,
+              borderColor: COLORS.granite,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -562,7 +562,7 @@ export default function ProfileScreen() {
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                   Scientific names
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                   Show latin names as primary display
                 </Text>
               </View>
@@ -572,7 +572,7 @@ export default function ProfileScreen() {
                 width: 44,
                 height: 26,
                 borderRadius: 13,
-                backgroundColor: preferScientific ? COLORS.sage : COLORS.sand,
+                backgroundColor: preferScientific ? COLORS.lichen : COLORS.granite,
                 justifyContent: 'center',
                 paddingHorizontal: 2,
               }}
@@ -582,7 +582,7 @@ export default function ProfileScreen() {
                   width: 22,
                   height: 22,
                   borderRadius: 11,
-                  backgroundColor: COLORS.cream,
+                  backgroundColor: COLORS.bone,
                   alignSelf: preferScientific ? 'flex-end' : 'flex-start',
                 }}
               />
@@ -606,16 +606,16 @@ export default function ProfileScreen() {
               borderRadius: 16,
               padding: 16,
               borderWidth: 1,
-              borderColor: juniorMode ? COLORS.gold : COLORS.sand,
+              borderColor: juniorMode ? COLORS.lichen : COLORS.granite,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <Ionicons name="star-outline" size={20} color={juniorMode ? COLORS.gold : COLORS.ink} />
+              <Ionicons name="star-outline" size={20} color={juniorMode ? COLORS.lichen : COLORS.ink} />
               <View>
                 <Text style={{ color: juniorMode ? COLORS.ink : COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                   Junior Naturalist
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                   Fun facts and kid-friendly species info
                 </Text>
               </View>
@@ -625,7 +625,7 @@ export default function ProfileScreen() {
                 width: 44,
                 height: 26,
                 borderRadius: 13,
-                backgroundColor: juniorMode ? COLORS.gold : COLORS.sand,
+                backgroundColor: juniorMode ? COLORS.lichen : COLORS.granite,
                 justifyContent: 'center',
                 paddingHorizontal: 2,
               }}
@@ -635,7 +635,7 @@ export default function ProfileScreen() {
                   width: 22,
                   height: 22,
                   borderRadius: 11,
-                  backgroundColor: COLORS.cream,
+                  backgroundColor: COLORS.bone,
                   alignSelf: juniorMode ? 'flex-end' : 'flex-start',
                 }}
               />
@@ -655,7 +655,7 @@ export default function ProfileScreen() {
                 borderRadius: 16,
                 padding: 16,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 gap: 12,
               }}
             >
@@ -670,9 +670,9 @@ export default function ProfileScreen() {
                 size={20}
                 color={
                   modelStatus === 'ready'
-                    ? COLORS.sage
+                    ? COLORS.lichen
                     : modelStatus === 'error'
-                      ? COLORS.clay
+                      ? COLORS.lichen
                       : COLORS.ink
                 }
               />
@@ -680,7 +680,7 @@ export default function ProfileScreen() {
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                   Offline ID model
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+                <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                   {modelStatus === 'ready'
                     ? 'Downloaded — works without internet'
                     : modelStatus === 'downloading'
@@ -707,7 +707,7 @@ export default function ProfileScreen() {
                 borderRadius: 16,
                 padding: 14,
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
                 gap: 12,
               },
               softShadow(0.04, 5, 1),
@@ -718,15 +718,15 @@ export default function ProfileScreen() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                backgroundColor: COLORS.cream,
+                backgroundColor: COLORS.bone,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="heart" size={18} color={COLORS.clay} />
+              <Ionicons name="heart" size={18} color={COLORS.lichen} />
             </View>
             <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>Favorites</Text>
-            <Ionicons name="chevron-forward" size={16} color={COLORS.bark} />
+            <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
           </Pressable>
         </Animated.View>
 
@@ -735,14 +735,14 @@ export default function ProfileScreen() {
             onPress={() => router.push('/privacy-policy' as never)}
             style={{ marginTop: 28, alignItems: 'center', paddingVertical: 10 }}
           >
-            <Text style={{ color: COLORS.bark, fontSize: 13, fontWeight: '500' }}>
+            <Text style={{ color: COLORS.granite, fontSize: 13, fontWeight: '500' }}>
               Privacy Policy
             </Text>
           </Pressable>
         </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(450).duration(400)}>
-          <Text style={{ color: COLORS.sand, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}>
             WildLens 1.0.0
           </Text>
         </Animated.View>
@@ -765,7 +765,7 @@ export default function ProfileScreen() {
             }}
             style={{ marginTop: 24, marginBottom: 8, alignItems: 'center', paddingVertical: 12 }}
           >
-            <Text style={{ color: COLORS.clay, fontSize: 14, fontWeight: '600' }}>
+            <Text style={{ color: COLORS.lichen, fontSize: 14, fontWeight: '600' }}>
               Delete account
             </Text>
           </Pressable>
@@ -804,13 +804,13 @@ export default function ProfileScreen() {
               <Text style={{ color: COLORS.ink, fontSize: 20, fontWeight: '700', marginBottom: 6 }}>
                 Confirm deletion
               </Text>
-              <Text style={{ color: COLORS.bark, fontSize: 14, lineHeight: 20, marginBottom: 20 }}>
+              <Text style={{ color: COLORS.granite, fontSize: 14, lineHeight: 20, marginBottom: 20 }}>
                 Enter your password to permanently delete your account.
               </Text>
               <View
                 style={{
                   borderWidth: 1,
-                  borderColor: deleteError ? COLORS.clay : COLORS.sand,
+                  borderColor: deleteError ? COLORS.lichen : COLORS.granite,
                   borderRadius: 12,
                   paddingHorizontal: 14,
                   paddingVertical: 12,
@@ -825,14 +825,14 @@ export default function ProfileScreen() {
                     setDeleteError('');
                   }}
                   placeholder="Password"
-                  placeholderTextColor={COLORS.bark}
+                  placeholderTextColor={COLORS.granite}
                   secureTextEntry
                   autoFocus
                   style={{ color: COLORS.ink, fontSize: 15 }}
                 />
               </View>
               {deleteError ? (
-                <Text style={{ color: COLORS.clay, fontSize: 12, marginBottom: 16 }}>
+                <Text style={{ color: COLORS.lichen, fontSize: 12, marginBottom: 16 }}>
                   {deleteError}
                 </Text>
               ) : null}
@@ -848,7 +848,7 @@ export default function ProfileScreen() {
                     paddingVertical: 14,
                     borderRadius: 12,
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                     alignItems: 'center',
                   }}
                 >
@@ -861,12 +861,12 @@ export default function ProfileScreen() {
                     flex: 1,
                     paddingVertical: 14,
                     borderRadius: 12,
-                    backgroundColor: COLORS.clay,
+                    backgroundColor: COLORS.lichen,
                     alignItems: 'center',
                     opacity: deleting ? 0.6 : 1,
                   }}
                 >
-                  <Text style={{ color: COLORS.cream, fontWeight: '700' }}>
+                  <Text style={{ color: COLORS.bone, fontWeight: '700' }}>
                     {deleting ? 'Deleting…' : 'Delete'}
                   </Text>
                 </Pressable>
@@ -894,15 +894,15 @@ export default function ProfileScreen() {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
               <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Edit display name</Text>
               <Pressable onPress={() => setShowEditName(false)} accessibilityLabel="Cancel" accessibilityRole="button">
-                <Ionicons name="close" size={22} color={COLORS.bark} />
+                <Ionicons name="close" size={22} color={COLORS.granite} />
               </Pressable>
             </View>
-            <View style={{ borderWidth: 1, borderColor: COLORS.sand, borderRadius: 14, padding: 14, backgroundColor: COLORS.surface, marginBottom: 20 }}>
+            <View style={{ borderWidth: 1, borderColor: COLORS.granite, borderRadius: 14, padding: 14, backgroundColor: COLORS.surface, marginBottom: 20 }}>
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
                 placeholder="Your name"
-                placeholderTextColor={COLORS.bark}
+                placeholderTextColor={COLORS.granite}
                 autoFocus
                 maxLength={40}
                 style={{ color: COLORS.ink, fontSize: 16 }}
@@ -914,9 +914,9 @@ export default function ProfileScreen() {
               disabled={savingName || !newName.trim()}
               accessibilityLabel="Save name"
               accessibilityRole="button"
-              style={[{ backgroundColor: newName.trim() ? COLORS.clay : COLORS.sand, borderRadius: 24, paddingVertical: 16, alignItems: 'center' }, newName.trim() ? glow(COLORS.clay, 8) : {}]}
+              style={[{ backgroundColor: newName.trim() ? COLORS.lichen : COLORS.granite, borderRadius: 24, paddingVertical: 16, alignItems: 'center' }, newName.trim() ? glow(COLORS.lichen, 8) : {}]}
             >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>
                 {savingName ? 'Saving…' : 'Save'}
               </Text>
             </Pressable>

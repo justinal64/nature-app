@@ -78,7 +78,7 @@ function CameraTabButton() {
               width: 60,
               height: 60,
               borderRadius: 30,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
             },
             ringStyle,
           ]}
@@ -93,16 +93,16 @@ function CameraTabButton() {
               width: 60,
               height: 60,
               borderRadius: 30,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               alignItems: 'center',
               justifyContent: 'center',
               borderWidth: 4,
               borderColor: COLORS.background,
             },
-            glow(COLORS.clay, 12),
+            glow(COLORS.lichen, 12),
           ]}
         >
-          <Ionicons name="camera" size={26} color={COLORS.cream} />
+          <Ionicons name="camera" size={26} color={COLORS.bone} />
         </PressableScale>
       </View>
     </View>
@@ -116,14 +116,14 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: COLORS.background,
-          borderTopColor: COLORS.sand,
+          borderTopColor: COLORS.granite,
           borderTopWidth: 1,
           height: Platform.OS === 'ios' ? 86 : 70,
           paddingBottom: Platform.OS === 'ios' ? 28 : 10,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: COLORS.clay,
-        tabBarInactiveTintColor: COLORS.bark,
+        tabBarActiveTintColor: COLORS.lichen,
+        tabBarInactiveTintColor: COLORS.granite,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',

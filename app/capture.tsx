@@ -56,10 +56,10 @@ export default function CaptureScreen() {
           paddingHorizontal: 36,
         }}
       >
-        <Ionicons name="camera-outline" size={52} color={COLORS.cream} />
+        <Ionicons name="camera-outline" size={52} color={COLORS.bone} />
         <Text
           style={{
-            color: COLORS.cream,
+            color: COLORS.bone,
             fontSize: 20,
             fontWeight: '700',
             marginTop: 20,
@@ -70,7 +70,7 @@ export default function CaptureScreen() {
         </Text>
         <Text
           style={{
-            color: COLORS.bark,
+            color: COLORS.granite,
             fontSize: 15,
             marginTop: 10,
             textAlign: 'center',
@@ -84,25 +84,25 @@ export default function CaptureScreen() {
             onPress={requestPermission}
             style={{
               marginTop: 28,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 24,
               paddingVertical: 14,
               paddingHorizontal: 32,
             }}
           >
-            <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>
+            <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>
               Allow Camera
             </Text>
           </Pressable>
         ) : (
           <Text
-            style={{ color: COLORS.bark, fontSize: 13, marginTop: 20, textAlign: 'center' }}
+            style={{ color: COLORS.granite, fontSize: 13, marginTop: 20, textAlign: 'center' }}
           >
             Go to Settings → WildLens → Camera to enable access.
           </Text>
         )}
         <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
-          <Text style={{ color: COLORS.bark, fontSize: 15 }}>Go back</Text>
+          <Text style={{ color: COLORS.granite, fontSize: 15 }}>Go back</Text>
         </Pressable>
       </View>
     );
@@ -115,7 +115,7 @@ export default function CaptureScreen() {
       {/* Reticle corners */}
       <View style={{ position: 'absolute', inset: 0 }}>
         <Svg width="100%" height="100%" viewBox="0 0 393 752">
-          <G stroke={COLORS.cream} strokeWidth={2.5} fill="none" opacity={0.9}>
+          <G stroke={COLORS.bone} strokeWidth={2.5} fill="none" opacity={0.9}>
             <Line x1={60} y1={top + 150} x2={92} y2={top + 150} />
             <Line x1={60} y1={top + 150} x2={60} y2={top + 182} />
             <Line x1={333} y1={top + 150} x2={301} y2={top + 150} />
@@ -152,7 +152,7 @@ export default function CaptureScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="close" size={22} color={COLORS.cream} />
+          <Ionicons name="close" size={22} color={COLORS.bone} />
         </Pressable>
 
         <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -169,7 +169,7 @@ export default function CaptureScreen() {
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="layers-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="layers-outline" size={20} color={COLORS.bone} />
           </Pressable>
           <Pressable
             onPress={() => setFlash(f => (f === 'off' ? 'on' : 'off'))}
@@ -178,7 +178,7 @@ export default function CaptureScreen() {
               height: 42,
               borderRadius: 21,
               backgroundColor:
-                flash === 'on' ? COLORS.gold : 'rgba(10, 10, 24, 0.45)',
+                flash === 'on' ? COLORS.lichen : 'rgba(10, 10, 24, 0.45)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -186,7 +186,7 @@ export default function CaptureScreen() {
             <Ionicons
               name={flash === 'on' ? 'flash' : 'flash-outline'}
               size={20}
-              color={COLORS.cream}
+              color={COLORS.bone}
             />
           </Pressable>
           <Pressable
@@ -200,7 +200,7 @@ export default function CaptureScreen() {
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="sync-outline" size={20} color={COLORS.cream} />
+            <Ionicons name="sync-outline" size={20} color={COLORS.bone} />
           </Pressable>
         </View>
       </View>
@@ -225,7 +225,7 @@ export default function CaptureScreen() {
         >
           <Text
             style={{
-              color: COLORS.cream,
+              color: COLORS.bone,
               fontSize: 13,
               fontWeight: '500',
               letterSpacing: 0.3,
@@ -260,7 +260,7 @@ export default function CaptureScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="images-outline" size={24} color={COLORS.cream} />
+          <Ionicons name="images-outline" size={24} color={COLORS.bone} />
         </Pressable>
 
         <TouchableOpacity
@@ -275,24 +275,24 @@ export default function CaptureScreen() {
               height: 78,
               borderRadius: 39,
               borderWidth: 5,
-              borderColor: COLORS.cream,
+              borderColor: COLORS.bone,
               backgroundColor: 'rgba(244, 236, 218, 0.2)',
               alignItems: 'center',
               justifyContent: 'center',
               opacity: capturing ? 0.6 : 1,
             },
-            glow(COLORS.cream, 12),
+            glow(COLORS.bone, 12),
           ]}
         >
           {capturing ? (
-            <ActivityIndicator color={COLORS.cream} />
+            <ActivityIndicator color={COLORS.bone} />
           ) : (
             <View
               style={{
                 width: 58,
                 height: 58,
                 borderRadius: 29,
-                backgroundColor: COLORS.cream,
+                backgroundColor: COLORS.bone,
               }}
             />
           )}
@@ -311,7 +311,7 @@ export default function CaptureScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="mic-outline" size={24} color={COLORS.cream} />
+          <Ionicons name="mic-outline" size={24} color={COLORS.bone} />
         </Pressable>
       </View>
     </View>

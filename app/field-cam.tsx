@@ -88,18 +88,18 @@ export default function FieldCamScreen() {
   if (!permission.granted) {
     return (
       <View style={{ flex: 1, backgroundColor: '#000', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
-        <Ionicons name="camera-outline" size={52} color={COLORS.cream} />
-        <Text style={{ color: COLORS.cream, fontSize: 20, fontWeight: '700', marginTop: 20, textAlign: 'center' }}>
+        <Ionicons name="camera-outline" size={52} color={COLORS.bone} />
+        <Text style={{ color: COLORS.bone, fontSize: 20, fontWeight: '700', marginTop: 20, textAlign: 'center' }}>
           Camera access needed
         </Text>
         <Pressable
           onPress={requestPermission}
-          style={{ marginTop: 24, backgroundColor: COLORS.clay, borderRadius: 24, paddingVertical: 14, paddingHorizontal: 32 }}
+          style={{ marginTop: 24, backgroundColor: COLORS.lichen, borderRadius: 24, paddingVertical: 14, paddingHorizontal: 32 }}
         >
-          <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>Allow Camera</Text>
+          <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>Allow Camera</Text>
         </Pressable>
         <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
-          <Text style={{ color: COLORS.bark, fontSize: 15 }}>Go back</Text>
+          <Text style={{ color: COLORS.granite, fontSize: 15 }}>Go back</Text>
         </Pressable>
       </View>
     );
@@ -112,10 +112,10 @@ export default function FieldCamScreen() {
       {/* Scanning overlay */}
       <View style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         {/* Corner brackets */}
-        <View style={{ position: 'absolute', top: '8%', left: '6%', width: 28, height: 28, borderTopWidth: 2.5, borderLeftWidth: 2.5, borderColor: COLORS.sage, opacity: 0.9 }} />
-        <View style={{ position: 'absolute', top: '8%', right: '6%', width: 28, height: 28, borderTopWidth: 2.5, borderRightWidth: 2.5, borderColor: COLORS.sage, opacity: 0.9 }} />
-        <View style={{ position: 'absolute', bottom: '30%', left: '6%', width: 28, height: 28, borderBottomWidth: 2.5, borderLeftWidth: 2.5, borderColor: COLORS.sage, opacity: 0.9 }} />
-        <View style={{ position: 'absolute', bottom: '30%', right: '6%', width: 28, height: 28, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: COLORS.sage, opacity: 0.9 }} />
+        <View style={{ position: 'absolute', top: '8%', left: '6%', width: 28, height: 28, borderTopWidth: 2.5, borderLeftWidth: 2.5, borderColor: COLORS.lichen, opacity: 0.9 }} />
+        <View style={{ position: 'absolute', top: '8%', right: '6%', width: 28, height: 28, borderTopWidth: 2.5, borderRightWidth: 2.5, borderColor: COLORS.lichen, opacity: 0.9 }} />
+        <View style={{ position: 'absolute', bottom: '30%', left: '6%', width: 28, height: 28, borderBottomWidth: 2.5, borderLeftWidth: 2.5, borderColor: COLORS.lichen, opacity: 0.9 }} />
+        <View style={{ position: 'absolute', bottom: '30%', right: '6%', width: 28, height: 28, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: COLORS.lichen, opacity: 0.9 }} />
         {/* Scan line */}
         <Animated.View
           style={[
@@ -124,7 +124,7 @@ export default function FieldCamScreen() {
               left: '6%',
               right: '6%',
               height: 1.5,
-              backgroundColor: COLORS.sage,
+              backgroundColor: COLORS.lichen,
               opacity: 0.55,
             },
             scanLineStyle,
@@ -158,11 +158,11 @@ export default function FieldCamScreen() {
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="chevron-back" size={22} color={COLORS.cream} />
+          <Ionicons name="chevron-back" size={22} color={COLORS.bone} />
         </TouchableOpacity>
 
         <View style={[{ backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 7 }]}>
-          <Text style={{ color: COLORS.sage, fontSize: 12, fontWeight: '700', letterSpacing: 0.5 }}>
+          <Text style={{ color: COLORS.lichen, fontSize: 12, fontWeight: '700', letterSpacing: 0.5 }}>
             {location ? '● LOCATION LOCKED' : '○ LOCATING…'}
           </Text>
         </View>
@@ -175,12 +175,12 @@ export default function FieldCamScreen() {
             width: 44,
             height: 44,
             borderRadius: 22,
-            backgroundColor: showPanel ? COLORS.sage : 'rgba(0,0,0,0.45)',
+            backgroundColor: showPanel ? COLORS.lichen : 'rgba(0,0,0,0.45)',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Ionicons name="list-outline" size={20} color={showPanel ? COLORS.ink : COLORS.cream} />
+          <Ionicons name="list-outline" size={20} color={showPanel ? COLORS.ink : COLORS.bone} />
         </TouchableOpacity>
       </Animated.View>
 
@@ -206,7 +206,7 @@ export default function FieldCamScreen() {
                 alignItems: 'flex-start',
                 gap: 12,
                 borderWidth: 1,
-                borderColor: COLORS.sage,
+                borderColor: COLORS.lichen,
               },
               softShadow(0.4, 20, 8),
             ]}
@@ -216,22 +216,22 @@ export default function FieldCamScreen() {
                 width: 52,
                 height: 52,
                 borderRadius: 13,
-                backgroundColor: COLORS.sage,
+                backgroundColor: COLORS.lichen,
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              <SpeciesIcon kind={selected.kind} size={34} color={COLORS.cream} />
+              <SpeciesIcon kind={selected.kind} size={34} color={COLORS.bone} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>
                 {selected.commonName}
               </Text>
-              <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 12, marginTop: 1 }}>
+              <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 12, marginTop: 1 }}>
                 {selected.latin}
               </Text>
-              <Text style={{ color: COLORS.sage, fontSize: 12, marginTop: 6, lineHeight: 17 }}>
+              <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 6, lineHeight: 17 }}>
                 ID tip: {selected.tip}
               </Text>
             </View>
@@ -239,7 +239,7 @@ export default function FieldCamScreen() {
               onPress={() => setSelected(null)}
               style={{ padding: 4 }}
             >
-              <Ionicons name="close" size={18} color={COLORS.bark} />
+              <Ionicons name="close" size={18} color={COLORS.granite} />
             </TouchableOpacity>
           </View>
         </Animated.View>
@@ -263,10 +263,10 @@ export default function FieldCamScreen() {
           }}
         >
           <View style={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 }}>
-            <Text style={{ color: COLORS.cream, fontSize: 16, fontWeight: '700' }}>
+            <Text style={{ color: COLORS.bone, fontSize: 16, fontWeight: '700' }}>
               What to look for now
             </Text>
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 2 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 2 }}>
               Active species in your area this season — tap to pin ID tips on screen
             </Text>
           </View>
@@ -295,7 +295,7 @@ export default function FieldCamScreen() {
                         ? 'rgba(156, 171, 135, 0.25)'
                         : 'rgba(255,255,255,0.06)',
                       borderWidth: 1,
-                      borderColor: selected?.id === sp.id ? COLORS.sage : 'rgba(255,255,255,0.1)',
+                      borderColor: selected?.id === sp.id ? COLORS.lichen : 'rgba(255,255,255,0.1)',
                     },
                   ]}
                 >
@@ -304,17 +304,17 @@ export default function FieldCamScreen() {
                       width: 52,
                       height: 52,
                       borderRadius: 13,
-                      backgroundColor: selected?.id === sp.id ? COLORS.sage : 'rgba(255,255,255,0.1)',
+                      backgroundColor: selected?.id === sp.id ? COLORS.lichen : 'rgba(255,255,255,0.1)',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    <SpeciesIcon kind={sp.kind} size={32} color={COLORS.cream} />
+                    <SpeciesIcon kind={sp.kind} size={32} color={COLORS.bone} />
                   </View>
                   <Text
                     numberOfLines={2}
                     style={{
-                      color: selected?.id === sp.id ? COLORS.sage : COLORS.cream,
+                      color: selected?.id === sp.id ? COLORS.lichen : COLORS.bone,
                       fontSize: 11,
                       fontWeight: '700',
                       textAlign: 'center',
@@ -337,7 +337,7 @@ export default function FieldCamScreen() {
           style={{ position: 'absolute', bottom: bottom + 24, left: 0, right: 0, alignItems: 'center' }}
         >
           <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 14, paddingHorizontal: 16, paddingVertical: 8 }}>
-            <Text style={{ color: COLORS.cream, fontSize: 13, fontWeight: '500', letterSpacing: 0.2 }}>
+            <Text style={{ color: COLORS.bone, fontSize: 13, fontWeight: '500', letterSpacing: 0.2 }}>
               Tap ≡ to see what&apos;s active nearby
             </Text>
           </View>

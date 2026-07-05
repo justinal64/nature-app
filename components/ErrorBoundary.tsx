@@ -35,15 +35,15 @@ export class ErrorBoundary extends Component<Props, State> {
               width: 80,
               height: 80,
               borderRadius: 40,
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 24,
             },
-            glow(COLORS.clay, 14),
+            glow(COLORS.lichen, 14),
           ]}
         >
-          <Ionicons name="warning-outline" size={38} color={COLORS.cream} />
+          <Ionicons name="warning-outline" size={38} color={COLORS.bone} />
         </View>
 
         <Text
@@ -59,7 +59,7 @@ export class ErrorBoundary extends Component<Props, State> {
         </Text>
         <Text
           style={{
-            color: COLORS.bark,
+            color: COLORS.granite,
             fontSize: 14,
             textAlign: 'center',
             lineHeight: 21,
@@ -75,16 +75,16 @@ export class ErrorBoundary extends Component<Props, State> {
           accessibilityRole="button"
           style={[
             {
-              backgroundColor: COLORS.clay,
+              backgroundColor: COLORS.lichen,
               borderRadius: 28,
               paddingVertical: 16,
               paddingHorizontal: 40,
               alignItems: 'center',
             },
-            glow(COLORS.clay, 10),
+            glow(COLORS.lichen, 10),
           ]}
         >
-          <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 16 }}>Try again</Text>
+          <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>Try again</Text>
         </Pressable>
       </View>
     );

@@ -23,16 +23,16 @@ const KIND_LABELS: Record<string, string> = {
 };
 
 const KIND_COLOR: Record<string, string> = {
-  cactus: COLORS.sage,
-  bird: COLORS.clay,
-  insect: COLORS.gold,
-  snake: COLORS.dusk,
-  mammal: COLORS.bark,
-  lizard: COLORS.dusk,
-  amphibian: COLORS.sage,
+  cactus: COLORS.lichen,
+  bird: COLORS.lichen,
+  insect: COLORS.lichen,
+  snake: COLORS.slate,
+  mammal: COLORS.granite,
+  lizard: COLORS.slate,
+  amphibian: COLORS.lichen,
   arachnid: COLORS.ink,
-  fungus: COLORS.gold,
-  fish: COLORS.dusk,
+  fungus: COLORS.lichen,
+  fish: COLORS.slate,
 };
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -113,7 +113,7 @@ export default function JournalStatsScreen() {
           alignItems: 'center',
           gap: 12,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
           backgroundColor: COLORS.background,
         }}
       >
@@ -124,13 +124,13 @@ export default function JournalStatsScreen() {
           style={{
             width: 40, height: 40, borderRadius: 20,
             backgroundColor: COLORS.surface, alignItems: 'center', justifyContent: 'center',
-            borderWidth: 1, borderColor: COLORS.sand,
+            borderWidth: 1, borderColor: COLORS.granite,
           }}
         >
           <Ionicons name="chevron-back" size={20} color={COLORS.ink} />
         </TouchableOpacity>
         <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>My Field Stats</Text>
-        <Ionicons name="stats-chart" size={20} color={COLORS.clay} />
+        <Ionicons name="stats-chart" size={20} color={COLORS.lichen} />
       </View>
 
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 48 }} showsVerticalScrollIndicator={false}>
@@ -138,40 +138,40 @@ export default function JournalStatsScreen() {
         {/* Top stats row */}
         <Animated.View entering={FadeInDown.duration(280)} style={{ flexDirection: 'row', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'Total sightings', value: total, icon: 'leaf', color: COLORS.sage },
-            { label: 'Species found', value: uniqueSpecies, icon: 'albums', color: COLORS.clay },
-            { label: 'Best streak', value: bestStreak, icon: 'flame', color: COLORS.gold },
-            { label: 'Current streak', value: currentStreak, icon: 'trending-up', color: COLORS.dusk },
+            { label: 'Total sightings', value: total, icon: 'leaf', color: COLORS.lichen },
+            { label: 'Species found', value: uniqueSpecies, icon: 'albums', color: COLORS.lichen },
+            { label: 'Best streak', value: bestStreak, icon: 'flame', color: COLORS.lichen },
+            { label: 'Current streak', value: currentStreak, icon: 'trending-up', color: COLORS.slate },
           ].map((s) => (
             <View
               key={s.label}
               style={[
                 {
                   flex: 1, backgroundColor: COLORS.surface, borderRadius: 16, padding: 12,
-                  alignItems: 'center', gap: 4, borderWidth: 1, borderColor: COLORS.sand,
+                  alignItems: 'center', gap: 4, borderWidth: 1, borderColor: COLORS.granite,
                 },
                 softShadow(0.04, 5, 1),
               ]}
             >
               <Ionicons name={s.icon as never} size={18} color={s.color} />
               <Text style={{ color: COLORS.ink, fontSize: 20, fontWeight: '800' }}>{s.value}</Text>
-              <Text style={{ color: COLORS.bark, fontSize: 9, textAlign: 'center', lineHeight: 12 }}>{s.label}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 9, textAlign: 'center', lineHeight: 12 }}>{s.label}</Text>
             </View>
           ))}
         </Animated.View>
 
         {/* Sightings by kind */}
         <Animated.View entering={FadeInDown.delay(60).duration(280)} style={{ marginBottom: 24 }}>
-          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
             By type
           </Text>
           {byKind.map((k) => (
             <View key={k.kind} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, gap: 10 }}>
               <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: KIND_COLOR[k.kind], alignItems: 'center', justifyContent: 'center' }}>
-                <SpeciesIcon kind={k.kind as SpeciesKind} size={22} color={COLORS.cream} />
+                <SpeciesIcon kind={k.kind as SpeciesKind} size={22} color={COLORS.bone} />
               </View>
               <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 13, width: 64 }}>{KIND_LABELS[k.kind]}</Text>
-              <View style={{ flex: 1, height: 8, borderRadius: 4, backgroundColor: COLORS.sand, overflow: 'hidden' }}>
+              <View style={{ flex: 1, height: 8, borderRadius: 4, backgroundColor: COLORS.granite, overflow: 'hidden' }}>
                 <View
                   style={{
                     height: '100%',
@@ -181,14 +181,14 @@ export default function JournalStatsScreen() {
                   }}
                 />
               </View>
-              <Text style={{ color: COLORS.bark, fontSize: 12, width: 22, textAlign: 'right' }}>{k.count}</Text>
+              <Text style={{ color: COLORS.granite, fontSize: 12, width: 22, textAlign: 'right' }}>{k.count}</Text>
             </View>
           ))}
         </Animated.View>
 
         {/* Monthly activity */}
         <Animated.View entering={FadeInDown.delay(120).duration(280)} style={{ marginBottom: 24 }}>
-          <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
+          <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
             Last 12 months
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 80 }}>
@@ -198,11 +198,11 @@ export default function JournalStatsScreen() {
                   style={{
                     width: '100%',
                     borderRadius: 4,
-                    backgroundColor: m.count > 0 ? COLORS.clay : COLORS.sand,
+                    backgroundColor: m.count > 0 ? COLORS.lichen : COLORS.granite,
                     height: Math.max((m.count / maxMonth) * 56, m.count > 0 ? 6 : 2),
                   }}
                 />
-                <Text style={{ color: COLORS.bark, fontSize: 8 }}>{m.label}</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 8 }}>{m.label}</Text>
               </View>
             ))}
           </View>
@@ -211,7 +211,7 @@ export default function JournalStatsScreen() {
         {/* Top species */}
         {topSpecies.length > 0 && (
           <Animated.View entering={FadeInDown.delay(180).duration(280)}>
-            <Text style={{ color: COLORS.bark, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
               Most logged
             </Text>
             {topSpecies.map((sp, i) => (
@@ -225,25 +225,25 @@ export default function JournalStatsScreen() {
                     flexDirection: 'row', alignItems: 'center',
                     backgroundColor: COLORS.surface, borderRadius: 14,
                     padding: 12, marginBottom: 8,
-                    borderWidth: 1, borderColor: COLORS.sand, gap: 12,
+                    borderWidth: 1, borderColor: COLORS.granite, gap: 12,
                   },
                   softShadow(0.03, 4, 1),
                 ]}
               >
                 <View style={{
                   width: 28, height: 28, borderRadius: 8,
-                  backgroundColor: COLORS.cream, alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: COLORS.bone, alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Text style={{ color: COLORS.clay, fontWeight: '800', fontSize: 13 }}>{i + 1}</Text>
+                  <Text style={{ color: COLORS.lichen, fontWeight: '800', fontSize: 13 }}>{i + 1}</Text>
                 </View>
                 <View style={{
                   width: 40, height: 40, borderRadius: 10,
                   backgroundColor: KIND_COLOR[sp.kind], alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <SpeciesIcon kind={sp.kind as SpeciesKind} size={26} color={COLORS.cream} />
+                  <SpeciesIcon kind={sp.kind as SpeciesKind} size={26} color={COLORS.bone} />
                 </View>
                 <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{sp.name}</Text>
-                <Text style={{ color: COLORS.clay, fontWeight: '700', fontSize: 14 }}>{sp.count}×</Text>
+                <Text style={{ color: COLORS.lichen, fontWeight: '700', fontSize: 14 }}>{sp.count}×</Text>
               </TouchableOpacity>
             ))}
           </Animated.View>
@@ -251,9 +251,9 @@ export default function JournalStatsScreen() {
 
         {total === 0 && (
           <View style={{ paddingTop: 60, alignItems: 'center', gap: 10 }}>
-            <Ionicons name="stats-chart-outline" size={48} color={COLORS.sand} />
+            <Ionicons name="stats-chart-outline" size={48} color={COLORS.granite} />
             <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 17 }}>No sightings yet</Text>
-            <Text style={{ color: COLORS.bark, fontSize: 14, textAlign: 'center', paddingHorizontal: 40, lineHeight: 20 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 14, textAlign: 'center', paddingHorizontal: 40, lineHeight: 20 }}>
               Head out and log your first sighting to see stats here.
             </Text>
           </View>

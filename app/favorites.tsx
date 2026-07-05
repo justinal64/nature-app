@@ -33,7 +33,7 @@ export default function FavoritesScreen() {
           alignItems: 'center',
           gap: 12,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
           backgroundColor: COLORS.background,
         }}
       >
@@ -49,7 +49,7 @@ export default function FavoritesScreen() {
             alignItems: 'center',
             justifyContent: 'center',
             borderWidth: 1,
-            borderColor: COLORS.sand,
+            borderColor: COLORS.granite,
           }}
         >
           <Ionicons name="chevron-back" size={20} color={COLORS.ink} />
@@ -57,12 +57,12 @@ export default function FavoritesScreen() {
         <View style={{ flex: 1 }}>
           <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Favorites</Text>
           {!loading && (
-            <Text style={{ color: COLORS.bark, fontSize: 12, marginTop: 1 }}>
+            <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
               {favorites.length} species saved
             </Text>
           )}
         </View>
-        <Ionicons name="heart" size={20} color={COLORS.clay} />
+        <Ionicons name="heart" size={20} color={COLORS.lichen} />
       </View>
 
       <ScrollView
@@ -72,18 +72,18 @@ export default function FavoritesScreen() {
           <RefreshControl
             refreshing={loading}
             onRefresh={refresh}
-            tintColor={COLORS.clay}
-            colors={[COLORS.clay]}
+            tintColor={COLORS.lichen}
+            colors={[COLORS.lichen]}
           />
         }
       >
         {!loading && favorites.length === 0 && (
           <View style={{ paddingTop: 80, alignItems: 'center', gap: 12 }}>
-            <Ionicons name="heart-outline" size={52} color={COLORS.sand} />
+            <Ionicons name="heart-outline" size={52} color={COLORS.granite} />
             <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>No favorites yet</Text>
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 14,
                 textAlign: 'center',
                 lineHeight: 21,
@@ -99,13 +99,13 @@ export default function FavoritesScreen() {
               accessibilityRole="button"
               style={{
                 marginTop: 8,
-                backgroundColor: COLORS.clay,
+                backgroundColor: COLORS.lichen,
                 borderRadius: 24,
                 paddingVertical: 14,
                 paddingHorizontal: 28,
               }}
             >
-              <Text style={{ color: COLORS.cream, fontWeight: '700', fontSize: 15 }}>Browse the guide</Text>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 15 }}>Browse the guide</Text>
             </PressableScale>
           </View>
         )}
@@ -129,7 +129,7 @@ export default function FavoritesScreen() {
                       backgroundColor: COLORS.surface,
                       padding: 14,
                       borderWidth: 1,
-                      borderColor: COLORS.sand,
+                      borderColor: COLORS.granite,
                       alignItems: 'center',
                       gap: 10,
                     },
@@ -141,7 +141,7 @@ export default function FavoritesScreen() {
                       width: 68,
                       height: 68,
                       borderRadius: 16,
-                      backgroundColor: COLORS.cream,
+                      backgroundColor: COLORS.bone,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
@@ -162,7 +162,7 @@ export default function FavoritesScreen() {
                   </Text>
                   <Text
                     style={{
-                      color: COLORS.bark,
+                      color: COLORS.granite,
                       fontStyle: 'italic',
                       fontSize: 11,
                       textAlign: 'center',

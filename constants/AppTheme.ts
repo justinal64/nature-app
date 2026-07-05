@@ -2,23 +2,19 @@ import { DefaultTheme, Theme } from '@react-navigation/native';
 import { Platform, TextStyle, ViewStyle } from 'react-native';
 
 export const COLORS = {
-  ink: '#3D2519',
-  clay: '#B85C3A',
-  sand: '#E8D5B7',
-  sage: '#9CAB87',
-  dusk: '#6B4E6B',
-  cream: '#F4ECDA',
-  bark: '#8B6F47',
-  gold: '#D4A437',
-  night: '#0A0A18',
+  ink: '#2A3036',
+  granite: '#5D6B6F',
+  slate: '#3F4A50',
+  lichen: '#8FA38C',
+  bone: '#EFEAE0',
   // Semantic aliases
-  background: '#F4ECDA',
+  background: '#EFEAE0',
   surface: '#FFFFFF',
-  text: '#3D2519',
-  textDim: '#8B6F47',
-  primary: '#B85C3A',
-  secondary: '#9CAB87',
-  border: '#E8D5B7',
+  text: '#2A3036',
+  textDim: '#5D6B6F',
+  primary: '#8FA38C',
+  secondary: '#8FA38C',
+  border: '#5D6B6F',
 };
 
 export const glow = (color: string, radius = 10): ViewStyle => ({
@@ -60,12 +56,12 @@ export const softShadow = (opacity = 0.08, radius = 12, offsetY = 4): ViewStyle 
 export const NatureTheme: Theme = {
   dark: false,
   colors: {
-    primary: COLORS.clay,
-    background: COLORS.cream,
+    primary: COLORS.lichen,
+    background: COLORS.bone,
     card: COLORS.surface,
     text: COLORS.ink,
-    border: COLORS.sand,
-    notification: COLORS.clay,
+    border: COLORS.granite,
+    notification: COLORS.lichen,
   },
   fonts: DefaultTheme.fonts,
 };

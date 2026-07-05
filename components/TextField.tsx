@@ -28,7 +28,7 @@ export function TextField({
     <View style={{ marginBottom: 14 }}>
       <Text
         style={{
-          color: COLORS.bark,
+          color: COLORS.granite,
           fontSize: 11,
           fontWeight: '700',
           letterSpacing: 0.6,
@@ -41,7 +41,7 @@ export function TextField({
         style={{
           backgroundColor: COLORS.surface,
           borderWidth: 1,
-          borderColor: hasError ? COLORS.clay : COLORS.sand,
+          borderColor: hasError ? COLORS.lichen : COLORS.granite,
           borderRadius: 14,
           paddingHorizontal: 14,
           paddingVertical: 14,
@@ -51,13 +51,13 @@ export function TextField({
         onChangeText={onChangeText}
         value={value}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.bark}
+        placeholderTextColor={COLORS.granite}
         autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
         testID={testID}
       />
       {hasError ? (
-        <Text style={{ color: COLORS.clay, fontSize: 12, marginTop: 6, fontWeight: '500' }}>
+        <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 6, fontWeight: '500' }}>
           {error}
         </Text>
       ) : null}

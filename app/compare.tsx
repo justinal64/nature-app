@@ -31,16 +31,16 @@ const KIND_LABEL: Record<Species['kind'], string> = {
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
-  cactus: COLORS.sage,
-  bird: COLORS.clay,
-  insect: COLORS.gold,
-  snake: COLORS.dusk,
-  mammal: COLORS.bark,
-  lizard: COLORS.dusk,
-  amphibian: COLORS.sage,
+  cactus: COLORS.lichen,
+  bird: COLORS.lichen,
+  insect: COLORS.lichen,
+  snake: COLORS.slate,
+  mammal: COLORS.granite,
+  lizard: COLORS.slate,
+  amphibian: COLORS.lichen,
   arachnid: COLORS.ink,
-  fungus: COLORS.gold,
-  fish: COLORS.dusk,
+  fungus: COLORS.lichen,
+  fish: COLORS.slate,
 };
 
 function StatCol({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
@@ -48,15 +48,15 @@ function StatCol({ label, value, highlight }: { label: string; value: string; hi
     <View
       style={{
         flex: 1,
-        backgroundColor: highlight ? COLORS.clay + '18' : COLORS.surface,
+        backgroundColor: highlight ? COLORS.lichen + '18' : COLORS.surface,
         borderRadius: 12,
         padding: 10,
         alignItems: 'center',
         borderWidth: highlight ? 1 : 1,
-        borderColor: highlight ? COLORS.clay : COLORS.sand,
+        borderColor: highlight ? COLORS.lichen : COLORS.granite,
       }}
     >
-      <Text style={{ color: COLORS.bark, fontSize: 10, fontWeight: '600', textTransform: 'uppercase', marginBottom: 4 }}>
+      <Text style={{ color: COLORS.granite, fontSize: 10, fontWeight: '600', textTransform: 'uppercase', marginBottom: 4 }}>
         {label}
       </Text>
       <Text style={{ color: COLORS.ink, fontSize: 13, fontWeight: '700', textAlign: 'center' }}>
@@ -80,12 +80,12 @@ function SpeciesCard({ sp }: { sp: Species }) {
           marginBottom: 8,
         }}
       >
-        <SpeciesIcon kind={sp.kind as SpeciesKind} size={46} color={COLORS.cream} />
+        <SpeciesIcon kind={sp.kind as SpeciesKind} size={46} color={COLORS.bone} />
       </View>
       <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 13, textAlign: 'center', lineHeight: 17 }}>
         {sp.commonName}
       </Text>
-      <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 11, textAlign: 'center', marginTop: 2 }}>
+      <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 11, textAlign: 'center', marginTop: 2 }}>
         {sp.latin}
       </Text>
       <View
@@ -97,7 +97,7 @@ function SpeciesCard({ sp }: { sp: Species }) {
           marginTop: 6,
         }}
       >
-        <Text style={{ color: COLORS.cream, fontSize: 10, fontWeight: '700' }}>{KIND_LABEL[sp.kind]}</Text>
+        <Text style={{ color: COLORS.bone, fontSize: 10, fontWeight: '700' }}>{KIND_LABEL[sp.kind]}</Text>
       </View>
     </View>
   );
@@ -150,7 +150,7 @@ export default function CompareScreen() {
           alignItems: 'center',
           gap: 12,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.sand,
+          borderBottomColor: COLORS.granite,
         }}
       >
         <TouchableOpacity
@@ -165,13 +165,13 @@ export default function CompareScreen() {
             alignItems: 'center',
             justifyContent: 'center',
             borderWidth: 1,
-            borderColor: COLORS.sand,
+            borderColor: COLORS.granite,
           }}
         >
           <Ionicons name="chevron-back" size={20} color={COLORS.ink} />
         </TouchableOpacity>
         <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Compare Species</Text>
-        <Ionicons name="git-compare-outline" size={20} color={COLORS.clay} />
+        <Ionicons name="git-compare-outline" size={20} color={COLORS.lichen} />
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
@@ -183,7 +183,7 @@ export default function CompareScreen() {
             padding: 20,
             gap: 14,
             borderBottomWidth: 1,
-            borderBottomColor: COLORS.sand,
+            borderBottomColor: COLORS.granite,
           }}
         >
           <View style={{ flex: 1, alignItems: 'center' }}>
@@ -196,14 +196,14 @@ export default function CompareScreen() {
                 width: 36,
                 height: 36,
                 borderRadius: 18,
-                backgroundColor: COLORS.cream,
+                backgroundColor: COLORS.bone,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderWidth: 1,
-                borderColor: COLORS.sand,
+                borderColor: COLORS.granite,
               }}
             >
-              <Text style={{ color: COLORS.bark, fontWeight: '700', fontSize: 12 }}>VS</Text>
+              <Text style={{ color: COLORS.granite, fontWeight: '700', fontSize: 12 }}>VS</Text>
             </View>
           </View>
 
@@ -217,7 +217,7 @@ export default function CompareScreen() {
                   accessibilityRole="button"
                   style={{ marginTop: 4 }}
                 >
-                  <Text style={{ color: COLORS.clay, fontSize: 12, fontWeight: '600' }}>Change</Text>
+                  <Text style={{ color: COLORS.lichen, fontSize: 12, fontWeight: '600' }}>Change</Text>
                 </Pressable>
               </View>
             ) : (
@@ -232,7 +232,7 @@ export default function CompareScreen() {
                     minHeight: 130,
                     borderRadius: 18,
                     borderWidth: 2,
-                    borderColor: COLORS.clay,
+                    borderColor: COLORS.lichen,
                     borderStyle: 'dashed',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -241,8 +241,8 @@ export default function CompareScreen() {
                   },
                 ]}
               >
-                <Ionicons name="add-circle-outline" size={32} color={COLORS.clay} />
-                <Text style={{ color: COLORS.clay, fontWeight: '600', fontSize: 13, textAlign: 'center' }}>
+                <Ionicons name="add-circle-outline" size={32} color={COLORS.lichen} />
+                <Text style={{ color: COLORS.lichen, fontWeight: '600', fontSize: 13, textAlign: 'center' }}>
                   Pick a species
                 </Text>
               </PressableScale>
@@ -264,7 +264,7 @@ export default function CompareScreen() {
                   backgroundColor: COLORS.surface,
                   borderRadius: 22,
                   borderWidth: 1,
-                  borderColor: COLORS.sand,
+                  borderColor: COLORS.granite,
                   paddingHorizontal: 14,
                   height: 44,
                   gap: 8,
@@ -273,12 +273,12 @@ export default function CompareScreen() {
                 softShadow(0.04, 4, 1),
               ]}
             >
-              <Ionicons name="search" size={16} color={COLORS.bark} />
+              <Ionicons name="search" size={16} color={COLORS.granite} />
               <TextInput
                 value={query}
                 onChangeText={setQuery}
                 placeholder="Search by name…"
-                placeholderTextColor={COLORS.bark}
+                placeholderTextColor={COLORS.granite}
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="search"
@@ -287,7 +287,7 @@ export default function CompareScreen() {
               />
               {query.length > 0 && (
                 <Pressable onPress={() => setQuery('')} accessibilityLabel="Clear" accessibilityRole="button">
-                  <Ionicons name="close-circle" size={16} color={COLORS.bark} />
+                  <Ionicons name="close-circle" size={16} color={COLORS.granite} />
                 </Pressable>
               )}
             </View>
@@ -308,7 +308,7 @@ export default function CompareScreen() {
                       padding: 12,
                       marginBottom: 8,
                       borderWidth: 1,
-                      borderColor: COLORS.sand,
+                      borderColor: COLORS.granite,
                       gap: 12,
                     },
                     softShadow(0.03, 4, 1),
@@ -324,13 +324,13 @@ export default function CompareScreen() {
                       justifyContent: 'center',
                     }}
                   >
-                    <SpeciesIcon kind={sp.kind as SpeciesKind} size={28} color={COLORS.cream} />
+                    <SpeciesIcon kind={sp.kind as SpeciesKind} size={28} color={COLORS.bone} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>{sp.commonName}</Text>
-                    <Text style={{ color: COLORS.bark, fontStyle: 'italic', fontSize: 12 }}>{sp.latin}</Text>
+                    <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 12 }}>{sp.latin}</Text>
                   </View>
-                  <Ionicons name="add-circle-outline" size={22} color={COLORS.clay} />
+                  <Ionicons name="add-circle-outline" size={22} color={COLORS.lichen} />
                 </PressableScale>
               </Animated.View>
             ))}
@@ -345,7 +345,7 @@ export default function CompareScreen() {
               <>
                 <Text
                   style={{
-                    color: COLORS.bark,
+                    color: COLORS.granite,
                     fontSize: 11,
                     fontWeight: '700',
                     letterSpacing: 0.5,
@@ -361,7 +361,7 @@ export default function CompareScreen() {
                     <View key={stat.label} style={{ flexDirection: 'row', gap: 10, marginBottom: 8 }}>
                       <StatCol label={stat.label} value={stat.value} />
                       <View style={{ width: 30, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ color: COLORS.bark, fontSize: 10 }}>—</Text>
+                        <Text style={{ color: COLORS.granite, fontSize: 10 }}>—</Text>
                       </View>
                       <StatCol label={bStat?.label ?? stat.label} value={bStat?.value ?? '—'} />
                     </View>
@@ -387,7 +387,7 @@ export default function CompareScreen() {
             {/* ID tips side-by-side */}
             <Text
               style={{
-                color: COLORS.bark,
+                color: COLORS.granite,
                 fontSize: 11,
                 fontWeight: '700',
                 letterSpacing: 0.5,
@@ -401,16 +401,16 @@ export default function CompareScreen() {
               <View style={{ flex: 1, gap: 6 }}>
                 {speciesA.idTips.map((tip) => (
                   <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
-                    <Text style={{ color: COLORS.clay, fontSize: 12, marginTop: 1 }}>•</Text>
+                    <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
                     <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
                   </View>
                 ))}
               </View>
-              <View style={{ width: 1, backgroundColor: COLORS.sand }} />
+              <View style={{ width: 1, backgroundColor: COLORS.granite }} />
               <View style={{ flex: 1, gap: 6 }}>
                 {speciesB.idTips.map((tip) => (
                   <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
-                    <Text style={{ color: COLORS.clay, fontSize: 12, marginTop: 1 }}>•</Text>
+                    <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
                     <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
                   </View>
                 ))}
@@ -432,15 +432,15 @@ export default function CompareScreen() {
                     padding: 12,
                     alignItems: 'center',
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                   },
                   softShadow(0.04, 5, 1),
                 ]}
               >
-                <Text numberOfLines={1} style={{ color: COLORS.clay, fontWeight: '700', fontSize: 13 }}>
+                <Text numberOfLines={1} style={{ color: COLORS.lichen, fontWeight: '700', fontSize: 13 }}>
                   {speciesA.commonName}
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 2 }}>Full detail →</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 2 }}>Full detail →</Text>
               </PressableScale>
               <PressableScale
                 onPress={() => router.push(`/species/${speciesB.id}` as never)}
@@ -455,15 +455,15 @@ export default function CompareScreen() {
                     padding: 12,
                     alignItems: 'center',
                     borderWidth: 1,
-                    borderColor: COLORS.sand,
+                    borderColor: COLORS.granite,
                   },
                   softShadow(0.04, 5, 1),
                 ]}
               >
-                <Text numberOfLines={1} style={{ color: COLORS.clay, fontWeight: '700', fontSize: 13 }}>
+                <Text numberOfLines={1} style={{ color: COLORS.lichen, fontWeight: '700', fontSize: 13 }}>
                   {speciesB.commonName}
                 </Text>
-                <Text style={{ color: COLORS.bark, fontSize: 11, marginTop: 2 }}>Full detail →</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 2 }}>Full detail →</Text>
               </PressableScale>
             </View>
           </Animated.View>

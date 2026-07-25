@@ -1,5 +1,6 @@
 import { AudioModule, RecordingPresets, requestRecordingPermissionsAsync, setAudioModeAsync } from 'expo-audio';
 import type { AudioRecorder } from 'expo-audio';
+import * as Network from 'expo-network';
 
 import { CATALOG } from '@/constants/catalog';
 import { isActiveNow } from '@/constants/catalog';
@@ -12,6 +13,17 @@ export type SoundIdResult = {
 };
 
 let recorder: AudioRecorder | null = null;
+
+// Same check as lib/identify.ts: only treat as offline when we're sure
+// there's no link, since isInternetReachable is unreliable on simulators.
+async function hasNetwork(): Promise<boolean> {
+  try {
+    const state = await Network.getNetworkStateAsync();
+    return state.isConnected !== false;
+  } catch {
+    return true;
+  }
+}
 
 export async function requestMicrophonePermission(): Promise<boolean> {
   const { granted } = await requestRecordingPermissionsAsync();
@@ -98,6 +110,10 @@ function offlineBirdCandidates(): SoundIdResult[] {
 }
 
 export async function identifyBirdSound(audioUri: string): Promise<SoundIdResult[]> {
+  // Skip the doomed round-trip entirely when there's no link — don't make
+  // the user wait out the fetch timeout in the backcountry.
+  if (!(await hasNetwork())) return offlineBirdCandidates();
+
   const apiResults = await callBirdNetApi(audioUri);
   if (apiResults && apiResults.length > 0) return apiResults;
   return offlineBirdCandidates();

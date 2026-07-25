@@ -113,6 +113,7 @@ function RootLayoutNav() {
         <Stack.Screen name="sighting/[id]" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="phenology" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="life-list" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="journal-posts" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <OfflineBar />
       <StatusBar style="dark" />

@@ -53,7 +53,7 @@ export async function exportSightingsCsv(sightings: Sighting[]): Promise<void> {
     s.location ? String(s.location.lng) : '',
     s.locationObscured ? 'obscured' : '',
     s.dataQualityFlags?.wildOrganism === false ? 'true' : 'false',
-    escapeCsv([annotationTags(s), s.kind === 'cactus' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind === 'arachnid' ? 'arachnida' : s.kind === 'fungus' ? 'fungi' : s.kind === 'fish' ? 'actinopterygii' : s.kind].filter(Boolean).join(',')),
+    escapeCsv([annotationTags(s), s.kind === 'plant' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind === 'arachnid' ? 'arachnida' : s.kind === 'fungus' ? 'fungi' : s.kind === 'fish' ? 'actinopterygii' : s.kind].filter(Boolean).join(',')),
   ]);
 
   const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');

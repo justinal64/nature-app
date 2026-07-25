@@ -40,7 +40,7 @@ function CameraIllustration() {
     <View style={{ alignItems: 'center', justifyContent: 'center', width: 200, height: 200 }}>
       <View style={[{ width: 160, height: 120, borderRadius: 24, backgroundColor: COLORS.ink, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.lichen }, softShadow(0.25, 20, 8)]}>
         <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: COLORS.bone }}>
-          <SpeciesIcon kind="cactus" size={34} color={COLORS.bone} />
+          <SpeciesIcon kind="plant" size={34} color={COLORS.bone} />
         </View>
       </View>
       <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
@@ -53,7 +53,7 @@ function CameraIllustration() {
 }
 
 function GuideIllustration() {
-  const kinds = ['bird', 'cactus', 'insect', 'snake'] as const;
+  const kinds = ['bird', 'plant', 'insect', 'snake'] as const;
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: 180, gap: 12, alignItems: 'center', justifyContent: 'center' }}>
       {kinds.map((k) => (
@@ -71,7 +71,7 @@ function JournalIllustration() {
       <View style={[{ width: 160, borderRadius: 20, backgroundColor: COLORS.bone, padding: 16, borderWidth: 1.5, borderColor: COLORS.granite }, softShadow(0.15, 14, 6)]}>
         {[
           { kind: 'bird' as const, name: 'Roadrunner', when: '2 days ago' },
-          { kind: 'cactus' as const, name: 'Saguaro', when: 'Last week' },
+          { kind: 'plant' as const, name: 'Saguaro', when: 'Last week' },
           { kind: 'snake' as const, name: 'Sidewinder', when: 'June 20' },
         ].map((item, i) => (
           <View key={item.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 7, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: COLORS.granite }}>

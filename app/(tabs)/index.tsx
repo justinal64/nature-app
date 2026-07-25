@@ -22,7 +22,7 @@ import { pickDailySpecies, scheduleStreakReminder } from '@/lib/notifications';
 import { formatRelativeDate } from '@/utils/date';
 
 const CATEGORIES = [
-  { name: 'Plants', kind: 'cactus' as SpeciesKind },
+  { name: 'Plants', kind: 'plant' as SpeciesKind },
   { name: 'Birds', kind: 'bird' as SpeciesKind },
   { name: 'Mammals', kind: 'mammal' as SpeciesKind },
   { name: 'Lizards', kind: 'lizard' as SpeciesKind },
@@ -201,7 +201,7 @@ export default function HomeScreen() {
           </Svg>
 
           <Floating amplitude={4} duration={3600} style={{ position: 'absolute', right: 18, top: 8, opacity: 0.85 }}>
-            <SpeciesIcon kind="cactus" size={140} color={COLORS.ink} />
+            <SpeciesIcon kind="plant" size={140} color={COLORS.ink} />
           </Floating>
 
           <View style={{ position: 'absolute', left: 22, top: 22 }}>
@@ -284,7 +284,7 @@ export default function HomeScreen() {
               glow(COLORS.lichen, 8),
             ]}
           >
-            <SpeciesIcon kind={(sotdSpecies?.kind ?? 'cactus') as SpeciesKind} size={34} color={COLORS.ink} />
+            <SpeciesIcon kind={(sotdSpecies?.kind ?? 'plant') as SpeciesKind} size={34} color={COLORS.ink} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ color: COLORS.bone, fontSize: 10, fontWeight: '700', letterSpacing: 0.6, textTransform: 'uppercase', opacity: 0.85 }}>

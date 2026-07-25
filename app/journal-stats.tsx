@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 
 const KIND_LABELS: Record<string, string> = {
-  cactus: 'Plants',
+  plant: 'Plants',
   bird: 'Birds',
   insect: 'Insects',
   snake: 'Reptiles',
@@ -23,7 +23,7 @@ const KIND_LABELS: Record<string, string> = {
 };
 
 const KIND_COLOR: Record<string, string> = {
-  cactus: COLORS.lichen,
+  plant: COLORS.lichen,
   bird: COLORS.lichen,
   insect: COLORS.lichen,
   snake: COLORS.slate,
@@ -47,7 +47,7 @@ export default function JournalStatsScreen() {
   const uniqueSpecies = new Set(sightings.map((s) => s.speciesId)).size;
 
   // Sightings by kind
-  const byKind = ['cactus', 'bird', 'mammal', 'snake', 'lizard', 'insect', 'arachnid', 'amphibian', 'fungus', 'fish'].map((kind) => ({
+  const byKind = ['plant', 'bird', 'mammal', 'snake', 'lizard', 'insect', 'arachnid', 'amphibian', 'fungus', 'fish'].map((kind) => ({
     kind,
     count: sightings.filter((s) => s.kind === kind).length,
   }));

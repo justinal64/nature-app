@@ -20,7 +20,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useSightings } from '@/hooks/useSightings';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
-  cactus: 'Plant',
+  plant: 'Plant',
   bird: 'Bird',
   insect: 'Insect',
   snake: 'Reptile',
@@ -33,7 +33,7 @@ const KIND_LABEL: Record<Species['kind'], string> = {
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
-  cactus: COLORS.lichen,
+  plant: COLORS.lichen,
   bird: COLORS.lichen,
   insect: COLORS.lichen,
   snake: COLORS.slate,
@@ -54,7 +54,7 @@ const REGION_LABEL: Record<string, string> = {
 
 // Shown before the user types anything
 const QUICK_CATEGORIES = [
-  { label: 'Plants', kind: 'cactus' as SpeciesKind },
+  { label: 'Plants', kind: 'plant' as SpeciesKind },
   { label: 'Birds', kind: 'bird' as SpeciesKind },
   { label: 'Insects', kind: 'insect' as SpeciesKind },
   { label: 'Reptiles', kind: 'snake' as SpeciesKind },

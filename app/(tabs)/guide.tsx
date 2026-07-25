@@ -17,7 +17,7 @@ import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { useSightings } from '@/hooks/useSightings';
 
 const CATS = [
-  { name: 'Plants', kind: 'cactus' as SpeciesKind },
+  { name: 'Plants', kind: 'plant' as SpeciesKind },
   { name: 'Birds', kind: 'bird' as SpeciesKind },
   { name: 'Mammals', kind: 'mammal' as SpeciesKind },
   { name: 'Lizards', kind: 'lizard' as SpeciesKind },
@@ -45,7 +45,7 @@ export default function GuideScreen() {
   const [locLoading, setLocLoading] = useState(false);
   const [unseenOnly, setUnseenOnly] = useState(false);
 
-  const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'cactus';
+  const activeKind = CATS.find((c) => c.name === activeCategory)?.kind ?? 'plant';
   const seenIds = new Set(sightings.map((s) => s.speciesId));
 
   const filtered = CATALOG.filter((sp) => {

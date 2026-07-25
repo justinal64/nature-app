@@ -2,7 +2,7 @@ import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
 import { COLORS } from '@/constants/AppTheme';
 
-export type SpeciesKind = 'cactus' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid' | 'fungus' | 'fish';
+export type SpeciesKind = 'plant' | 'bird' | 'insect' | 'snake' | 'mammal' | 'lizard' | 'amphibian' | 'arachnid' | 'fungus' | 'fish';
 
 type Props = {
   kind: SpeciesKind;
@@ -13,7 +13,7 @@ type Props = {
 export function SpeciesIcon({ kind, size = 50, color = COLORS.bone }: Props) {
   return (
     <Svg width={size} height={size} viewBox="0 0 80 80">
-      {kind === 'cactus' && (
+      {kind === 'plant' && (
         <Path
           d="M40 8c-9 12-11 22-7 32h-3l-2 10h4v18h16V50h4l-2-10h-3c4-10 2-20-7-32z"
           fill={color}

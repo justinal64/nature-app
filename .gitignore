@@ -42,3 +42,36 @@ yarn-error.*
 
 # iNat training dataset pulled by scripts/pull_inat_dataset.py (large, not for git)
 inat_dataset/
+
+# Data-acquisition scripts kept out of the repo (pull from iNaturalist / GBIF)
+scripts/pull_inat_dataset.py
+scripts/build_regional_catalog.py
+scripts/pull_sw_plants.sh
+scripts/pull_sw_snakes.sh
+scripts/pull_se_plants.sh
+scripts/pull_se_snakes.sh
+scripts/pull_se_*.sh
+scripts/pull_se_group.sh
+scripts/topup_critical_snakes.sh
+
+# Generated regional species lists from scripts/build_regional_catalog.py
+# (review artifacts; the wanted rows get merged into constants/catalog.ts by hand)
+se_catalog*
+regional_catalog*
+sw_plants*
+sw_squamata*
+sw_snakes*
+se_plants*
+se_squamata*
+se_snakes*
+se_queue*
+se_pull.log
+# generated regional lists/logs (root-level artifacts only)
+/se_*
+/sw_*
+overnight_*
+*watcher*.log
+
+repull_*
+
+resume_*

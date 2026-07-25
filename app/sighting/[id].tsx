@@ -24,7 +24,7 @@ import type { DataQualityFlags, Sighting, SightingComment } from '@/lib/sighting
 import { addComment, deleteComment, deleteSighting, getQualityGrade, getSightingById, updateSighting } from '@/lib/sightings';
 
 const KIND_COLOR: Record<string, string> = {
-  cactus: COLORS.lichen,
+  plant: COLORS.lichen,
   bird: COLORS.lichen,
   insect: COLORS.lichen,
   snake: COLORS.slate,

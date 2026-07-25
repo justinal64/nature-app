@@ -30,12 +30,12 @@ function findInCatalog(latin: string, common?: string): Species | undefined {
 }
 
 function iconicTaxonToKind(iconicTaxon?: string): Species['kind'] {
-  if (!iconicTaxon) return 'cactus';
+  if (!iconicTaxon) return 'plant';
   const t = iconicTaxon.toLowerCase();
   if (t === 'aves') return 'bird';
   if (t === 'insecta' || t === 'arachnida') return 'insect';
   if (t === 'reptilia') return 'snake';
-  return 'cactus';
+  return 'plant';
 }
 
 // Shown when network is unavailable — common Sonoran Desert species

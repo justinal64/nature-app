@@ -35,7 +35,7 @@ import { addSighting, findDuplicateSighting, type Activity, type LifeStage, type
 import { maybeRequestReview } from '@/lib/review';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
-  cactus: 'Plant',
+  plant: 'Plant',
   bird: 'Bird',
   insect: 'Insect',
   snake: 'Reptile',
@@ -160,8 +160,8 @@ export default function ResultScreen() {
         observationType,
         sex,
         lifeStage,
-        activity: topResult.kind !== 'cactus' ? activity : undefined,
-        phenology: topResult.kind === 'cactus' ? phenology : undefined,
+        activity: topResult.kind !== 'plant' ? activity : undefined,
+        phenology: topResult.kind === 'plant' ? phenology : undefined,
         location: locationRef.current ?? undefined,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -444,7 +444,7 @@ export default function ResultScreen() {
                   })()}
 
                   {/* Edibility — shown for plants and fungi */}
-                  {topResult.speciesId && (topResult.kind === 'cactus' || topResult.kind === 'fungus') && (() => {
+                  {topResult.speciesId && (topResult.kind === 'plant' || topResult.kind === 'fungus') && (() => {
                     const ed = getEdibilityInfo(topResult.speciesId!);
                     if (!ed) return null;
                     const cfg: Record<EdibilityStatus, { bg: string; text: string; icon: React.ComponentProps<typeof Ionicons>['name']; label: string }> = {
@@ -574,7 +574,7 @@ export default function ResultScreen() {
                       <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
                         {alt.commonName}
                       </Text>
-                      {(alt.kind === 'cactus' || alt.kind === 'fungus') && alt.speciesId && (() => {
+                      {(alt.kind === 'plant' || alt.kind === 'fungus') && alt.speciesId && (() => {
                         const ed = getEdibilityInfo(alt.speciesId!);
                         if (!ed) return null;
                         const edColor = ed.status === 'edible' ? '#2E6B2A' : ed.status === 'parts-edible' ? '#4A7A35' : ed.status === 'caution' ? '#8B6A00' : ed.status === 'toxic' ? '#7A0000' : '#3A3A3A';
@@ -794,7 +794,7 @@ export default function ResultScreen() {
                   </View>
 
                   {/* Activity (animals only) */}
-                  {topResult.kind !== 'cactus' && (
+                  {topResult.kind !== 'plant' && (
                     <View style={{ gap: 6 }}>
                       <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                         Activity
@@ -823,7 +823,7 @@ export default function ResultScreen() {
                   )}
 
                   {/* Phenology (plants only) */}
-                  {topResult.kind === 'cactus' && (
+                  {topResult.kind === 'plant' && (
                     <View style={{ gap: 6 }}>
                       <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase' }}>
                         Phenology

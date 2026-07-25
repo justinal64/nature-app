@@ -15,7 +15,7 @@ export const ALL_BADGES: Badge[] = [
     id: 'first-find',
     name: 'First Find',
     description: 'Log your first sighting',
-    kind: 'cactus',
+    kind: 'plant',
     check: (s) => s.length >= 1,
   },
   {
@@ -45,7 +45,7 @@ export const ALL_BADGES: Badge[] = [
     id: 'species-5',
     name: 'Budding Naturalist',
     description: 'Identify 5 unique species',
-    kind: 'cactus',
+    kind: 'plant',
     check: (s) => new Set(s.map((x) => x.speciesId)).size >= 5,
   },
   {
@@ -82,7 +82,7 @@ export const ALL_BADGES: Badge[] = [
     id: 'streak-7',
     name: 'Week in the Wild',
     description: 'Log a sighting 7 days in a row',
-    kind: 'cactus',
+    kind: 'plant',
     check: (_, streak) => streak >= 7,
   },
   {
@@ -112,8 +112,8 @@ export const ALL_BADGES: Badge[] = [
     id: 'cactus-crew',
     name: 'Cactus Crew',
     description: 'Log 5 different plant species',
-    kind: 'cactus',
-    check: (s) => new Set(s.filter((x) => x.kind === 'cactus').map((x) => x.speciesId)).size >= 5,
+    kind: 'plant',
+    check: (s) => new Set(s.filter((x) => x.kind === 'plant').map((x) => x.speciesId)).size >= 5,
   },
   {
     id: 'bug-hunter',

@@ -9,7 +9,7 @@ import {
 import type { SpeciesKind } from '../lib/sightings';
 
 const ALL_KINDS: SpeciesKind[] = [
-  'cactus',
+  'plant',
   'bird',
   'insect',
   'snake',

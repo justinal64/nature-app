@@ -21,7 +21,7 @@ describe('addSighting', () => {
       speciesId: 'saguaro',
       commonName: 'Saguaro',
       latinName: 'Carnegiea gigantea',
-      kind: 'cactus',
+      kind: 'plant',
       capturedAt: '2026-06-27T10:00:00.000Z',
     });
 
@@ -34,7 +34,7 @@ describe('addSighting', () => {
   it('prepends new sightings so most recent comes first', async () => {
     await addSighting({
       userId: 'user1', speciesId: 'saguaro', commonName: 'Saguaro',
-      latinName: 'Carnegiea gigantea', kind: 'cactus', capturedAt: '2026-06-27T10:00:00.000Z',
+      latinName: 'Carnegiea gigantea', kind: 'plant', capturedAt: '2026-06-27T10:00:00.000Z',
     });
     await addSighting({
       userId: 'user1', speciesId: 'roadrunner', commonName: 'Greater Roadrunner',
@@ -49,7 +49,7 @@ describe('addSighting', () => {
   it('isolates data per user', async () => {
     await addSighting({
       userId: 'user1', speciesId: 'saguaro', commonName: 'Saguaro',
-      latinName: 'Carnegiea gigantea', kind: 'cactus', capturedAt: '2026-06-27T10:00:00.000Z',
+      latinName: 'Carnegiea gigantea', kind: 'plant', capturedAt: '2026-06-27T10:00:00.000Z',
     });
 
     const user2 = await getSightings('user2');
@@ -61,7 +61,7 @@ describe('deleteSighting', () => {
   it('removes only the specified sighting', async () => {
     const s1 = await addSighting({
       userId: 'user1', speciesId: 'saguaro', commonName: 'Saguaro',
-      latinName: 'Carnegiea gigantea', kind: 'cactus', capturedAt: '2026-06-27T10:00:00.000Z',
+      latinName: 'Carnegiea gigantea', kind: 'plant', capturedAt: '2026-06-27T10:00:00.000Z',
     });
     await addSighting({
       userId: 'user1', speciesId: 'roadrunner', commonName: 'Greater Roadrunner',

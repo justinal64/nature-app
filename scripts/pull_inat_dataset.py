@@ -93,6 +93,23 @@ def load_species_from_catalog() -> list[dict]:
     return species
 
 
+def load_species_from_csv(path: Path) -> list[dict]:
+    """Load species from a CSV with id,common,latin,kind columns (e.g. from
+    build_regional_catalog.py) so images can be pulled before app-catalog entries
+    are authored."""
+    if not path.exists():
+        sys.exit(f"--catalog-csv file not found: {path}")
+    species = []
+    with path.open(encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("id") and row.get("latin"):
+                species.append({"id": row["id"], "common": row.get("common", ""),
+                                "latin": row["latin"], "kind": row.get("kind", "")})
+    if not species:
+        sys.exit(f"Parsed 0 species from {path} — expected columns id,common,latin,kind.")
+    return species
+
+
 # ---------------------------------------------------------------------------
 # iNaturalist API
 # ---------------------------------------------------------------------------
@@ -221,7 +238,11 @@ def parse_args(argv=None):
     ap.add_argument("--report", default=None,
                     help="path to the counts report for --min-available (default: <output>/report_counts.csv)")
     ap.add_argument("--place-id", type=int, default=None, help="iNat place_id instead of the default bbox")
+    ap.add_argument("--bbox", default="", help="custom geo box 'swlat,swlng,nelat,nelng' (overrides the default Sonoran box)")
     ap.add_argument("--no-geo", action="store_true", help="disable the geographic filter (global pull)")
+    ap.add_argument("--catalog-csv", default="",
+                    help="load species from a CSV (cols: id,common,latin,kind) instead of constants/catalog.ts — "
+                         "e.g. a list from build_regional_catalog.py, before entries are authored in the app catalog")
     ap.add_argument("--counts-only", action="store_true", help="report availability, download nothing")
     ap.add_argument("--api-delay", type=float, default=API_DELAY_S,
                     help=f"seconds between iNat API requests (default {API_DELAY_S})")
@@ -296,17 +317,33 @@ def main(argv=None):
     DOWNLOAD_WORKERS = args.workers
     DOWNLOAD_DELAY_S = args.download_delay
 
-    bbox = None if args.no_geo else DEFAULT_BBOX
+    if args.no_geo:
+        bbox = None
+    elif args.bbox:
+        parts = [float(x) for x in args.bbox.split(",")]
+        if len(parts) != 4:
+            sys.exit("--bbox needs 4 comma-separated numbers: swlat,swlng,nelat,nelng")
+        bbox = tuple(parts)
+    else:
+        bbox = DEFAULT_BBOX
     out_root = Path(args.output)
     session = make_session()
 
-    species = dedupe_by_latin(select_species(load_species_from_catalog(), args))
+    source = load_species_from_csv(Path(args.catalog_csv)) if args.catalog_csv else load_species_from_catalog()
+    species = dedupe_by_latin(select_species(source, args))
     if args.min_available > 0:
         report_path = Path(args.report) if args.report else (out_root / "report_counts.csv")
         species = filter_by_report(species, report_path, args.min_available)
+    if args.no_geo:
+        geo_label = "off"
+    elif args.place_id:
+        geo_label = f"place {args.place_id}"
+    elif args.bbox:
+        geo_label = f"bbox {args.bbox}"
+    else:
+        geo_label = "Sonoran bbox"
     print(f"Selected {len(species)} species "
-          f"(geo={'off' if args.no_geo else (f'place {args.place_id}' if args.place_id else 'Sonoran bbox')}, "
-          f"cap={args.per_species}/species, counts_only={args.counts_only})")
+          f"(geo={geo_label}, cap={args.per_species}/species, counts_only={args.counts_only})")
     print(f"Pacing: {API_DELAY_S:.2f}s/API request, "
           f"{DOWNLOAD_WORKERS} download workers x {DOWNLOAD_DELAY_S:.2f}s/image\n")
 

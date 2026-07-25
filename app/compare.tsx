@@ -18,7 +18,7 @@ import { COLORS, softShadow } from '@/constants/AppTheme';
 import { CATALOG, getSpeciesById, type Species } from '@/constants/catalog';
 
 const KIND_LABEL: Record<Species['kind'], string> = {
-  cactus: 'Plant',
+  plant: 'Plant',
   bird: 'Bird',
   insect: 'Insect',
   snake: 'Reptile',
@@ -31,7 +31,7 @@ const KIND_LABEL: Record<Species['kind'], string> = {
 };
 
 const KIND_COLOR: Record<Species['kind'], string> = {
-  cactus: COLORS.lichen,
+  plant: COLORS.lichen,
   bird: COLORS.lichen,
   insect: COLORS.lichen,
   snake: COLORS.slate,

@@ -1,9 +1,9 @@
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-import * as Network from 'expo-network';
 
 import { CATALOG } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
 import { identifyFromPhoto } from '@/lib/local-identify';
+import { hasNetwork } from '@/lib/network';
 
 export type IdentifyResult = {
   speciesId: string | null;
@@ -21,18 +21,6 @@ const TIMEOUT_MS = 8000;
 // via env var until the on-device model replaces this path (see the Obsidian
 // note "decision-identification-online-api"). Tokens are short-lived (~24h).
 const INAT_API_TOKEN = process.env.EXPO_PUBLIC_INATURALIST_API_TOKEN ?? '';
-
-async function hasNetwork(): Promise<boolean> {
-  try {
-    const state = await Network.getNetworkStateAsync();
-    // Only treat as offline when we are *sure* there's no link. On the iOS
-    // simulator `isInternetReachable` is frequently false/undefined even when
-    // online, so don't let it alone force the offline path.
-    return state.isConnected !== false;
-  } catch {
-    return true; // if we can't tell, let the request attempt and fail fast
-  }
-}
 
 const byLatin = new Map(CATALOG.map((s) => [s.latin.toLowerCase(), s]));
 const byName = new Map(CATALOG.map((s) => [s.commonName.toLowerCase(), s]));

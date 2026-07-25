@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Dimensions, Linking, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
@@ -33,6 +34,7 @@ import { getForagingLegality, LAND_TYPE_LABELS, RULE_CONFIG, type ForagingLegali
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
 import { isFavorited, toggleFavorite } from '@/lib/favorites';
+import { getNearbyObservations, RADIUS_KM, type NearbyObservation } from '@/lib/inat-nearby';
 import { useSightings } from '@/hooks/useSightings';
 import { formatRelativeDate } from '@/utils/date';
 
@@ -59,6 +61,7 @@ export default function SpeciesDetailScreen() {
   const [note, setNote] = useState('');
   const [editingNote, setEditingNote] = useState(false);
   const [taxonomyExpanded, setTaxonomyExpanded] = useState(false);
+  const [nearby, setNearby] = useState<NearbyObservation[]>([]);
   const noteInputRef = useRef<TextInput>(null);
 
   const species = speciesId ? getSpeciesById(speciesId) : undefined;
@@ -69,6 +72,26 @@ export default function SpeciesDetailScreen() {
     if (!user || !speciesId) return;
     isFavorited(user.uid, speciesId).then(setLiked);
   }, [user, speciesId]);
+
+  // Optional online enrichment — silently does nothing if location permission
+  // isn't already granted (never prompt just for this) or there's no network.
+  useEffect(() => {
+    if (!species) return;
+    let cancelled = false;
+    (async () => {
+      const { status } = await Location.getForegroundPermissionsAsync();
+      if (status !== 'granted') return;
+      const pos = await Location.getLastKnownPositionAsync().catch(() => null);
+      if (!pos || cancelled) return;
+      const results = await getNearbyObservations(
+        species.latin,
+        { lat: pos.coords.latitude, lng: pos.coords.longitude },
+        species.id,
+      );
+      if (!cancelled) setNearby(results);
+    })();
+    return () => { cancelled = true; };
+  }, [species]);
 
   useEffect(() => {
     if (!noteKey) return;
@@ -399,6 +422,32 @@ export default function SpeciesDetailScreen() {
                   </View>
                 </View>
                 <DesertRangeMap region={species.region} />
+              </Animated.View>
+            ) : null}
+
+            {nearby.length > 0 ? (
+              <Animated.View entering={FadeInDown.delay(140).duration(280)} style={[
+                { marginTop: 16, marginHorizontal: 16, backgroundColor: COLORS.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: COLORS.granite },
+                softShadow(0.04, 6, 2),
+              ]}>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 10 }}>
+                  Recently seen nearby
+                </Text>
+                {nearby.map((obs, i) => (
+                  <Pressable
+                    key={obs.id}
+                    onPress={() => Linking.openURL(obs.uri)}
+                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 8, borderTopWidth: i === 0 ? 0 : 1, borderTopColor: COLORS.granite }}
+                  >
+                    <Text style={{ color: COLORS.ink, fontSize: 13 }}>
+                      {obs.observerName}{obs.observedOn ? ` · ${obs.observedOn}` : ''}
+                    </Text>
+                    <Ionicons name="open-outline" size={15} color={COLORS.granite} />
+                  </Pressable>
+                ))}
+                <Text style={{ color: COLORS.granite, fontSize: 10, marginTop: 8 }}>
+                  Via iNaturalist · within {RADIUS_KM}km
+                </Text>
               </Animated.View>
             ) : null}
 

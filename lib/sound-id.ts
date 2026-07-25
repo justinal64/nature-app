@@ -1,10 +1,10 @@
 import { AudioModule, RecordingPresets, requestRecordingPermissionsAsync, setAudioModeAsync } from 'expo-audio';
 import type { AudioRecorder } from 'expo-audio';
-import * as Network from 'expo-network';
 
 import { CATALOG } from '@/constants/catalog';
 import { isActiveNow } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
+import { hasNetwork } from '@/lib/network';
 
 export type SoundIdResult = {
   species: Species;
@@ -13,17 +13,6 @@ export type SoundIdResult = {
 };
 
 let recorder: AudioRecorder | null = null;
-
-// Same check as lib/identify.ts: only treat as offline when we're sure
-// there's no link, since isInternetReachable is unreliable on simulators.
-async function hasNetwork(): Promise<boolean> {
-  try {
-    const state = await Network.getNetworkStateAsync();
-    return state.isConnected !== false;
-  } catch {
-    return true;
-  }
-}
 
 export async function requestMicrophonePermission(): Promise<boolean> {
   const { granted } = await requestRecordingPermissionsAsync();

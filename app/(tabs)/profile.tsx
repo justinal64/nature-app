@@ -225,8 +225,10 @@ export default function ProfileScreen() {
             ]}
           >
             {STATS.map((stat, i) => (
-              <View
+              <Pressable
                 key={stat.label}
+                disabled={stat.label !== 'Species'}
+                onPress={() => stat.label === 'Species' && router.push('/life-list' as never)}
                 style={{
                   flex: 1,
                   alignItems: 'center',
@@ -251,7 +253,7 @@ export default function ProfileScreen() {
                 >
                   {stat.label}
                 </Text>
-              </View>
+              </Pressable>
             ))}
           </View>
         </Reveal>

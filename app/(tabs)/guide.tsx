@@ -75,6 +75,7 @@ export default function GuideScreen() {
       { text: 'Mojave', onPress: () => setActiveRegion('MOJAVE') },
       { text: 'Chihuahuan', onPress: () => setActiveRegion('CHIHUAHUAN') },
       { text: 'Great Basin', onPress: () => setActiveRegion('GREAT_BASIN') },
+      { text: 'Southeast', onPress: () => setActiveRegion('SOUTHEAST') },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };

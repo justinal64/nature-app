@@ -1,6 +1,6 @@
 import { SpeciesKind } from '@/lib/sightings';
 
-export type Region = 'SONORAN' | 'MOJAVE' | 'CHIHUAHUAN' | 'GREAT_BASIN';
+export type Region = 'SONORAN' | 'MOJAVE' | 'CHIHUAHUAN' | 'GREAT_BASIN' | 'SOUTHEAST';
 
 export type IUCNStatus = 'LC' | 'NT' | 'VU' | 'EN' | 'CR' | 'EW' | 'EX' | 'DD';
 
@@ -16,17 +16,21 @@ export type Taxonomy = {
 
 export type SpeciesStat = { label: string; value: string };
 
+// family/region/description/didYouKnow/idTips/stats are optional so a species can be
+// merged into the catalog (and pulled for training) before its rich field content is
+// written — e.g. the initial Southeast batch. Enrich over time; UI call sites must
+// tolerate these being absent.
 export type Species = {
   id: string;
   commonName: string;
   latin: string;
-  family: string;
+  family?: string;
   kind: SpeciesKind;
-  region: Region;
-  description: string;
-  didYouKnow: string;
-  idTips: string[];
-  stats: SpeciesStat[];
+  region?: Region;
+  description?: string;
+  didYouKnow?: string;
+  idTips?: string[];
+  stats?: SpeciesStat[];
 };
 
 export const CATALOG: Species[] = [
@@ -2843,6 +2847,8 @@ const REGION_BOXES: { region: Region; box: BBox }[] = [
   { region: 'CHIHUAHUAN',  box: { minLat: 25, maxLat: 33, minLng: -108, maxLng: -100 } },
   { region: 'GREAT_BASIN', box: { minLat: 36, maxLat: 45, minLng: -120, maxLng: -113 } },
   { region: 'SONORAN',     box: { minLat: 25, maxLat: 35, minLng: -116, maxLng: -107 } },
+  // Southeast US batch — FL up through NC/TN, west to E. Texas/Louisiana
+  { region: 'SOUTHEAST',   box: { minLat: 24.5, maxLat: 37, minLng: -94, maxLng: -75 } },
 ];
 
 export function getRelatedSpecies(species: Species, limit = 4): Species[] {

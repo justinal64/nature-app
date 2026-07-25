@@ -954,7 +954,7 @@ export default function SpeciesDetailScreen() {
                       <Text numberOfLines={2} style={{ color: COLORS.ink, fontWeight: '700', fontSize: 12, textAlign: 'center', lineHeight: 16 }}>
                         {rel.commonName}
                       </Text>
-                      <Text style={{ color: COLORS.granite, fontSize: 10, textAlign: 'center' }}>{rel.region.replace('_', ' ')}</Text>
+                      <Text style={{ color: COLORS.granite, fontSize: 10, textAlign: 'center' }}>{rel.region?.replace('_', ' ') ?? rel.family ?? ''}</Text>
                     </PressableScale>
                     <Pressable
                       onPress={() => router.push(`/compare?a=${speciesId}&b=${rel.id}` as never)}

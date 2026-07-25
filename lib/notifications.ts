@@ -72,12 +72,15 @@ const SOTD_ID = 'species-of-the-day';
 const SOTD_HOUR = 8;
 
 export function pickDailySpecies(): { commonName: string; description: string; id: string } {
+  // Only species with a written description are eligible — minimal batch entries
+  // (e.g. the Southeast catalog) don't have one yet.
+  const eligible = CATALOG.filter((s) => s.description);
   // Use the day of year as a stable seed so everyone gets the same species each day
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86_400_000);
-  const sp = CATALOG[dayOfYear % CATALOG.length];
-  return { commonName: sp.commonName, description: sp.description.slice(0, 100) + '…', id: sp.id };
+  const sp = eligible[dayOfYear % eligible.length];
+  return { commonName: sp.commonName, description: sp.description!.slice(0, 100) + '…', id: sp.id };
 }
 
 export async function scheduleSpeciesOfTheDay(): Promise<void> {

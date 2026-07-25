@@ -46,10 +46,11 @@ const KIND_COLOR: Record<Species['kind'], string> = {
 };
 
 const REGION_LABEL: Record<string, string> = {
-  SONORAN: 'Sonoran',
-  MOJAVE: 'Mojave',
-  CHIHUAHUAN: 'Chihuahuan',
-  GREAT_BASIN: 'Great Basin',
+  SONORAN: 'Sonoran Desert',
+  MOJAVE: 'Mojave Desert',
+  CHIHUAHUAN: 'Chihuahuan Desert',
+  GREAT_BASIN: 'Great Basin Desert',
+  SOUTHEAST: 'Southeast US',
 };
 
 // Shown before the user types anything
@@ -82,8 +83,8 @@ export default function SearchScreen() {
         (sp) =>
           sp.commonName.toLowerCase().includes(q) ||
           sp.latin.toLowerCase().includes(q) ||
-          sp.family.toLowerCase().includes(q) ||
-          sp.region.toLowerCase().includes(q),
+          (sp.family?.toLowerCase().includes(q) ?? false) ||
+          (sp.region?.toLowerCase().includes(q) ?? false),
       )
     : [];
 
@@ -231,16 +232,17 @@ export default function SearchScreen() {
                 marginBottom: 14,
               }}
             >
-              Browse by desert
+              Browse by region
             </Text>
-            {(['SONORAN', 'MOJAVE', 'CHIHUAHUAN', 'GREAT_BASIN'] as const).map((region) => {
+            {(['SONORAN', 'MOJAVE', 'CHIHUAHUAN', 'GREAT_BASIN', 'SOUTHEAST'] as const).map((region) => {
               const count = CATALOG.filter((s) => s.region === region).length;
+              if (count === 0) return null;
               return (
                 <PressableScale
                   key={region}
                   onPress={() => router.push(`/(tabs)/guide?region=${region}` as never)}
                   scaleTo={0.98}
-                  accessibilityLabel={`Browse ${REGION_LABEL[region]} Desert`}
+                  accessibilityLabel={`Browse ${REGION_LABEL[region]}`}
                   accessibilityRole="button"
                   style={[
                     {
@@ -271,7 +273,7 @@ export default function SearchScreen() {
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>
-                      {REGION_LABEL[region]} Desert
+                      {REGION_LABEL[region]}
                     </Text>
                     <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
                       {count} species
@@ -373,20 +375,22 @@ export default function SearchScreen() {
                             {KIND_LABEL[sp.kind]}
                           </Text>
                         </View>
-                        <View
-                          style={{
-                            backgroundColor: COLORS.bone,
-                            borderRadius: 10,
-                            paddingHorizontal: 7,
-                            paddingVertical: 2,
-                            borderWidth: 1,
-                            borderColor: COLORS.granite,
-                          }}
-                        >
-                          <Text style={{ color: COLORS.granite, fontSize: 10, fontWeight: '600' }}>
-                            {REGION_LABEL[sp.region]}
-                          </Text>
-                        </View>
+                        {sp.region && (
+                          <View
+                            style={{
+                              backgroundColor: COLORS.bone,
+                              borderRadius: 10,
+                              paddingHorizontal: 7,
+                              paddingVertical: 2,
+                              borderWidth: 1,
+                              borderColor: COLORS.granite,
+                            }}
+                          >
+                            <Text style={{ color: COLORS.granite, fontSize: 10, fontWeight: '600' }}>
+                              {REGION_LABEL[sp.region]}
+                            </Text>
+                          </View>
+                        )}
                         {seen && (
                           <View
                             style={{

@@ -78,12 +78,12 @@ function buildSystemPrompt(speciesId?: string): string {
 
     catalogContext = `\n\nCurrent species context:
 - Common name: ${species.commonName}
-- Latin: ${species.latin}
-- Family: ${species.family}
-- Region: ${species.region}
-- Description: ${species.description}
-- Did you know: ${species.didYouKnow}
-- ID tips: ${species.idTips.join('; ')}`;
+- Latin: ${species.latin}`;
+    if (species.family) catalogContext += `\n- Family: ${species.family}`;
+    if (species.region) catalogContext += `\n- Region: ${species.region}`;
+    if (species.description) catalogContext += `\n- Description: ${species.description}`;
+    if (species.didYouKnow) catalogContext += `\n- Did you know: ${species.didYouKnow}`;
+    if (species.idTips?.length) catalogContext += `\n- ID tips: ${species.idTips.join('; ')}`;
 
     if (danger) {
       catalogContext += `\n- DANGER LEVEL: ${danger.level.toUpperCase()} — ${danger.summary}`;

@@ -34,7 +34,7 @@ function getContextualSpecies(lat: number | null, lng: number | null): OverlaySp
     .slice(0, 6)
     .map((s) => ({
       ...s,
-      tip: s.idTips[0] ?? s.description.split('.')[0],
+      tip: s.idTips?.[0] ?? s.description?.split('.')[0] ?? s.commonName,
     }));
 }
 

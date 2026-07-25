@@ -341,7 +341,7 @@ export default function CompareScreen() {
         {speciesB && !picking && (
           <Animated.View entering={FadeInDown.duration(300)} style={{ padding: 20 }}>
             {/* Stats comparison */}
-            {speciesA.stats.length > 0 && (
+            {speciesA.stats && speciesA.stats.length > 0 && (
               <>
                 <Text
                   style={{
@@ -355,8 +355,8 @@ export default function CompareScreen() {
                 >
                   At a glance
                 </Text>
-                {speciesA.stats.map((stat, i) => {
-                  const bStat = speciesB.stats[i];
+                {speciesA.stats!.map((stat, i) => {
+                  const bStat = speciesB.stats?.[i];
                   return (
                     <View key={stat.label} style={{ flexDirection: 'row', gap: 10, marginBottom: 8 }}>
                       <StatCol label={stat.label} value={stat.value} />
@@ -372,50 +372,54 @@ export default function CompareScreen() {
 
             {/* Region */}
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: 8, marginTop: 4 }}>
-              <StatCol label="Region" value={speciesA.region.replace('_', ' ')} />
+              <StatCol label="Region" value={speciesA.region?.replace('_', ' ') ?? '—'} />
               <View style={{ width: 30 }} />
-              <StatCol label="Region" value={speciesB.region.replace('_', ' ')} />
+              <StatCol label="Region" value={speciesB.region?.replace('_', ' ') ?? '—'} />
             </View>
 
             {/* Family */}
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: 20 }}>
-              <StatCol label="Family" value={speciesA.family} />
+              <StatCol label="Family" value={speciesA.family ?? '—'} />
               <View style={{ width: 30 }} />
-              <StatCol label="Family" value={speciesB.family} />
+              <StatCol label="Family" value={speciesB.family ?? '—'} />
             </View>
 
             {/* ID tips side-by-side */}
-            <Text
-              style={{
-                color: COLORS.granite,
-                fontSize: 11,
-                fontWeight: '700',
-                letterSpacing: 0.5,
-                textTransform: 'uppercase',
-                marginBottom: 12,
-              }}
-            >
-              How to tell them apart
-            </Text>
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <View style={{ flex: 1, gap: 6 }}>
-                {speciesA.idTips.map((tip) => (
-                  <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
-                    <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
-                    <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
+            {((speciesA.idTips?.length ?? 0) > 0 || (speciesB.idTips?.length ?? 0) > 0) && (
+              <>
+                <Text
+                  style={{
+                    color: COLORS.granite,
+                    fontSize: 11,
+                    fontWeight: '700',
+                    letterSpacing: 0.5,
+                    textTransform: 'uppercase',
+                    marginBottom: 12,
+                  }}
+                >
+                  How to tell them apart
+                </Text>
+                <View style={{ flexDirection: 'row', gap: 12 }}>
+                  <View style={{ flex: 1, gap: 6 }}>
+                    {(speciesA.idTips ?? []).map((tip) => (
+                      <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
+                        <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
+                        <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
-              </View>
-              <View style={{ width: 1, backgroundColor: COLORS.granite }} />
-              <View style={{ flex: 1, gap: 6 }}>
-                {speciesB.idTips.map((tip) => (
-                  <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
-                    <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
-                    <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
+                  <View style={{ width: 1, backgroundColor: COLORS.granite }} />
+                  <View style={{ flex: 1, gap: 6 }}>
+                    {(speciesB.idTips ?? []).map((tip) => (
+                      <View key={tip} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
+                        <Text style={{ color: COLORS.lichen, fontSize: 12, marginTop: 1 }}>•</Text>
+                        <Text style={{ color: COLORS.ink, fontSize: 12, flex: 1, lineHeight: 17 }}>{tip}</Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
-              </View>
-            </View>
+                </View>
+              </>
+            )}
 
             {/* Navigation links */}
             <View style={{ flexDirection: 'row', gap: 12, marginTop: 28 }}>

@@ -51,8 +51,8 @@ describe('CATALOG integrity', () => {
     expect(bad).toEqual([]);
   });
 
-  it('every species has exactly 4 stats', () => {
-    const bad = CATALOG.filter((s) => s.stats.length !== 4).map((s) => s.id);
+  it('every species with stats has exactly 4', () => {
+    const bad = CATALOG.filter((s) => s.stats && s.stats.length !== 4).map((s) => s.id);
     expect(bad).toEqual([]);
   });
 
@@ -61,9 +61,9 @@ describe('CATALOG integrity', () => {
     expect(bad).toEqual([]);
   });
 
-  it('every species has a valid region', () => {
-    const valid = ['SONORAN', 'MOJAVE', 'CHIHUAHUAN', 'GREAT_BASIN'];
-    const bad = CATALOG.filter((s) => !valid.includes(s.region)).map((s) => s.id);
+  it('every species with a region has a valid one', () => {
+    const valid = ['SONORAN', 'MOJAVE', 'CHIHUAHUAN', 'GREAT_BASIN', 'SOUTHEAST'];
+    const bad = CATALOG.filter((s) => s.region && !valid.includes(s.region)).map((s) => s.id);
     expect(bad).toEqual([]);
   });
 });

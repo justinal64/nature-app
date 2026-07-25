@@ -1473,8 +1473,8 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
           borderRadius: 18,
           overflow: 'hidden',
           borderWidth: 1,
-          borderColor: '#B85C3A44',
-          backgroundColor: '#FDF0EA',
+          borderColor: '#C0392B44',
+          backgroundColor: '#C0392B14',
         },
         softShadow(0.06, 6, 2),
       ]}
@@ -1491,7 +1491,7 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
             width: 32,
             height: 32,
             borderRadius: 10,
-            backgroundColor: COLORS.lichen,
+            backgroundColor: '#C0392B',
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -1522,7 +1522,7 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
         <View
           style={{
             borderTopWidth: 1,
-            borderTopColor: '#B85C3A22',
+            borderTopColor: '#C0392B22',
             padding: 14,
             gap: 14,
           }}
@@ -1549,12 +1549,12 @@ function EncounterProtocolCard({ protocol }: { protocol: EncounterProtocol }) {
           </View>
 
           <View style={{ gap: 6 }}>
-            <Text style={{ color: COLORS.lichen, fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
+            <Text style={{ color: '#C0392B', fontSize: 11, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase' }}>
               Don&apos;t
             </Text>
             {protocol.dont.map((item, i) => (
               <View key={i} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                <Ionicons name="close" size={14} color={COLORS.lichen} style={{ marginTop: 2 }} />
+                <Ionicons name="close" size={14} color="#C0392B" style={{ marginTop: 2 }} />
                 <Text style={{ color: COLORS.ink, fontSize: 13, lineHeight: 18, flex: 1 }}>{item}</Text>
               </View>
             ))}

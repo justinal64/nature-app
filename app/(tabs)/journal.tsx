@@ -35,7 +35,7 @@ import { formatRelativeDate } from '@/utils/date';
 
 const KIND_FILTERS: { label: string; value: SpeciesKind | 'all' }[] = [
   { label: 'All', value: 'all' },
-  { label: 'Plants', value: 'cactus' },
+  { label: 'Plants', value: 'plant' },
   { label: 'Birds', value: 'bird' },
   { label: 'Insects', value: 'insect' },
   { label: 'Snakes', value: 'snake' },
@@ -155,7 +155,12 @@ export default function JournalScreen() {
               </Text>
               <Text style={{ color: COLORS.ink, fontSize: 30, fontWeight: '700' }}>Journal</Text>
             </View>
-            <View style={{ flexDirection: 'row', gap: 8, marginBottom: 4 }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ flexShrink: 1, marginBottom: 4 }}
+              contentContainerStyle={{ flexDirection: 'row', gap: 8, paddingLeft: 12 }}
+            >
               <TouchableOpacity
                 onPress={() => router.push('/batch-import' as never)}
                 accessibilityLabel="Import photos from camera roll"
@@ -251,7 +256,7 @@ export default function JournalScreen() {
               >
                 <Ionicons name="download-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
-            </View>
+            </ScrollView>
           </View>
         </Reveal>
 

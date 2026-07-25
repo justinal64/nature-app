@@ -15,7 +15,7 @@ import { formatRelativeDate } from '@/utils/date';
 
 const CATS: { name: string; kind: SpeciesKind | 'all' }[] = [
   { name: 'All', kind: 'all' },
-  { name: 'Plants', kind: 'cactus' },
+  { name: 'Plants', kind: 'plant' },
   { name: 'Birds', kind: 'bird' },
   { name: 'Mammals', kind: 'mammal' },
   { name: 'Lizards', kind: 'lizard' },
@@ -61,7 +61,7 @@ export default function LifeListScreen() {
           speciesId,
           commonName: sp?.commonName ?? speciesId,
           latin: sp?.latin ?? '',
-          kind: sp?.kind ?? 'cactus',
+          kind: sp?.kind ?? 'plant',
           firstSeen,
           count,
         };
@@ -90,7 +90,12 @@ export default function LifeListScreen() {
         </View>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 12 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ flexGrow: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 12, alignItems: 'center' }}
+      >
         {CATS.map((cat) => {
           const active = filter === cat.kind;
           return (
@@ -115,7 +120,7 @@ export default function LifeListScreen() {
         })}
       </ScrollView>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32, gap: 10 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32, gap: 10 }}>
         {filtered.length === 0 ? (
           <View style={{ alignItems: 'center', marginTop: 60, gap: 8 }}>
             <Ionicons name="albums-outline" size={40} color={COLORS.granite} />

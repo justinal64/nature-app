@@ -170,8 +170,14 @@ export default function JournalStatsScreen() {
               <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: KIND_COLOR[k.kind], alignItems: 'center', justifyContent: 'center' }}>
                 <SpeciesIcon kind={k.kind as SpeciesKind} size={22} color={COLORS.bone} />
               </View>
-              <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 13, width: 64 }}>{KIND_LABELS[k.kind]}</Text>
-              <View style={{ flex: 1, height: 8, borderRadius: 4, backgroundColor: COLORS.granite, overflow: 'hidden' }}>
+              <Text
+                style={{ color: COLORS.ink, fontWeight: '600', fontSize: 13, width: 92 }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
+                {KIND_LABELS[k.kind]}
+              </Text>
+              <View style={{ flex: 1, height: 8, borderRadius: 4, backgroundColor: `${COLORS.granite}30`, overflow: 'hidden' }}>
                 <View
                   style={{
                     height: '100%',

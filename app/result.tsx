@@ -595,6 +595,17 @@ export default function ResultScreen() {
                         <Text style={{ fontSize: 12, fontWeight: '500' }}>%</Text>
                       </Text>
                     )}
+                    {topResult?.speciesId && alt.speciesId && alt.speciesId !== topResult.speciesId && (
+                      <Pressable
+                        onPress={() => router.push(`/compare?a=${topResult.speciesId}&b=${alt.speciesId}` as never)}
+                        accessibilityLabel={`Compare with ${alt.commonName}`}
+                        accessibilityRole="button"
+                        hitSlop={8}
+                        style={{ marginLeft: 8, padding: 4 }}
+                      >
+                        <Ionicons name="git-compare-outline" size={18} color={COLORS.lichen} />
+                      </Pressable>
+                    )}
                     {alt.speciesId && (
                       <Ionicons
                         name="chevron-forward"

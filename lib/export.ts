@@ -21,32 +21,39 @@ export async function exportSightingsCsv(sightings: Sighting[]): Promise<void> {
     'taxon_name',
     'observed_on',
     'time_observed_at',
-    'observation_type',
-    'sex',
-    'life_stage',
-    'activity',
-    'phenology',
     'description',
     'latitude',
     'longitude',
+    'geoprivacy',
     'captive_cultivated',
     'tag_list',
   ];
+
+  // observation_type/sex/life_stage/activity/phenology aren't recognized
+  // iNaturalist import columns (only taxon_name, observed_on, description,
+  // latitude, longitude, geoprivacy, and tag_list are) — fold them into
+  // tags instead of dropping them.
+  function annotationTags(s: Sighting): string {
+    const tags: (string | undefined)[] = [
+      s.observationType && s.observationType !== 'organism' ? s.observationType : undefined,
+      s.sex,
+      s.lifeStage,
+      s.activity,
+      s.phenology,
+    ];
+    return tags.filter((v): v is string => !!v).join(',');
+  }
 
   const rows = sightings.map((s) => [
     escapeCsv(s.latinName),
     escapeCsv(formatDate(s.capturedAt)),
     escapeCsv(s.capturedAt),
-    escapeCsv(s.observationType ?? 'organism'),
-    escapeCsv(s.sex),
-    escapeCsv(s.lifeStage),
-    escapeCsv(s.activity),
-    escapeCsv(s.phenology),
     escapeCsv(s.notes),
     s.location ? String(s.location.lat) : '',
     s.location ? String(s.location.lng) : '',
-    'false',
-    escapeCsv(s.kind === 'cactus' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind === 'arachnid' ? 'arachnida' : s.kind === 'fungus' ? 'fungi' : s.kind === 'fish' ? 'actinopterygii' : s.kind),
+    s.locationObscured ? 'obscured' : '',
+    s.dataQualityFlags?.wildOrganism === false ? 'true' : 'false',
+    escapeCsv([annotationTags(s), s.kind === 'cactus' ? 'plant' : s.kind === 'lizard' ? 'reptile' : s.kind === 'amphibian' ? 'amphibian' : s.kind === 'arachnid' ? 'arachnida' : s.kind === 'fungus' ? 'fungi' : s.kind === 'fish' ? 'actinopterygii' : s.kind].filter(Boolean).join(',')),
   ]);
 
   const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');

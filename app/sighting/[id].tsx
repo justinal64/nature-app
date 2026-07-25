@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -34,6 +35,31 @@ const KIND_COLOR: Record<string, string> = {
   fungus: COLORS.lichen,
   fish: COLORS.slate,
 };
+
+function AudioEvidenceCard({ uri }: { uri: string }) {
+  const player = useAudioPlayer(uri);
+  const status = useAudioPlayerStatus(player);
+
+  return (
+    <Pressable
+      onPress={() => (status.playing ? player.pause() : player.play())}
+      style={[
+        { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.surface, borderRadius: 18, padding: 16, marginBottom: 14, borderWidth: 1, borderColor: COLORS.granite },
+        softShadow(0.04, 6, 2),
+      ]}
+    >
+      <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
+        <Ionicons name={status.playing ? 'pause' : 'play'} size={20} color={COLORS.bone} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>Recording</Text>
+        <Text style={{ color: COLORS.granite, fontSize: 12 }}>
+          {status.playing ? 'Playing…' : 'Tap to play the bird call you recorded'}
+        </Text>
+      </View>
+    </Pressable>
+  );
+}
 
 function formatFullDate(iso: string): string {
   const d = new Date(iso);
@@ -204,6 +230,8 @@ export default function SightingDetailScreen() {
             );
           })()}
         </Animated.View>
+
+        {sighting.audioUri && <AudioEvidenceCard uri={sighting.audioUri} />}
 
         {/* Identity */}
         <Animated.View entering={FadeInDown.delay(80).duration(280)} style={[

@@ -25,6 +25,7 @@ export type Sighting = {
   kind: SpeciesKind;
   photoUri?: string;    // legacy: single photo (still read for backward compat)
   photoUris?: string[]; // new: ordered photo array; use this going forward
+  audioUri?: string;    // bird-call recording, when identified via sound ID
   capturedAt: string; // ISO 8601
   observationType?: ObservationType;
   notes?: string;

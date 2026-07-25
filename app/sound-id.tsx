@@ -39,6 +39,7 @@ export default function SoundIdScreen() {
   const [results, setResults] = useState<SoundIdResult[]>([]);
   const [secondsLeft, setSecondsLeft] = useState(MAX_RECORD_SECONDS);
   const [saving, setSaving] = useState<string | null>(null);
+  const [recordedUri, setRecordedUri] = useState<string | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pulse = useSharedValue(0);
@@ -113,6 +114,7 @@ export default function SoundIdScreen() {
       setPhase('idle');
       return;
     }
+    setRecordedUri(uri);
 
     try {
       const res = await identifyBirdSound(uri);
@@ -135,6 +137,7 @@ export default function SoundIdScreen() {
         latinName: result.species.latin,
         kind: 'bird',
         capturedAt: new Date().toISOString(),
+        audioUri: recordedUri ?? undefined,
       });
       cancelStreakReminder().catch(() => {});
       Alert.alert('Saved!', `${result.species.commonName} added to your journal.`, [

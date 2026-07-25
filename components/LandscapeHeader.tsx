@@ -8,6 +8,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
 import { COLORS, glow } from '@/constants/AppTheme';
@@ -40,6 +41,7 @@ function Bird({ size = 22, opacity = 0.45 }: { size?: number; opacity?: number }
 }
 
 export function LandscapeHeader({ height = 200 }: Props) {
+  const { top: safeTop } = useSafeAreaInsets();
   const back = useDrift(13000);
   const front = useDrift(9000);
   const sun = useDrift(4200);
@@ -78,7 +80,7 @@ export function LandscapeHeader({ height = 200 }: Props) {
         style={[
           {
             position: 'absolute',
-            top: 16,
+            top: safeTop + 16,
             right: 40,
             width: 56,
             height: 56,
@@ -90,7 +92,7 @@ export function LandscapeHeader({ height = 200 }: Props) {
         ]}
       />
 
-      <Animated.View style={[{ position: 'absolute', top: 52, left: '26%' }, flightStyle]}>
+      <Animated.View style={[{ position: 'absolute', top: safeTop + 52, left: '26%' }, flightStyle]}>
         <Bird />
         <View style={{ marginLeft: 26, marginTop: -4, transform: [{ scale: 0.65 }] }}>
           <Bird opacity={0.3} />

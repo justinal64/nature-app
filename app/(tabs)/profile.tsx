@@ -436,7 +436,7 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
               <Ionicons name="notifications-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -505,7 +505,7 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
               <Ionicons name="sunny-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -558,7 +558,7 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
               <Ionicons name="text-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -611,7 +611,7 @@ export default function ProfileScreen() {
               borderColor: juniorMode ? COLORS.lichen : COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
               <Ionicons name="star-outline" size={20} color={juniorMode ? COLORS.lichen : COLORS.ink} />
               <View>
                 <Text style={{ color: juniorMode ? COLORS.ink : COLORS.ink, fontWeight: '600', fontSize: 15 }}>

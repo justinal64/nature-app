@@ -2806,6 +2806,13 @@ export const ACTIVE_MONTHS: Record<string, number[]> = {
   'turkey-tail-fungus':         ALL,              // bracket fungi fruit year-round
   'sunburst-lichen':            ALL,              // lichen — permanent
   'map-lichen':                 ALL,              // lichen — permanent
+  // Invasive species
+  'buffelgrass':                WARM,             // warm-season perennial; greens up with monsoon
+  'tamarisk':                   [3, 4, 5, 6, 7, 8, 9, 10], // deciduous; bare in winter
+  'cheatgrass':                 [10, 11, 12, 1, 2, 3, 4, 5, 6], // winter annual; dry/dormant by midsummer
+  'sahara-mustard':             [12, 1, 2, 3, 4], // winter/spring annual
+  'russian-thistle':            [4, 5, 6, 7, 8, 9, 10], // summer-fall annual; dead plants tumble through winter
+  'african-rue':                [3, 4, 5, 6, 7, 8, 9, 10], // perennial forb; spring through fall
 };
 
 export function isActiveNow(speciesId: string): boolean {

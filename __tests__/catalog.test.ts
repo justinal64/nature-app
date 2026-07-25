@@ -6,6 +6,20 @@ import {
   getRelatedSpecies,
   getActiveMonths,
 } from '../constants/catalog';
+import type { SpeciesKind } from '../lib/sightings';
+
+const ALL_KINDS: SpeciesKind[] = [
+  'cactus',
+  'bird',
+  'insect',
+  'snake',
+  'mammal',
+  'lizard',
+  'amphibian',
+  'arachnid',
+  'fungus',
+  'fish',
+];
 
 describe('CATALOG integrity', () => {
   it('has at least 130 species', () => {
@@ -43,8 +57,7 @@ describe('CATALOG integrity', () => {
   });
 
   it('every species has a valid kind', () => {
-    const valid = ['cactus', 'bird', 'insect', 'snake'];
-    const bad = CATALOG.filter((s) => !valid.includes(s.kind)).map((s) => s.id);
+    const bad = CATALOG.filter((s) => !ALL_KINDS.includes(s.kind)).map((s) => s.id);
     expect(bad).toEqual([]);
   });
 
@@ -69,17 +82,13 @@ describe('getSpeciesById', () => {
 
 describe('getCategoryCount', () => {
   it('returns a positive count for each kind', () => {
-    for (const kind of ['cactus', 'bird', 'insect', 'snake'] as const) {
+    for (const kind of ALL_KINDS) {
       expect(getCategoryCount(kind)).toBeGreaterThan(0);
     }
   });
 
   it('counts sum to total catalog size', () => {
-    const sum =
-      getCategoryCount('cactus') +
-      getCategoryCount('bird') +
-      getCategoryCount('insect') +
-      getCategoryCount('snake');
+    const sum = ALL_KINDS.reduce((total, kind) => total + getCategoryCount(kind), 0);
     expect(sum).toBe(CATALOG.length);
   });
 });

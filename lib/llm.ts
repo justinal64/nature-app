@@ -9,6 +9,15 @@ import { CATALOG, getDangerInfo, getEcosystemRole, getSpeciesUses } from '@/cons
 const MODEL_URL =
   'https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf';
 const MODEL_FILENAME = 'Llama-3.2-3B-Instruct-Q4_K_M.gguf';
+const MODEL_SIZE_BYTES = 2_147_483_648; // ~2 GB, matches the gguf above
+
+// Require headroom beyond the model's own size: the download writes to a
+// temp location before the final file, and users need some free space left
+// over afterward for photos/journal entries.
+export async function hasEnoughStorageForModel(): Promise<boolean> {
+  const free = await FileSystem.getFreeDiskStorageAsync();
+  return free > MODEL_SIZE_BYTES * 1.5;
+}
 
 export type LlmState =
   | 'not_downloaded'

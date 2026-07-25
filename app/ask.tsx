@@ -24,6 +24,7 @@ import {
   chat,
   downloadModel,
   getLlmState,
+  hasEnoughStorageForModel,
   loadModel,
 } from '@/lib/llm';
 
@@ -63,6 +64,13 @@ export default function AskScreen() {
   }, []);
 
   async function handleDownload() {
+    if (!(await hasEnoughStorageForModel())) {
+      Alert.alert(
+        'Not enough storage',
+        'This model needs about 3 GB free (2 GB download plus working room). Free up some space and try again.',
+      );
+      return;
+    }
     setLlmState('downloading');
     try {
       await downloadModel((pct) => setDownloadPct(pct));

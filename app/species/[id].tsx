@@ -745,6 +745,50 @@ export default function SpeciesDetailScreen() {
               </Pressable>
             ) : null}
 
+            {/* DNA barcode reference (BOLD Systems) */}
+            {species?.latin ? (
+              <Pressable
+                onPress={() => Linking.openURL('https://portal.boldsystems.org')}
+                style={[
+                  {
+                    marginHorizontal: 16,
+                    marginTop: 10,
+                    backgroundColor: COLORS.surface,
+                    borderRadius: 16,
+                    padding: 14,
+                    borderWidth: 1,
+                    borderColor: COLORS.granite,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  },
+                  softShadow(0.04, 6, 2),
+                ]}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 10,
+                      backgroundColor: COLORS.bone,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Ionicons name="git-network-outline" size={16} color={COLORS.ink} />
+                  </View>
+                  <View>
+                    <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 14 }}>DNA barcode records (BOLD)</Text>
+                    <Text style={{ color: COLORS.granite, fontSize: 12, fontStyle: 'italic' }}>
+                      Search &quot;{species.latin}&quot; on the portal
+                    </Text>
+                  </View>
+                </View>
+                <Ionicons name="open-outline" size={16} color={COLORS.granite} />
+              </Pressable>
+            ) : null}
+
             {/* Personal notes */}
             <View
               style={[

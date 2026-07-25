@@ -132,7 +132,7 @@ export default function SearchScreen() {
             ref={inputRef}
             value={query}
             onChangeText={setQuery}
-            placeholder="Search 90 species…"
+            placeholder={`Search ${CATALOG.length} species…`}
             placeholderTextColor={COLORS.granite}
             returnKeyType="search"
             autoCapitalize="none"

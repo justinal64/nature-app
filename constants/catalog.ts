@@ -3838,7 +3838,7 @@ export const CATALOG: Species[] = [
   },
   {
     id: 'ardilla-listada-oriental',
-    commonName: 'Ardilla Listada Oriental',
+    commonName: 'Eastern Chipmunk',
     latin: 'Tamias striatus',
     kind: 'mammal',
     region: 'SOUTHEAST',
@@ -3957,14 +3957,14 @@ export const CATALOG: Species[] = [
   },
   {
     id: 'bisamratte',
-    commonName: 'Bisamratte',
+    commonName: 'Muskrat',
     latin: 'Ondatra zibethicus',
     kind: 'mammal',
     region: 'SOUTHEAST',
   },
   {
     id: 'ardilla-voladora-meridional',
-    commonName: 'Ardilla Voladora Meridional',
+    commonName: 'Southern Flying Squirrel',
     latin: 'Glaucomys volans',
     kind: 'mammal',
     region: 'SOUTHEAST',
@@ -4034,7 +4034,7 @@ export const CATALOG: Species[] = [
   },
   {
     id: 'p-romyscus-a-pattes-blanches',
-    commonName: 'Péromyscus A Pattes Blanches',
+    commonName: 'White-footed Mouse',
     latin: 'Peromyscus leucopus',
     kind: 'mammal',
     region: 'SOUTHEAST',
@@ -4335,7 +4335,7 @@ export const CATALOG: Species[] = [
   },
   {
     id: 'brown-wax',
-    commonName: 'Brown Wax',
+    commonName: 'Southern Watersnake',
     latin: 'Nerodia fasciata',
     kind: 'snake',
     region: 'SOUTHEAST',

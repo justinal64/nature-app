@@ -121,10 +121,37 @@ def make_session() -> requests.Session:
     return s
 
 
+# Transient network hiccups (reset connections, timeouts) shouldn't kill a
+# multi-minute run — retry a few times with backoff before giving up. This
+# does not touch API_DELAY_S pacing between distinct requests, only what
+# happens after a single request fails.
+API_MAX_RETRIES = 4
+API_RETRY_BACKOFF_S = 3.0
+
+
+def _get_with_retry(session: requests.Session, url: str, **kwargs) -> requests.Response:
+    last_exc: requests.RequestException | None = None
+    for attempt in range(API_MAX_RETRIES):
+        try:
+            r = session.get(url, **kwargs)
+            time.sleep(API_DELAY_S)
+            if r.status_code == 429 or r.status_code >= 500:
+                r.raise_for_status()
+            return r
+        except requests.RequestException as e:
+            last_exc = e
+            if attempt < API_MAX_RETRIES - 1:
+                wait = API_RETRY_BACKOFF_S * (2 ** attempt)
+                print(f"  (network hiccup: {e}; retrying in {wait:.0f}s "
+                      f"[{attempt + 1}/{API_MAX_RETRIES}])")
+                time.sleep(wait)
+    assert last_exc is not None
+    raise last_exc
+
+
 def resolve_taxon_id(session: requests.Session, latin: str) -> int | None:
     """Resolve a scientific name to an iNat taxon_id (exact match preferred)."""
-    r = session.get(f"{API_BASE}/taxa", params={"q": latin, "per_page": 5}, timeout=30)
-    time.sleep(API_DELAY_S)
+    r = _get_with_retry(session, f"{API_BASE}/taxa", params={"q": latin, "per_page": 5}, timeout=30)
     r.raise_for_status()
     results = r.json().get("results", [])
     for t in results:
@@ -160,8 +187,7 @@ def iter_observations(session: requests.Session, taxon_id: int, bbox, place_id, 
         page_params = dict(params)
         if id_below is not None:
             page_params["id_below"] = id_below
-        r = session.get(f"{API_BASE}/observations", params=page_params, timeout=60)
-        time.sleep(API_DELAY_S)
+        r = _get_with_retry(session, f"{API_BASE}/observations", params=page_params, timeout=60)
         r.raise_for_status()
         results = r.json().get("results", [])
         if not results:

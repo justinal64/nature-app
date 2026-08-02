@@ -3090,7 +3090,7 @@ export const CATALOG: Species[] = [
   {
     id: 'common-gallinule',
     commonName: 'Common Gallinule',
-    latin: 'Gallinula chloropus',
+    latin: 'Gallinula galeata',
     kind: 'bird',
     region: 'SOUTHEAST',
   },
@@ -4378,7 +4378,7 @@ export const CATALOG: Species[] = [
   {
     id: 'midland-rat-snake',
     commonName: 'Midland Rat Snake',
-    latin: 'Pantherophis spiloides',
+    latin: 'Pantherophis alleghaniensis',
     kind: 'snake',
     region: 'SOUTHEAST',
   },

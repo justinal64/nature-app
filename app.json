@@ -4,6 +4,7 @@
     "slug": "wildlens",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "scheme": "wildlens",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -72,6 +73,10 @@
     "android": {
       "package": "com.justinleggett.wildlens",
       "predictiveBackGestureEnabled": false,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#F4ECDA"
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",

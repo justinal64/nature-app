@@ -9,7 +9,7 @@ before touching data persistence or the identification flow).
 ```
 cp .env.example .env
 # fill in the 6 EXPO_PUBLIC_FIREBASE_* values from the Firebase console,
-# and optionally EXPO_PUBLIC_INATURALIST_API_TOKEN
+# and optionally EXPO_PUBLIC_INATURALIST_API_TOKEN / EXPO_PUBLIC_XENO_CANTO_API_KEY
 npx expo start
 ```
 
@@ -32,6 +32,10 @@ eas secret:create --scope project --name EXPO_PUBLIC_FIREBASE_APP_ID --value <va
 
 List existing secrets with `eas secret:list`; delete/replace with
 `eas secret:delete` before re-creating if a value changes.
+
+`EXPO_PUBLIC_INATURALIST_API_TOKEN` and `EXPO_PUBLIC_XENO_CANTO_API_KEY` are
+optional the same way — both features (online ID fallback, species-detail
+reference audio) degrade to "unavailable" without them rather than crashing.
 
 Verify a build can actually sign in before shipping:
 

@@ -24,6 +24,7 @@ import { Image } from 'expo-image';
 
 import { DesertRangeMap } from '@/components/DesertRangeMap';
 import { PressableScale } from '@/components/PressableScale';
+import { ReferenceAudioCard } from '@/components/ReferenceAudioCard';
 import { Reveal } from '@/components/Reveal';
 import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
@@ -564,6 +565,9 @@ export default function SpeciesDetailScreen() {
                 </Text>
               </Animated.View>
             )}
+
+            {/* Reference audio (bird calls / insect sounds) */}
+            {species && <ReferenceAudioCard species={species} />}
 
             {/* Human uses */}
             {speciesId && getSpeciesUses(speciesId) && (() => {

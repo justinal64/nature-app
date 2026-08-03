@@ -230,6 +230,23 @@ export default function JournalScreen() {
                 <Ionicons name="albums-outline" size={20} color={COLORS.lichen} />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => router.push('/challenges' as never)}
+                accessibilityLabel="View challenges"
+                accessibilityRole="button"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: COLORS.surface,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.granite,
+                }}
+              >
+                <Ionicons name="flag-outline" size={20} color={COLORS.lichen} />
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => router.push('/sightings-map' as never)}
                 accessibilityLabel="View sightings on map"
                 accessibilityRole="button"

@@ -715,6 +715,35 @@ export default function SightingDetailScreen() {
             </TouchableOpacity>
           </Animated.View>
         )}
+
+        {/* Ask about this photo (photo-grounded on-device Q&A, #24) */}
+        {(sighting.photoUris?.[0] ?? sighting.photoUri) && (
+          <Animated.View entering={FadeInDown.delay(280).duration(280)} style={{ marginTop: 10 }}>
+            <TouchableOpacity
+              onPress={() =>
+                router.push(
+                  `/ask?speciesId=${sighting.speciesId}&photoUri=${encodeURIComponent(sighting.photoUris?.[0] ?? sighting.photoUri ?? '')}` as never,
+                )
+              }
+              accessibilityLabel="Ask about this photo"
+              accessibilityRole="button"
+              style={{
+                backgroundColor: COLORS.surface,
+                borderRadius: 24,
+                paddingVertical: 15,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: 8,
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+              }}
+            >
+              <Ionicons name="chatbubble-ellipses-outline" size={18} color={COLORS.granite} />
+              <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 15 }}>Ask about this photo</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
       </ScrollView>
 
       {reviewingId && (

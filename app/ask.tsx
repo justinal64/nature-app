@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -22,10 +23,15 @@ import {
   type ChatMessage,
   type LlmState,
   chat,
+  chatWithImage,
   downloadModel,
+  downloadVisionModel,
   getLlmState,
+  getVisionLlmState,
   hasEnoughStorageForModel,
+  hasEnoughStorageForVisionModel,
   loadModel,
+  loadVisionModel,
 } from '@/lib/llm';
 
 const SUGGESTED: string[] = [
@@ -35,10 +41,18 @@ const SUGGESTED: string[] = [
   'When is the best time to spot one?',
 ];
 
+const PHOTO_SUGGESTED: string[] = [
+  "What's going on with this one?",
+  'Does anything about it look unusual?',
+  'Why does the color look different here?',
+  'Is this a normal size/shape for the species?',
+];
+
 export default function AskScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const router = useRouter();
-  const { speciesId } = useLocalSearchParams<{ speciesId?: string }>();
+  const { speciesId, photoUri } = useLocalSearchParams<{ speciesId?: string; photoUri?: string }>();
+  const isPhotoMode = !!photoUri;
 
   const species = speciesId ? getSpeciesById(speciesId) : undefined;
 
@@ -51,31 +65,42 @@ export default function AskScreen() {
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    getLlmState().then((state) => {
+    const getState = isPhotoMode ? getVisionLlmState : getLlmState;
+    const load = isPhotoMode ? loadVisionModel : loadModel;
+    getState().then((state) => {
       if (state === 'ready') {
         setLlmState('loading');
-        loadModel((p) => setLoadPct(p ?? 0))
+        load((p) => setLoadPct(p ?? 0))
           .then(() => setLlmState('ready'))
           .catch(() => setLlmState('error'));
       } else {
         setLlmState(state as LlmState);
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleDownload() {
-    if (!(await hasEnoughStorageForModel())) {
+    const hasStorage = isPhotoMode ? hasEnoughStorageForVisionModel : hasEnoughStorageForModel;
+    if (!(await hasStorage())) {
       Alert.alert(
         'Not enough storage',
-        'This model needs about 3 GB free (2 GB download plus working room). Free up some space and try again.',
+        isPhotoMode
+          ? 'This model needs about 800 MB free (~520 MB download plus working room). Free up some space and try again.'
+          : 'This model needs about 3 GB free (2 GB download plus working room). Free up some space and try again.',
       );
       return;
     }
     setLlmState('downloading');
     try {
-      await downloadModel((pct) => setDownloadPct(pct));
+      if (isPhotoMode) {
+        await downloadVisionModel((pct) => setDownloadPct(pct));
+      } else {
+        await downloadModel((pct) => setDownloadPct(pct));
+      }
       setLlmState('loading');
-      await loadModel((p) => setLoadPct(p ?? 0));
+      const load = isPhotoMode ? loadVisionModel : loadModel;
+      await load((p) => setLoadPct(p ?? 0));
       setLlmState('ready');
     } catch {
       Alert.alert('Download failed', 'Check your connection and try again.');
@@ -95,11 +120,16 @@ export default function AskScreen() {
     setMessages([...updated, { role: 'assistant', content: '…' }]);
 
     try {
-      await chat(updated, speciesId, (token) => {
+      const onToken = (token: string) => {
         reply += token;
         setMessages([...updated, { role: 'assistant', content: reply }]);
         scrollRef.current?.scrollToEnd({ animated: true });
-      });
+      };
+      if (isPhotoMode) {
+        await chatWithImage(updated, speciesId, photoUri, onToken);
+      } else {
+        await chat(updated, speciesId, onToken);
+      }
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
     } finally {
@@ -124,24 +154,33 @@ export default function AskScreen() {
             <View style={[{ width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center', marginBottom: 24 }, glow(COLORS.lichen, 12)]}>
               <Ionicons name="chatbubble-ellipses-outline" size={38} color={COLORS.bone} />
             </View>
+            {isPhotoMode && (
+              <Image source={{ uri: photoUri }} style={{ width: 96, height: 96, borderRadius: 16, marginBottom: 20 }} contentFit="cover" />
+            )}
             <Text style={{ color: COLORS.ink, fontSize: 24, fontWeight: '700', textAlign: 'center', marginBottom: 12 }}>
-              Ask the Field Guide
+              {isPhotoMode ? 'Ask About This Photo' : 'Ask the Field Guide'}
             </Text>
             <Text style={{ color: COLORS.granite, fontSize: 14, textAlign: 'center', lineHeight: 21, marginBottom: 32 }}>
-              An on-device AI trained on desert ecology answers your species questions — no internet needed once downloaded.
+              {isPhotoMode
+                ? 'A small on-device vision model looks at this specific photo to answer questions — no internet needed once downloaded.'
+                : 'An on-device AI trained on desert ecology answers your species questions — no internet needed once downloaded.'}
             </Text>
             <View style={{ backgroundColor: COLORS.surface, borderRadius: 16, padding: 16, width: '100%', borderWidth: 1, borderColor: COLORS.granite, marginBottom: 32 }}>
               <Text style={{ color: COLORS.granite, fontSize: 12, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6 }}>Model details</Text>
               <Text style={{ color: COLORS.ink, fontSize: 14, lineHeight: 20 }}>
-                Llama 3.2 3B Instruct (Q4_K_M){'\n'}
-                <Text style={{ color: COLORS.granite }}>~2 GB · downloaded once to your device</Text>
+                {isPhotoMode ? 'SmolVLM-500M-Instruct (Q8_0)' : 'Llama 3.2 3B Instruct (Q4_K_M)'}{'\n'}
+                <Text style={{ color: COLORS.granite }}>
+                  {isPhotoMode ? '~520 MB · downloaded once to your device' : '~2 GB · downloaded once to your device'}
+                </Text>
               </Text>
             </View>
             <Pressable
               onPress={handleDownload}
               style={[{ width: '100%', backgroundColor: COLORS.lichen, borderRadius: 24, paddingVertical: 16, alignItems: 'center' }, glow(COLORS.lichen, 10)]}
             >
-              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>Download Model (~2 GB)</Text>
+              <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>
+                {isPhotoMode ? 'Download Model (~520 MB)' : 'Download Model (~2 GB)'}
+              </Text>
             </Pressable>
             <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 10, textAlign: 'center' }}>
               Requires Wi-Fi. Only needed once.
@@ -202,7 +241,7 @@ export default function AskScreen() {
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
           <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16 }}>
-            {species ? `Ask about ${species.commonName}` : 'Field Guide AI'}
+            {isPhotoMode ? 'Ask About This Photo' : species ? `Ask about ${species.commonName}` : 'Field Guide AI'}
           </Text>
           <Text style={{ color: COLORS.granite, fontSize: 11, marginTop: 1 }}>On-device · No internet needed</Text>
         </View>
@@ -215,8 +254,12 @@ export default function AskScreen() {
         showsVerticalScrollIndicator={false}
         onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
       >
-        {/* Species context chip */}
-        {species && (
+        {/* Photo / species context chip */}
+        {isPhotoMode ? (
+          <Animated.View entering={FadeIn.duration(300)} style={{ alignItems: 'center', marginBottom: 4 }}>
+            <Image source={{ uri: photoUri }} style={{ width: 72, height: 72, borderRadius: 14 }} contentFit="cover" />
+          </Animated.View>
+        ) : species && (
           <Animated.View entering={FadeIn.duration(300)} style={{ alignItems: 'center', marginBottom: 4 }}>
             <View style={{ backgroundColor: COLORS.lichen, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6 }}>
               <Text style={{ color: COLORS.ink, fontSize: 12, fontWeight: '700' }}>
@@ -231,9 +274,11 @@ export default function AskScreen() {
           <Animated.View entering={FadeInDown.delay(200).duration(400)}>
             <View style={[{ backgroundColor: COLORS.surface, borderRadius: 18, borderBottomLeftRadius: 4, padding: 14, maxWidth: '82%', borderWidth: 1, borderColor: COLORS.granite }, softShadow(0.04, 6, 2)]}>
               <Text style={{ color: COLORS.ink, fontSize: 14, lineHeight: 20 }}>
-                {species
-                  ? `I know all about ${species.commonName}. What would you like to know?`
-                  : 'I\'m your on-device desert nature guide. Ask me anything about the species in the Sonoran, Mojave, Chihuahuan, or Great Basin deserts.'}
+                {isPhotoMode
+                  ? "I'm looking at this photo. What would you like to know about it?"
+                  : species
+                    ? `I know all about ${species.commonName}. What would you like to know?`
+                    : 'I\'m your on-device desert nature guide. Ask me anything about the species in the Sonoran, Mojave, Chihuahuan, or Great Basin deserts.'}
               </Text>
             </View>
           </Animated.View>
@@ -243,7 +288,7 @@ export default function AskScreen() {
         {messages.length === 0 && (
           <Animated.View entering={FadeInDown.delay(350).duration(400)}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-              {SUGGESTED.map((q) => (
+              {(isPhotoMode ? PHOTO_SUGGESTED : SUGGESTED).map((q) => (
                 <Pressable
                   key={q}
                   onPress={() => send(q)}

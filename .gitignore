@@ -75,3 +75,14 @@ overnight_*
 repull_*
 
 resume_*
+
+# Session handoff docs (dev-only, not for the app bundle). Listed explicitly
+# rather than relying on /se_* above — that pattern is lowercase and this
+# machine's git has core.ignorecase=true, so it silently also matched these
+# uppercase filenames here but would NOT match them on a case-sensitive
+# system (e.g. EAS Build's Linux runners), causing a real tracked/ignored
+# mismatch between environments. EAS's tarball step correctly flagged this
+# as "inconsistent filename casing" and refused to build until fixed.
+/SE_MODEL_HANDOFF.md
+/SE_REPULL_HANDOFF.md
+/SE_EXPANSION_PULL_HANDOFF.md

@@ -1,13 +1,26 @@
 import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Line } from 'react-native-svg';
 
 import { COLORS, glow } from '@/constants/AppTheme';
+import type { IdentifyResult } from '@/lib/identify';
+import { identifyFromPhoto } from '@/lib/local-identify';
+
+// How often to sample the live preview for a "looks like X" hint. Throttled
+// deliberately — this runs the same on-device TFLite classifier the shutter
+// press uses, so tighter intervals mean more heat/battery for a preview
+// that's discarded on the next capture-shutter identification anyway.
+const PREVIEW_INTERVAL_MS = 2200;
+// Below this the guess is too shaky to show as a live hint (result.tsx uses
+// the same 50 cutoff to gate saving; previews get a bit more slack since
+// they're just a hint, not a save).
+const PREVIEW_CONFIDENCE_THRESHOLD = 35;
 
 export default function CaptureScreen() {
   const { top, bottom } = useSafeAreaInsets();
@@ -17,10 +30,55 @@ export default function CaptureScreen() {
   const [facing, setFacing] = useState<'front' | 'back'>('back');
   const [flash, setFlash] = useState<'on' | 'off'>('off');
   const [capturing, setCapturing] = useState(false);
+  const [previewGuess, setPreviewGuess] = useState<IdentifyResult | null>(null);
+  const capturingRef = useRef(false);
+  const previewBusyRef = useRef(false);
+
+  useEffect(() => {
+    capturingRef.current = capturing;
+  }, [capturing]);
+
+  // Live viewfinder hint: periodically grab a lightweight frame and run it
+  // through the same on-device classifier the shutter uses, entirely
+  // offline. Skips a tick (rather than queuing) if the previous one hasn't
+  // finished, so a slow device just shows hints less often instead of
+  // falling behind — and clears the hint if a sample doesn't identify
+  // anything, so a stale guess never lingers once it's no longer relevant.
+  useEffect(() => {
+    if (!permission?.granted) return;
+    const interval = setInterval(async () => {
+      if (capturingRef.current || previewBusyRef.current || !cameraRef.current) return;
+      previewBusyRef.current = true;
+      let uri: string | undefined;
+      try {
+        const photo = await cameraRef.current.takePictureAsync({
+          quality: 0.2,
+          skipProcessing: true,
+          shutterSound: false,
+        });
+        uri = photo?.uri;
+        if (uri) {
+          const results = await identifyFromPhoto(uri);
+          const top = results[0];
+          const good = top && !top.isOffline && top.confidence >= PREVIEW_CONFIDENCE_THRESHOLD;
+          setPreviewGuess(good ? top : null);
+        }
+      } catch {
+        setPreviewGuess(null);
+      } finally {
+        if (uri) {
+          FileSystem.deleteAsync(uri, { idempotent: true }).catch(() => {});
+        }
+        previewBusyRef.current = false;
+      }
+    }, PREVIEW_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [permission?.granted]);
 
   async function takePicture() {
     if (!cameraRef.current || capturing) return;
     setCapturing(true);
+    setPreviewGuess(null);
     try {
       const photo = await cameraRef.current.takePictureAsync({ quality: 0.85 });
       if (photo) {
@@ -235,6 +293,39 @@ export default function CaptureScreen() {
           </Text>
         </View>
       </View>
+
+      {/* Live "looks like X" hint */}
+      {previewGuess && !capturing && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: bottom + 120,
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 8,
+              backgroundColor: 'rgba(10, 10, 24, 0.55)',
+              paddingHorizontal: 16,
+              paddingVertical: 9,
+              borderRadius: 18,
+            }}
+          >
+            <Ionicons name="sparkles-outline" size={14} color={COLORS.lichen} />
+            <Text style={{ color: COLORS.bone, fontSize: 13, fontWeight: '600', letterSpacing: 0.2 }}>
+              Looks like {previewGuess.commonName}
+            </Text>
+            <Text style={{ color: COLORS.lichen, fontSize: 12, fontWeight: '700' }}>
+              {previewGuess.confidence}%
+            </Text>
+          </View>
+        </View>
+      )}
 
       {/* Bottom controls */}
       <View

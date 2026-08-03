@@ -136,8 +136,11 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
     });
     const pixels = width * height;
 
-    // RGBA → model input tensor (drop alpha). Quantized models take raw uint8
-    // bytes; float models take RGB normalized to [0, 1].
+    // RGBA → model input tensor (drop alpha). Quantized (uint8) models take
+    // raw bytes. Float models here are exported with MobileNetV3's own
+    // preprocess_input (scales to [-1, 1]) baked into the graph as the first
+    // op, so they also expect raw 0-255 values, NOT pre-normalized — the
+    // model does its own scaling internally. Don't divide by 255 here.
     let inputBuffer: ArrayBuffer;
     if (wantsUint8) {
       const buf = new Uint8Array(pixels * 3);
@@ -150,9 +153,9 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
     } else {
       const buf = new Float32Array(pixels * 3);
       for (let i = 0; i < pixels; i++) {
-        buf[i * 3] = data[i * 4] / 255;
-        buf[i * 3 + 1] = data[i * 4 + 1] / 255;
-        buf[i * 3 + 2] = data[i * 4 + 2] / 255;
+        buf[i * 3] = data[i * 4];
+        buf[i * 3 + 1] = data[i * 4 + 1];
+        buf[i * 3 + 2] = data[i * 4 + 2];
       }
       inputBuffer = buf.buffer;
     }

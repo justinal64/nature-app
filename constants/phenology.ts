@@ -135,9 +135,9 @@ export const PHENOLOGY_EVENTS: PhenologyEvent[] = [
     note: 'Ephemeral spring wildflower, blooms for just 3–6 weeks in March–April after El Niño rain years.',
   },
   {
-    id: 'mexican-golden-poppy-bloom',
-    speciesId: 'mexican-golden-poppy',
-    commonName: 'Mexican Golden Poppy',
+    id: 'desert-mariposa-lily-bloom',
+    speciesId: 'desert-mariposa-lily',
+    commonName: 'Desert Mariposa Lily',
     eventType: 'bloom',
     category: 'Plants',
     startWeek: 9, peakWeek: 12, endWeek: 15,

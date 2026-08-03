@@ -147,7 +147,7 @@ const FORAGING_MAP: Partial<Record<string, ForagingLegalityInfo>> = {
 
   // ── Forbs & Wildflowers ───────────────────────────────────────────────────
 
-  'mexican-golden-poppy': {
+  'desert-mariposa-lily': {
     byLandType: {
       nationalPark:    'prohibited',
       nationalMonument:'prohibited',

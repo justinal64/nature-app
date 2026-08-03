@@ -5,6 +5,7 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Pressable,
   ScrollView,
@@ -18,8 +19,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SpeciesIcon } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
-import { getSpeciesById } from '@/constants/catalog';
+import { CATALOG, getSpeciesById, type Species } from '@/constants/catalog';
 import { useAuth } from '@/context/AuthContext';
+import { identifySpecies, type IdentifyResult } from '@/lib/identify';
 import type { DataQualityFlags, Sighting, SightingComment } from '@/lib/sightings';
 import { addComment, deleteComment, deleteSighting, getQualityGrade, getSightingById, updateSighting } from '@/lib/sightings';
 
@@ -61,6 +63,177 @@ function AudioEvidenceCard({ uri }: { uri: string }) {
   );
 }
 
+type IdChoice = { speciesId: string; commonName: string; latin: string; kind: Species['kind'] };
+
+// Local stand-in for "community identifications" (#34) — this app has no
+// shared backend for other users to weigh in (see CLAUDE.md's offline-first
+// architecture), so instead of crowd-sourced ID help, this re-runs the same
+// on-device classifier against the sighting's own photo to surface
+// alternates the user might have meant, plus a manual search fallback.
+function AlternateIdSheet({
+  sighting,
+  onClose,
+  onSelect,
+}: {
+  sighting: Sighting;
+  onClose: () => void;
+  onSelect: (choice: IdChoice) => void;
+}) {
+  const [candidates, setCandidates] = useState<IdentifyResult[]>([]);
+  const [loadingCandidates, setLoadingCandidates] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const uri = sighting.photoUris?.[0] ?? sighting.photoUri;
+    if (!uri) return;
+    setLoadingCandidates(true);
+    identifySpecies(uri, { coords: sighting.location })
+      .then((results) =>
+        setCandidates(results.filter((r) => r.speciesId && r.speciesId !== sighting.speciesId)),
+      )
+      .finally(() => setLoadingCandidates(false));
+  }, [sighting]);
+
+  const q = searchQuery.trim().toLowerCase();
+  const searchResults: Species[] = q
+    ? CATALOG.filter(
+        (sp) => sp.commonName.toLowerCase().includes(q) || sp.latin.toLowerCase().includes(q),
+      ).slice(0, 10)
+    : [];
+
+  return (
+    <Pressable
+      style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.45)' }}
+      onPress={onClose}
+      accessibilityRole="button"
+      accessibilityLabel="Close"
+    >
+      <Pressable
+        onPress={() => {}}
+        style={[
+          {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: COLORS.background,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            padding: 20,
+            paddingBottom: 40,
+            maxHeight: '75%',
+          },
+          softShadow(0.2, 24, 8),
+        ]}
+      >
+        <Text style={{ color: COLORS.ink, fontWeight: '700', fontSize: 16, marginBottom: 4 }}>
+          Suggest a different ID
+        </Text>
+        <Text style={{ color: COLORS.granite, fontSize: 12, marginBottom: 14 }}>
+          Re-checked on-device against this sighting&apos;s photo.
+        </Text>
+
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+          {loadingCandidates && (
+            <View style={{ paddingVertical: 20, alignItems: 'center' }}>
+              <ActivityIndicator color={COLORS.lichen} />
+            </View>
+          )}
+
+          {!loadingCandidates && candidates.length === 0 && (
+            <Text style={{ color: COLORS.granite, fontSize: 13, marginBottom: 14 }}>
+              {sighting.photoUris?.[0] ?? sighting.photoUri
+                ? 'No other on-device suggestions for this photo. Search below to pick a different species.'
+                : 'This sighting has no photo to re-check. Search below to pick a different species.'}
+            </Text>
+          )}
+
+          {candidates.map((c) => (
+            <Pressable
+              key={c.speciesId}
+              onPress={() =>
+                onSelect({ speciesId: c.speciesId!, commonName: c.commonName, latin: c.latin, kind: c.kind })
+              }
+              accessibilityLabel={`Use ${c.commonName}, ${c.confidence}% match`}
+              accessibilityRole="button"
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: COLORS.granite,
+                gap: 12,
+              }}
+            >
+              <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: COLORS.lichen, alignItems: 'center', justifyContent: 'center' }}>
+                <SpeciesIcon kind={c.kind as never} size={20} color={COLORS.bone} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 14 }}>{c.commonName}</Text>
+                <Text style={{ color: COLORS.granite, fontSize: 11, fontStyle: 'italic' }}>{c.latin}</Text>
+              </View>
+              <Text style={{ color: COLORS.lichen, fontWeight: '700', fontSize: 12 }}>{c.confidence}%</Text>
+            </Pressable>
+          ))}
+
+          <View style={{ marginTop: 16 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.surface,
+                borderRadius: 22,
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+                paddingHorizontal: 14,
+                height: 44,
+                gap: 8,
+              }}
+            >
+              <Ionicons name="search" size={16} color={COLORS.granite} />
+              <TextInput
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                placeholder="Or search all species…"
+                placeholderTextColor={COLORS.granite}
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={{ flex: 1, color: COLORS.ink, fontSize: 14 }}
+                accessibilityLabel="Search species"
+              />
+            </View>
+            {searchResults.map((sp) => (
+              <Pressable
+                key={sp.id}
+                onPress={() => onSelect({ speciesId: sp.id, commonName: sp.commonName, latin: sp.latin, kind: sp.kind })}
+                accessibilityLabel={`Select ${sp.commonName}`}
+                accessibilityRole="button"
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.granite,
+                  gap: 12,
+                  marginTop: 4,
+                }}
+              >
+                <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: COLORS.bone, alignItems: 'center', justifyContent: 'center' }}>
+                  <SpeciesIcon kind={sp.kind as never} size={20} color={COLORS.ink} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 14 }}>{sp.commonName}</Text>
+                  <Text style={{ color: COLORS.granite, fontSize: 11, fontStyle: 'italic' }}>{sp.latin}</Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </Pressable>
+    </Pressable>
+  );
+}
+
 function formatFullDate(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleString(undefined, {
@@ -85,6 +258,22 @@ export default function SightingDetailScreen() {
   const [comments, setComments] = useState<SightingComment[]>([]);
   const [commentDraft, setCommentDraft] = useState('');
   const [postingComment, setPostingComment] = useState(false);
+  const [reviewingId, setReviewingId] = useState(false);
+
+  async function applyIdChoice(choice: IdChoice) {
+    if (!user || !sighting) return;
+    setSighting((prev) =>
+      prev ? { ...prev, speciesId: choice.speciesId, commonName: choice.commonName, latinName: choice.latin, kind: choice.kind } : prev,
+    );
+    await updateSighting(user.uid, sighting.id, {
+      speciesId: choice.speciesId,
+      commonName: choice.commonName,
+      latinName: choice.latin,
+      kind: choice.kind,
+    });
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setReviewingId(false);
+  }
 
   useEffect(() => {
     if (!user || !id) return;
@@ -246,6 +435,23 @@ export default function SightingDetailScreen() {
               <Text style={{ color: COLORS.ink, fontWeight: '800', fontSize: 20 }}>{sighting.commonName}</Text>
               <Text style={{ color: COLORS.granite, fontStyle: 'italic', fontSize: 14, marginTop: 2 }}>{sighting.latinName}</Text>
             </View>
+            <TouchableOpacity
+              onPress={() => setReviewingId(true)}
+              accessibilityLabel="Suggest a different ID for this sighting"
+              accessibilityRole="button"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: COLORS.background,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+              }}
+            >
+              <Ionicons name="swap-horizontal-outline" size={18} color={COLORS.granite} />
+            </TouchableOpacity>
           </View>
           {species && (
             <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 12, lineHeight: 18 }} numberOfLines={3}>
@@ -510,6 +716,14 @@ export default function SightingDetailScreen() {
           </Animated.View>
         )}
       </ScrollView>
+
+      {reviewingId && (
+        <AlternateIdSheet
+          sighting={sighting}
+          onClose={() => setReviewingId(false)}
+          onSelect={applyIdChoice}
+        />
+      )}
     </View>
   );
 }

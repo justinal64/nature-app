@@ -155,7 +155,24 @@ export async function deleteSighting(userId: string, sightingId: string): Promis
 export async function updateSighting(
   userId: string,
   sightingId: string,
-  patch: Partial<Pick<Sighting, 'notes' | 'sex' | 'lifeStage' | 'activity' | 'phenology' | 'photoUris' | 'dataQualityFlags' | 'isPrivate' | 'comments'>>,
+  patch: Partial<
+    Pick<
+      Sighting,
+      | 'notes'
+      | 'sex'
+      | 'lifeStage'
+      | 'activity'
+      | 'phenology'
+      | 'photoUris'
+      | 'dataQualityFlags'
+      | 'isPrivate'
+      | 'comments'
+      | 'speciesId'
+      | 'commonName'
+      | 'latinName'
+      | 'kind'
+    >
+  >,
 ): Promise<void> {
   const all = await getSightings(userId);
   await AsyncStorage.setItem(

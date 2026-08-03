@@ -732,6 +732,44 @@ export default function ProfileScreen() {
           </Pressable>
         </Animated.View>
 
+        <Animated.View entering={FadeInDown.delay(457).duration(400)}>
+          <Pressable
+            onPress={() => router.push('/community' as never)}
+            accessibilityLabel="Community features"
+            accessibilityRole="button"
+            style={[
+              {
+                marginHorizontal: 20,
+                marginTop: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.surface,
+                borderRadius: 16,
+                padding: 14,
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+                gap: 12,
+              },
+              softShadow(0.04, 5, 1),
+            ]}
+          >
+            <View
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                backgroundColor: COLORS.bone,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="people-outline" size={18} color={COLORS.lichen} />
+            </View>
+            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>Community</Text>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
+          </Pressable>
+        </Animated.View>
+
         <Animated.View entering={FadeInDown.delay(440).duration(400)}>
           <Pressable
             onPress={() => router.push('/privacy-policy' as never)}

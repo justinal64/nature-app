@@ -29,6 +29,28 @@ const SPECIES_LABELS: Record<ModelVariant, string[]> = {
   SE: require('../assets/models/species_labels_se.json'),
 };
 
+// Raw softmax confidence is not a calibrated probability — issue #46's
+// real-world re-test (25 real photos, on-device, current 561-species/float16
+// SE model) found it systematically overstates accuracy, worst at the top end
+// (candidates the model scored ~100% were only right ~2/3 of the time). Fit
+// via Platt scaling (logistic regression on logit(rawProb) -> P(correct)) over
+// the 125 labeled (candidate, is-correct) pairs from that test — see
+// scratchpad fit in that session for the full reliability table. SW has no
+// equivalent labeled real-world set yet, so it's left as an identity mapping
+// rather than guessing a curve from no data; revisit once a comparable SW
+// test exists.
+const CALIBRATION: Record<ModelVariant, { a: number; b: number }> = {
+  SW: { a: 1, b: 0 },
+  SE: { a: 0.3528, b: -1.0644 },
+};
+
+function calibrateConfidence(rawProb: number, variant: ModelVariant): number {
+  const p = Math.min(Math.max(rawProb, 1e-4), 1 - 1e-4);
+  const { a, b } = CALIBRATION[variant];
+  const z = a * Math.log(p / (1 - p)) + b;
+  return 1 / (1 + Math.exp(-z));
+}
+
 const cachedModels: Partial<Record<ModelVariant, TfliteModel | null>> = {};
 const loadAttempted: Partial<Record<ModelVariant, boolean>> = {};
 
@@ -62,9 +84,7 @@ export async function isModelDownloaded(): Promise<boolean> {
   return true;
 }
 
-export async function downloadModel(
-  onProgress?: (fraction: number) => void,
-): Promise<void> {
+export async function downloadModel(onProgress?: (fraction: number) => void): Promise<void> {
   onProgress?.(1);
 }
 
@@ -124,11 +144,10 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
     const w = shape.length >= 3 ? shape[shape.length - 2] : 224;
     const wantsUint8 = inputSpec.dataType === 'uint8';
 
-    const resized = await manipulateAsync(
-      photoUri,
-      [{ resize: { width: w, height: h } }],
-      { format: SaveFormat.JPEG, base64: true },
-    );
+    const resized = await manipulateAsync(photoUri, [{ resize: { width: w, height: h } }], {
+      format: SaveFormat.JPEG,
+      base64: true,
+    });
     if (!resized.base64) return fallback;
 
     const { data, width, height } = jpeg.decode(base64ToBytes(resized.base64), {
@@ -163,9 +182,7 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
     const [outputBuffer] = await model.run([inputBuffer]);
     const outSpec = model.outputs[0];
     const scores =
-      outSpec.dataType === 'uint8'
-        ? new Uint8Array(outputBuffer)
-        : new Float32Array(outputBuffer);
+      outSpec.dataType === 'uint8' ? new Uint8Array(outputBuffer) : new Float32Array(outputBuffer);
     // Normalize to a 0-1 confidence for display. For a quantized (uint8)
     // output this is an approximation of the softmax probability.
     const scale = outSpec.dataType === 'uint8' ? 255 : 1;
@@ -187,7 +204,7 @@ export async function identifyFromPhoto(photoUri: string): Promise<IdentifyResul
             commonName: sp.commonName,
             latin: sp.latin,
             kind: sp.kind,
-            confidence: Math.round(Math.min(1, score / scale) * 100),
+            confidence: Math.round(calibrateConfidence(Math.min(1, score / scale), variant) * 100),
             isOffline: false,
           },
         ];

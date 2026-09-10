@@ -86,3 +86,6 @@ resume_*
 /SE_MODEL_HANDOFF.md
 /SE_REPULL_HANDOFF.md
 /SE_EXPANSION_PULL_HANDOFF.md
+
+# Claude Code local (machine-specific) permissions
+.claude/settings.local.json

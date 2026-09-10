@@ -149,24 +149,52 @@ issue #7.
 ## Verify before reporting work as done
 
 ```
-npx tsc --noEmit
-npx expo lint
+./scripts/verify.sh
 ```
 
-Both must be clean. The user is fine with paid `--cache`-clearing dev server
-restarts when env vars change (`npx expo start -c`).
+That runs all three gates — `npx tsc --noEmit`, `npx expo lint`,
+`npx jest --ci` — and all three must be clean. A `Stop` hook runs it
+automatically whenever the working tree is dirty, so a red gate will come back
+to you rather than shipping. Same three gates run in CI on every PR.
+
+The user is fine with paid `--cache`-clearing dev server restarts when env
+vars change (`npx expo start -c`).
 
 ## Workflow
 
-- **Git push:** use `git push` as transport (no `gh` equivalent), but rely on
-  `gh` CLI for any GitHub-side operation (issues, PRs, status checks).
+Everything lands through a pull request. Nothing is pushed to `main` directly,
+by a human or by an agent.
+
+- **Branches:** `agent/issue-<n>-<slug>` for agent work, anything readable for
+  hand work. Branch off an up-to-date `main`.
 - **Commits:** always include the
   `Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>` trailer.
-- **Closing issues from commits:** `Closes #N` in the commit body auto-closes
-  on push to `main`. The user is OK with this.
+- **PRs:** open with `gh pr create` against `main`. The body starts with
+  `Closes #N`, says what changed and why, lists what was deliberately left out,
+  and flags anything that needs verifying on a real device (camera, ML
+  inference, offline behaviour). **Never merge your own PR** — Justin reviews
+  and merges.
+- **CI:** `.github/workflows/ci.yml` runs typecheck, lint, and tests on every
+  push and PR. A PR with red checks is not finished.
+- **Review:** `.github/workflows/claude-code-review.yml` reviews every PR
+  automatically, including agent PRs.
+- **Git push:** use `git push` as transport (no `gh` equivalent), but rely on
+  `gh` CLI for any GitHub-side operation (issues, PRs, status checks).
 - **Issue tracking:** the user prefers filing issues for problems noticed in
   passing — proactively suggest filing one rather than silently fixing
   off-task things.
+
+### Automation surface
+
+- `/verify` — run the three gates.
+- `/ship-issue <n>` — issue → branch → implementation → tests → PR.
+- `/triage` — sort the open backlog and label what an agent can ship alone.
+- `/land` — turn the current working tree into a reviewable PR.
+- `@claude` in any issue or PR comment runs the same loop on GitHub.
+- The `agent-ready` label is the nightly agent's queue
+  (`.github/workflows/claude-nightly.yml`, 03:00 Central, weekdays). It takes
+  the oldest labelled issue, opens a PR, and stops. An unlabelled issue is
+  never touched unattended.
 
 ## Data layer status
 

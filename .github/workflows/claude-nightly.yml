@@ -1,0 +1,91 @@
+name: Nightly Backlog Agent
+
+# Picks one open issue labelled `agent-ready` and opens a PR for it.
+# Opt-in by design: nothing runs unless you have labelled an issue.
+# 08:00 UTC = 03:00 America/Chicago.
+on:
+  schedule:
+    - cron: '0 8 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: 'Issue number to work (blank = oldest agent-ready issue)'
+        required: false
+        type: string
+
+jobs:
+  ship:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: anthropics/claude-code-action@v1
+        env:
+          TARGET_ISSUE: ${{ inputs.issue }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --max-turns 80
+            --allowedTools "Bash,Read,Edit,Write,Glob,Grep,mcp__github"
+          prompt: |
+            You are the nightly backlog agent for WildLens. Read CLAUDE.md first
+            and follow every convention in it. Work autonomously; nobody is
+            watching this run.
+
+            1. Pick the issue.
+               - If the TARGET_ISSUE environment variable is set and non-empty,
+                 work that issue number.
+               - Otherwise list open issues labelled `agent-ready`, skip any that
+                 already have an open PR referencing them, and take the oldest
+                 remaining one.
+               - If there is no such issue, post nothing, change nothing, and
+                 stop. An empty queue is a success, not a failure.
+
+            2. Scope check. If the issue is ambiguous, needs a product decision,
+               requires new paid services or credentials, touches ML model
+               training/retraining, or would take more than roughly 400 changed
+               lines, do NOT implement it. Instead comment on the issue with the
+               specific question that blocks you, remove the `agent-ready` label,
+               and stop.
+
+            3. Implement it on a new branch named `agent/issue-<number>-<slug>`.
+               Match the surrounding code style. Respect the offline-first
+               architecture rules in CLAUDE.md - network calls in the identify
+               or guide hot path are a bug, not a feature.
+
+            4. Add or update tests under `__tests__/` for any logic you add that
+               is testable without a device.
+
+            5. Verify before opening anything. All three must be clean:
+                 npx tsc --noEmit
+                 npx expo lint
+                 npx jest --ci
+               If you cannot get them clean, do not open a PR. Comment on the
+               issue explaining exactly what failed and stop.
+
+            6. Commit with the
+               `Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>` trailer,
+               push the branch, and open a PR against `main` whose body:
+                 - starts with `Closes #<number>`
+                 - explains what changed and why in a few sentences
+                 - lists anything you deliberately left out
+                 - flags anything a human must verify on a real device
+                   (camera, ML inference, offline behaviour)
+               Do not merge the PR and do not push to `main`.
+
+            7. Comment on the issue with a link to the PR.

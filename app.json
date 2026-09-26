@@ -139,7 +139,8 @@
           "enableCoreMLDelegate": true,
           "enableAndroidGpuLibraries": true
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

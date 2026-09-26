@@ -24,6 +24,7 @@ import { SpeciesIcon, SpeciesKind } from '@/components/SpeciesIcon';
 import { COLORS, glow, softShadow } from '@/constants/AppTheme';
 import { useAuth } from '@/context/AuthContext';
 import { useDisplayPrefs } from '@/context/DisplayPrefsContext';
+import { useINatAuth } from '@/context/INatAuthContext';
 import { useModelInit } from '@/context/ModelInitContext';
 import { getEarnedBadges } from '@/lib/badges';
 import {
@@ -58,6 +59,7 @@ export default function ProfileScreen() {
   const { user, signOut, deleteAccount, refreshUser } = useAuth();
   const { preferScientific, toggleNameDisplay, juniorMode, toggleJuniorMode } = useDisplayPrefs();
   const { modelStatus, modelProgress } = useModelInit();
+  const { status: inatStatus, username: inatUsername } = useINatAuth();
   const { sightings } = useSightings(user?.uid);
   const streak = useStreak(user?.uid);
 
@@ -88,10 +90,12 @@ export default function ProfileScreen() {
   const [savingName, setSavingName] = useState(false);
 
   useEffect(() => {
-    getScheduledReminders().then(({ streak, sotd }) => {
-      setNotificationsOn(streak);
-      setSotdOn(sotd);
-    }).catch(() => {});
+    getScheduledReminders()
+      .then(({ streak, sotd }) => {
+        setNotificationsOn(streak);
+        setSotdOn(sotd);
+      })
+      .catch(() => {});
   }, []);
 
   const handleDeleteAccount = async () => {
@@ -169,14 +173,15 @@ export default function ProfileScreen() {
                 glow(COLORS.slate, 10),
               ]}
             >
-              <Text style={{ color: COLORS.bone, fontSize: 32, fontWeight: '700' }}>
-                {initial}
-              </Text>
+              <Text style={{ color: COLORS.bone, fontSize: 32, fontWeight: '700' }}>{initial}</Text>
             </View>
           </Animated.View>
           <Reveal delay={80} style={{ flex: 1 }}>
             <Pressable
-              onPress={() => { setNewName(displayName); setShowEditName(true); }}
+              onPress={() => {
+                setNewName(displayName);
+                setShowEditName(true);
+              }}
               accessibilityLabel={`Edit display name, currently ${displayName}`}
               accessibilityRole="button"
               style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
@@ -269,9 +274,7 @@ export default function ProfileScreen() {
               marginBottom: 12,
             }}
           >
-            <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>
-              Badges
-            </Text>
+            <Text style={{ color: COLORS.ink, fontSize: 17, fontWeight: '700' }}>Badges</Text>
             <Text style={{ color: COLORS.granite, fontSize: 13 }}>
               {earnedBadges.length}/{earnedBadges.length + (16 - earnedBadges.length)} earned
             </Text>
@@ -436,7 +439,15 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+                flex: 1,
+                marginRight: 12,
+              }}
+            >
               <Ionicons name="notifications-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -505,7 +516,15 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+                flex: 1,
+                marginRight: 12,
+              }}
+            >
               <Ionicons name="sunny-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -558,7 +577,15 @@ export default function ProfileScreen() {
               borderColor: COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+                flex: 1,
+                marginRight: 12,
+              }}
+            >
               <Ionicons name="text-outline" size={20} color={COLORS.ink} />
               <View>
                 <Text style={{ color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
@@ -611,10 +638,28 @@ export default function ProfileScreen() {
               borderColor: juniorMode ? COLORS.lichen : COLORS.granite,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 }}>
-              <Ionicons name="star-outline" size={20} color={juniorMode ? COLORS.lichen : COLORS.ink} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+                flex: 1,
+                marginRight: 12,
+              }}
+            >
+              <Ionicons
+                name="star-outline"
+                size={20}
+                color={juniorMode ? COLORS.lichen : COLORS.ink}
+              />
               <View>
-                <Text style={{ color: juniorMode ? COLORS.ink : COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+                <Text
+                  style={{
+                    color: juniorMode ? COLORS.ink : COLORS.ink,
+                    fontWeight: '600',
+                    fontSize: 15,
+                  }}
+                >
                   Junior Naturalist
                 </Text>
                 <Text style={{ color: COLORS.granite, fontSize: 12, marginTop: 1 }}>
@@ -727,7 +772,9 @@ export default function ProfileScreen() {
             >
               <Ionicons name="heart" size={18} color={COLORS.lichen} />
             </View>
-            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>Favorites</Text>
+            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+              Favorites
+            </Text>
             <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
           </Pressable>
         </Animated.View>
@@ -765,7 +812,55 @@ export default function ProfileScreen() {
             >
               <Ionicons name="people-outline" size={18} color={COLORS.lichen} />
             </View>
-            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>Community</Text>
+            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+              Community
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(459).duration(400)}>
+          <Pressable
+            onPress={() => router.push('/inaturalist-connect' as never)}
+            accessibilityLabel="iNaturalist account"
+            accessibilityRole="button"
+            style={[
+              {
+                marginHorizontal: 20,
+                marginTop: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.surface,
+                borderRadius: 16,
+                padding: 14,
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+                gap: 12,
+              },
+              softShadow(0.04, 5, 1),
+            ]}
+          >
+            <View
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                backgroundColor: COLORS.bone,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons
+                name={inatStatus === 'connected' ? 'leaf' : 'leaf-outline'}
+                size={18}
+                color={COLORS.lichen}
+              />
+            </View>
+            <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '600', fontSize: 15 }}>
+              {inatStatus === 'connected'
+                ? `iNaturalist — @${inatUsername ?? 'connected'}`
+                : 'Connect iNaturalist account'}
+            </Text>
             <Ionicons name="chevron-forward" size={16} color={COLORS.granite} />
           </Pressable>
         </Animated.View>
@@ -782,7 +877,9 @@ export default function ProfileScreen() {
         </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(450).duration(400)}>
-          <Text style={{ color: COLORS.granite, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}>
+          <Text
+            style={{ color: COLORS.granite, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}
+          >
             WildLens 1.0.0
           </Text>
         </Animated.View>
@@ -844,7 +941,9 @@ export default function ProfileScreen() {
               <Text style={{ color: COLORS.ink, fontSize: 20, fontWeight: '700', marginBottom: 6 }}>
                 Confirm deletion
               </Text>
-              <Text style={{ color: COLORS.granite, fontSize: 14, lineHeight: 20, marginBottom: 20 }}>
+              <Text
+                style={{ color: COLORS.granite, fontSize: 14, lineHeight: 20, marginBottom: 20 }}
+              >
                 Enter your password to permanently delete your account.
               </Text>
               <View
@@ -929,15 +1028,39 @@ export default function ProfileScreen() {
         >
           <Pressable
             onPress={() => {}}
-            style={[{ backgroundColor: COLORS.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 24, paddingBottom: 36 }, softShadow(0.18, 20, 8)]}
+            style={[
+              {
+                backgroundColor: COLORS.background,
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                padding: 24,
+                paddingBottom: 36,
+              },
+              softShadow(0.18, 20, 8),
+            ]}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-              <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>Edit display name</Text>
-              <Pressable onPress={() => setShowEditName(false)} accessibilityLabel="Cancel" accessibilityRole="button">
+              <Text style={{ flex: 1, color: COLORS.ink, fontWeight: '700', fontSize: 18 }}>
+                Edit display name
+              </Text>
+              <Pressable
+                onPress={() => setShowEditName(false)}
+                accessibilityLabel="Cancel"
+                accessibilityRole="button"
+              >
                 <Ionicons name="close" size={22} color={COLORS.granite} />
               </Pressable>
             </View>
-            <View style={{ borderWidth: 1, borderColor: COLORS.granite, borderRadius: 14, padding: 14, backgroundColor: COLORS.surface, marginBottom: 20 }}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.granite,
+                borderRadius: 14,
+                padding: 14,
+                backgroundColor: COLORS.surface,
+                marginBottom: 20,
+              }}
+            >
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
@@ -954,7 +1077,15 @@ export default function ProfileScreen() {
               disabled={savingName || !newName.trim()}
               accessibilityLabel="Save name"
               accessibilityRole="button"
-              style={[{ backgroundColor: newName.trim() ? COLORS.lichen : COLORS.granite, borderRadius: 24, paddingVertical: 16, alignItems: 'center' }, newName.trim() ? glow(COLORS.lichen, 8) : {}]}
+              style={[
+                {
+                  backgroundColor: newName.trim() ? COLORS.lichen : COLORS.granite,
+                  borderRadius: 24,
+                  paddingVertical: 16,
+                  alignItems: 'center',
+                },
+                newName.trim() ? glow(COLORS.lichen, 8) : {},
+              ]}
             >
               <Text style={{ color: COLORS.bone, fontWeight: '700', fontSize: 16 }}>
                 {savingName ? 'Saving…' : 'Save'}

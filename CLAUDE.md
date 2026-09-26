@@ -28,6 +28,16 @@ than a typical Expo + Firebase app:
   while the user is identifying a plant in the desert, it can't depend on
   reaching the internet.
 
+**Exception (2026-09-25):** species identification (`lib/identify.ts`) now
+calls the iNaturalist Computer Vision API as its **default** path — on-device
+accuracy wasn't good enough even after calibration (see Obsidian:
+decision-identification-online-api). It falls back to the on-device TFLite
+model whenever offline, not connected (`lib/inat-auth.ts` / OAuth via
+`context/INatAuthContext.tsx`), or the call fails, so backcountry use still
+works. This is a scoped, dated exception to the rule above — it does **not**
+reopen network dependence for the catalog, ML-model bundling, or the guide
+flow, which stay offline-first.
+
 Implications for existing issues: #8 (Firestore schema) is much narrower than
 it reads — auth profile only, not catalog. #10 (replace hardcoded data) is
 actually about moving the hardcoded arrays into a bundled catalog file, not
@@ -55,7 +65,7 @@ when adding equivalents, but don't assume its Firestore patterns apply.
   with `COLORS` from `constants/AppTheme.ts` — be consistent with neighbouring
   code rather than mixing approaches in one file
 - `react-native-svg` for species illustrations and landscape backdrops
-- `firebase` (Web SDK, JS) for auth + Firestore — *not* `@react-native-firebase`
+- `firebase` (Web SDK, JS) for auth + Firestore — _not_ `@react-native-firebase`
 - `expo-image` available; `expo-camera` is **not yet installed** (issue #1)
 
 ## File layout
@@ -201,7 +211,7 @@ by a human or by an agent.
 Two kinds of "fake" data live in the screens right now:
 
 1. **Catalog data** (species names, regions, photos, descriptions) — currently
-   inline arrays per screen. The *bundle-with-the-app* end state is similar
+   inline arrays per screen. The _bundle-with-the-app_ end state is similar
    in shape; the work is to extract these into a single source of truth
    (e.g. `constants/catalog.ts` or `assets/catalog.json`) keyed by id, then
    import it from each screen. **Not** a Firestore migration.
@@ -220,8 +230,11 @@ until #10 lands.
 - Social auth (Google / Apple) — the email + verify pattern is intentional
 - `@react-native-firebase/*` native modules — we use the JS SDK on purpose
 - `firebase-admin` or server SDKs — this is a pure client app
-- **Network-dependent code paths in the identification or guide flow** —
-  app must work offline (see Architecture above). Auth is the one exception.
+- **Network-dependent code paths in the guide flow** — app must work offline
+  (see Architecture above). Auth and identification (see the 2026-09-25
+  exception above) are the accepted exceptions — don't add further network
+  dependence to identification beyond the CV call + its OAuth refresh without
+  asking first.
 - Streaming photos / catalog data from Firestore Storage on demand —
   bundle it in the app instead
 - Comments that explain WHAT the code does — keep them for non-obvious WHY

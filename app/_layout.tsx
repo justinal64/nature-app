@@ -11,6 +11,7 @@ import '../global.css';
 import { NatureTheme } from '@/constants/AppTheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { DisplayPrefsProvider } from '@/context/DisplayPrefsContext';
+import { INatAuthProvider } from '@/context/INatAuthContext';
 import { ModelInitProvider } from '@/context/ModelInitContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OfflineBar } from '@/components/OfflineBar';
@@ -38,7 +39,9 @@ function RootLayoutNav() {
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const id = response.notification.request.identifier;
       if (id === 'species-of-the-day') {
-        const speciesId = response.notification.request.content.data?.speciesId as string | undefined;
+        const speciesId = response.notification.request.content.data?.speciesId as
+          | string
+          | undefined;
         if (speciesId) {
           router.push(`/species/${speciesId}` as never);
         }
@@ -57,7 +60,8 @@ function RootLayoutNav() {
     const isForgotPasswordPage = root === 'forgot-password';
     const isPrivacyPolicyPage = root === 'privacy-policy';
     const isOnboardingPage = root === 'onboarding';
-    const isPublicPage = isLoginPage || isRegisterPage || isForgotPasswordPage || isPrivacyPolicyPage;
+    const isPublicPage =
+      isLoginPage || isRegisterPage || isForgotPasswordPage || isPrivacyPolicyPage;
 
     if (!user && !isPublicPage) {
       router.replace('/login');
@@ -102,12 +106,19 @@ function RootLayoutNav() {
         <Stack.Screen name="species/[id]" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="privacy-policy" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sightings-map" options={{ animation: 'slide_from_right' }} />
-        <Stack.Screen name="sound-id" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
-        <Stack.Screen name="field-cam" options={{ animation: 'fade', presentation: 'fullScreenModal' }} />
+        <Stack.Screen
+          name="sound-id"
+          options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name="field-cam"
+          options={{ animation: 'fade', presentation: 'fullScreenModal' }}
+        />
         <Stack.Screen name="ask" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="onboarding" options={{ animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen name="search" options={{ animation: 'fade', presentation: 'modal' }} />
         <Stack.Screen name="favorites" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="inaturalist-connect" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="compare" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="journal-stats" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sighting/[id]" options={{ animation: 'slide_from_right' }} />
@@ -127,7 +138,9 @@ export default function RootLayout() {
       <DisplayPrefsProvider>
         <AuthProvider>
           <ModelInitProvider>
-            <RootLayoutNav />
+            <INatAuthProvider>
+              <RootLayoutNav />
+            </INatAuthProvider>
           </ModelInitProvider>
         </AuthProvider>
       </DisplayPrefsProvider>

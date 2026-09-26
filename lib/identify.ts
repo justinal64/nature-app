@@ -2,6 +2,7 @@ import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
 import { CATALOG } from '@/constants/catalog';
 import type { Species } from '@/constants/catalog';
+import { getValidApiToken } from '@/lib/inat-auth';
 import { identifyFromPhoto } from '@/lib/local-identify';
 import { hasNetwork } from '@/lib/network';
 
@@ -17,16 +18,13 @@ export type IdentifyResult = {
 const INAT_CV_URL = 'https://api.inaturalist.org/v1/computervision/score_image';
 const TIMEOUT_MS = 8000;
 
-// iNaturalist's score_image endpoint requires an authenticated JWT. Supplied
-// via env var until the on-device model replaces this path (see the Obsidian
-// note "decision-identification-online-api"). Tokens are short-lived (~24h).
-const INAT_API_TOKEN = process.env.EXPO_PUBLIC_INATURALIST_API_TOKEN ?? '';
-
 const byLatin = new Map(CATALOG.map((s) => [s.latin.toLowerCase(), s]));
 const byName = new Map(CATALOG.map((s) => [s.commonName.toLowerCase(), s]));
 
 function findInCatalog(latin: string, common?: string): Species | undefined {
-  return byLatin.get(latin.toLowerCase()) ?? (common ? byName.get(common.toLowerCase()) : undefined);
+  return (
+    byLatin.get(latin.toLowerCase()) ?? (common ? byName.get(common.toLowerCase()) : undefined)
+  );
 }
 
 function iconicTaxonToKind(iconicTaxon?: string): Species['kind'] {
@@ -74,8 +72,15 @@ export async function identifySpecies(
   imageUri: string,
   options: IdentifyOptions = {},
 ): Promise<IdentifyResult[]> {
-  // No token or no network → skip the online round-trip and use on-device.
-  if (!INAT_API_TOKEN || !(await hasNetwork())) {
+  // No network → skip the online round-trip and use on-device.
+  if (!(await hasNetwork())) {
+    return identifyFromPhoto(imageUri);
+  }
+
+  // Not connected to iNaturalist, or the OAuth session can't be refreshed
+  // right now → fall back to on-device rather than blocking the user.
+  const apiToken = await getValidApiToken();
+  if (!apiToken) {
     return identifyFromPhoto(imageUri);
   }
 
@@ -87,11 +92,10 @@ export async function identifySpecies(
     // hand back HEIC (iOS default) or a multi-MB full-res image; iNat's
     // score_image 500s on those. Re-encoding guarantees valid JPEG bytes that
     // match the declared content type.
-    const prepared = await manipulateAsync(
-      imageUri,
-      [{ resize: { width: 640 } }],
-      { compress: 0.85, format: SaveFormat.JPEG },
-    );
+    const prepared = await manipulateAsync(imageUri, [{ resize: { width: 640 } }], {
+      compress: 0.85,
+      format: SaveFormat.JPEG,
+    });
 
     const body = new FormData();
     // iNat expects the file under the `image` field, not `file`.
@@ -107,7 +111,7 @@ export async function identifySpecies(
 
     const res = await fetch(INAT_CV_URL, {
       method: 'POST',
-      headers: { Authorization: INAT_API_TOKEN },
+      headers: { Authorization: apiToken },
       body,
       signal: controller.signal,
     });
